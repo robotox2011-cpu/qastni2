@@ -179,6 +179,11 @@ textarea.fc{resize:vertical;min-height:80px}
 </style>
 </head>
 <body>
+<style>@keyframes spinDots{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}</style>
+<div id="splash" style="position:fixed;inset:0;background:#f0f9f8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;z-index:9999;transition:opacity .4s ease">
+  <svg viewBox="0 0 120 120" width="110" height="110" style="animation:spinDots 4s linear infinite;flex-shrink:0"><g transform="translate(60,60)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(30)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(60)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(90)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(120)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(150)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(180)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(210)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(240)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(270)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(300)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(330)"/></g></svg>
+  <p style="font-family:Tajawal,sans-serif;font-size:13px;color:#64748b;margin-top:4px">جاري التحميل...</p>
+</div>
 <div id="app"></div>
 <div class="toast-c" id="tc"></div>
 <div class="moverlay hidden" id="rmodal">
@@ -282,8 +287,10 @@ function getAuthHTML(){
   return`<div class="auth-screen">
   <div class="auth-card">
     <div class="ahdr">
-      <div class="alogo">ق</div>
-      <div class="atitle">قسطني</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:8px">
+        <svg viewBox="0 0 120 120" width="80" height="80" style="flex-shrink:0"><g transform="translate(60,60)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,0.9)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,0.9)" transform="rotate(30)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,0.9)" transform="rotate(60)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,0.9)" transform="rotate(90)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,0.9)" transform="rotate(120)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,0.9)" transform="rotate(150)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,0.9)" transform="rotate(180)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,0.9)" transform="rotate(210)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,0.9)" transform="rotate(240)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,0.9)" transform="rotate(270)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,0.9)" transform="rotate(300)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,0.9)" transform="rotate(330)"/></g></svg>
+        <div class="atitle">قسطني</div>
+      </div>
       <div class="asub ar-t">منصة التقسيط الآمنة بين الأفراد</div>
       <div class="asub en-t hidden">Safe P2P Installment Platform</div>
       <div class="atabs" style="margin-top:18px">
@@ -322,7 +329,10 @@ function buildShell(){
   $('app').innerHTML=`
   <div class="app-shell">
     <aside class="sidebar">
-      <div class="sb-brand"><div class="sb-icon">ق</div><div><div class="sb-name">قسطني</div><div class="sb-tag">Qastni</div></div></div>
+      <div class="sb-brand" style="gap:8px">
+  <svg viewBox="0 0 120 120" width="38" height="38" style="flex-shrink:0"><g transform="translate(60,60)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(30)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(60)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(90)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(120)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(150)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(180)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(210)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(240)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(270)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(300)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(330)"/></g></svg>
+  <div><div class="sb-name">قسطني</div><div class="sb-tag">QASTNI</div></div>
+</div>
       <nav class="sb-nav">
         <button class="ni active" id="ni-dash" onclick="nav('dash')"><span class="ni-icon">🏠</span><span class="ar-t">الرئيسية</span><span class="en-t hidden">Dashboard</span></button>
         <button class="ni" id="ni-create" onclick="nav('create')"><span class="ni-icon">➕</span><span class="ar-t">طلب جديد</span><span class="en-t hidden">New Request</span></button>
@@ -336,7 +346,11 @@ function buildShell(){
       </div>
     </aside>
     <div class="main-area">
-      <div class="topbar"><span style="font-size:16px;font-weight:700;color:var(--g900)" id="ptbar">الرئيسية</span><div class="flex aic gap8"><button class="lbtn" data-lb onclick="toggleLang()">${isAr()?'English':'عربي'}</button><button class="btn btn-g btn-sm" onclick="doLogout()"><span class="ar-t">خروج</span><span class="en-t hidden">Logout</span></button></div></div>
+      <div class="topbar">
+  <div style="display:flex;align-items:center;gap:6px">
+    <svg viewBox="0 0 120 120" width="28" height="28" style="flex-shrink:0"><g transform="translate(60,60)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(30)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(60)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(90)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(120)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(150)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(180)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(210)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(240)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(270)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(300)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(330)"/></g></svg>
+    <span style="font-size:16px;font-weight:700;color:var(--g900)" id="ptbar">الرئيسية</span>
+  </div><div class="flex aic gap8"><button class="lbtn" data-lb onclick="toggleLang()">${isAr()?'English':'عربي'}</button><button class="btn btn-g btn-sm" onclick="doLogout()"><span class="ar-t">خروج</span><span class="en-t hidden">Logout</span></button></div></div>
 
       <div class="page-wrap hidden" id="pg-dash"><div class="page-inner">
         <div class="disc">⚠️ <span class="ar-t">قسطني منصة وساطة فقط — لا تُجري معاملات مالية</span><span class="en-t hidden">Qastni is mediation only — no real transactions</span></div>
@@ -679,13 +693,17 @@ window.submitR=async()=>{
 }
 
 // ════════ BOOT ════════
-let _booted=false
+let _started=false
 
-async function boot(){
-  if(_booted)return
-  _booted=true
+function hideSplash(){
+  const sp=$('splash')
+  if(sp){sp.style.opacity='0';setTimeout(()=>{if(sp.parentNode)sp.remove()},400)}
+}
+
+async function startApp(session){
+  if(_started)return
+  _started=true
   try{
-    const{data:{session}}=await sb.auth.getSession()
     if(session){
       CU=session.user
       const{data:p}=await sb.from('profiles').select('*').eq('id',CU.id).single()
@@ -693,6 +711,12 @@ async function boot(){
       await loadDeals()
       buildShell()
       await nav('dash')
+      sb.channel('qrt').on('postgres_changes',{event:'*',schema:'public',table:'deals'},async()=>{
+        await loadDeals();updBadge()
+        if(page==='incoming')rInc()
+        if(page==='dash')rDash()
+        if(page==='deals')rDeals()
+      }).subscribe()
     }else{
       $('app').innerHTML=getAuthHTML()
       applyLang()
@@ -701,28 +725,22 @@ async function boot(){
     $('app').innerHTML=getAuthHTML()
     applyLang()
   }
+  hideSplash()
 }
 
+// FIX 1: Handle registration - SIGNED_IN fires after signUp
 sb.auth.onAuthStateChange(async(event,session)=>{
-  if(event==='SIGNED_IN'&&!_booted){
-    _booted=true
-    CU=session.user
-    const{data:p}=await sb.from('profiles').select('*').eq('id',CU.id).single()
-    PRF=p||{}
-    await loadDeals()
-    buildShell()
-    await nav('dash')
-  }
+  if(event==='SIGNED_IN'&&!_started) await startApp(session)
   if(event==='SIGNED_OUT'){
-    _booted=false
-    CU=null;PRF=null;DEALS=[]
+    _started=false;CU=null;PRF=null;DEALS=[]
     $('app').innerHTML=getAuthHTML()
     applyLang()
   }
-  if(event==='TOKEN_REFRESHED'&&session){CU=session.user}
+  if(event==='TOKEN_REFRESHED'&&session) CU=session.user
 })
 
-boot()
+// FIX 2: Handle page refresh
+sb.auth.getSession().then(({data:{session}})=>startApp(session))
 </script>
 </body>
 </html>
