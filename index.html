@@ -748,10 +748,7 @@ sb.auth.getSession().then(({data:{session}})=>{
 })
 setTimeout(()=>{
   if(!_started) startApp(null)
-},4000)([
-  sb.auth.getSession(),
-  new Promise(resolve=>setTimeout(()=>resolve({data:{session:null}}),5000))
-]).then(({data:{session}})=>startApp(session))(({data:{session}})=>startApp(session))
+},4000)
 </script>
 </body>
 </html>
