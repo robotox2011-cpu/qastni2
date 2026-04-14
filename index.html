@@ -740,7 +740,11 @@ sb.auth.onAuthStateChange(async(event,session)=>{
 })
 
 // FIX 2: Handle page refresh
-sb.auth.getSession().then(({data:{session}})=>startApp(session))
+// Boot with timeout fallback
+Promise.race([
+  sb.auth.getSession(),
+  new Promise(resolve=>setTimeout(()=>resolve({data:{session:null}}),5000))
+]).then(({data:{session}})=>startApp(session))(({data:{session}})=>startApp(session))
 </script>
 </body>
 </html>
