@@ -302,7 +302,7 @@ function valSAR(n){return!isNaN(n)&&n>0&&n<10000000}
 const sb=supabase.createClient(
   'https://ovinfpvwrdmqasxiveek.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92aW5mcHZ3cmRtcWFzeGl2ZWVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0MzcyNjksImV4cCI6MjA5MDAxMzI2OX0.LEPaswPoJAqdW2TSjMxyw6yXxn8wGLdDt38oi0KEqFg',
-  {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'qastni_s1'}}
+  {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'qastni_auth'}}
 )
 
 // ══ STATE ══
@@ -909,7 +909,7 @@ sb.auth.getSession()
   .then(({data:{session}})=>startApp(session))
   .catch(()=>startApp(null))
 
-setTimeout(()=>{if(!_started)startApp(null)},5000)
+setTimeout(()=>{if(!_started)startApp(null)},3000)
 </script>
 </body>
 </html>
