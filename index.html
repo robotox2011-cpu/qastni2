@@ -905,12 +905,17 @@ sb.auth.onAuthStateChange(async(event,session)=>{
 })
 
 // Page refresh: getSession + 5s safety timeout
-sb.auth.getSession()
-  .then(({data:{session}})=>startApp(session))
-  .catch(()=>startApp(null))
-  .finally(()=>{setTimeout(()=>{if(!_started)startApp(null)},1000)})
+// Force start after 2 seconds no matter what
+setTimeout(()=>startApp(null),2000)
 
-setTimeout(()=>{if(!_started)startApp(null)},3000)
+// Try getSession in parallel
+try{
+  sb.auth.getSession().then(({data:{session}})=>{
+    if(!_started)startApp(session)
+  })
+}catch(e){
+  // timeout will handle it
+}
 </script>
 </body>
 </html>
