@@ -4,6 +4,8 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+<meta http-equiv="X-Frame-Options" content="DENY"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://ovinfpvwrdmqasxiveek.supabase.co https://cdn.jsdelivr.net https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; connect-src 'self' https://ovinfpvwrdmqasxiveek.supabase.co wss://ovinfpvwrdmqasxiveek.supabase.co;"/>
 <title>قسطني | Qastni</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -302,7 +304,7 @@ function valSAR(n){return!isNaN(n)&&n>0&&n<10000000}
 const sb=supabase.createClient(
   'https://ovinfpvwrdmqasxiveek.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92aW5mcHZ3cmRtcWFzeGl2ZWVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0MzcyNjksImV4cCI6MjA5MDAxMzI2OX0.LEPaswPoJAqdW2TSjMxyw6yXxn8wGLdDt38oi0KEqFg',
-  {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'qastni_auth'}}
+  {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'qastni_s1'}}
 )
 
 // ══ STATE ══
@@ -892,9 +894,20 @@ async function startApp(session){
   hideSplash()
 }
 
-// Auth state listener
+// ══ BOOT STRATEGY ══
+// 1. onAuthStateChange fires for login/logout
+// 2. INITIAL_SESSION fires once on page load with existing session
+// 3. Hard timeout as final fallback
+
 sb.auth.onAuthStateChange(async(event,session)=>{
-  if(event==='SIGNED_IN'&&!_started) await startApp(session)
+  console.log('Auth event:',event)
+  if(event==='INITIAL_SESSION'){
+    // This fires on page load - handles refresh
+    await startApp(session)
+  }
+  if(event==='SIGNED_IN'&&!_started){
+    await startApp(session)
+  }
   if(event==='SIGNED_OUT'){
     _started=false;CU=null;PRF=null;DEALS=[]
     if(_rtChannel)sb.removeChannel(_rtChannel)
@@ -904,18 +917,13 @@ sb.auth.onAuthStateChange(async(event,session)=>{
   if(event==='TOKEN_REFRESHED'&&session) CU=session.user
 })
 
-// Page refresh: getSession + 5s safety timeout
-// Force start after 2 seconds no matter what
-setTimeout(()=>startApp(null),2000)
-
-// Try getSession in parallel
-try{
-  sb.auth.getSession().then(({data:{session}})=>{
-    if(!_started)startApp(session)
-  })
-}catch(e){
-  // timeout will handle it
-}
+// Hard fallback - if nothing happens in 4s, show login
+setTimeout(()=>{
+  if(!_started){
+    console.log('Timeout fallback triggered')
+    startApp(null)
+  }
+},4000)
 </script>
 </body>
 </html>
