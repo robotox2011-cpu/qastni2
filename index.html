@@ -905,7 +905,7 @@ sb.auth.onAuthStateChange(async(event,session)=>{
     // This fires on page load - handles refresh
     await startApp(session)
   }
-  if(event==='SIGNED_IN'&&!_started){
+ if(event==='SIGNED_IN'){
     await startApp(session)
   }
   if(event==='SIGNED_OUT'){
