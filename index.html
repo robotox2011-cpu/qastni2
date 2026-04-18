@@ -908,6 +908,7 @@ sb.auth.onAuthStateChange(async(event,session)=>{
 sb.auth.getSession()
   .then(({data:{session}})=>startApp(session))
   .catch(()=>startApp(null))
+  .finally(()=>{setTimeout(()=>{if(!_started)startApp(null)},1000)})
 
 setTimeout(()=>{if(!_started)startApp(null)},3000)
 </script>
