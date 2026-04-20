@@ -3,9 +3,6 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-
-
-
 <title>قسطني | Qastni</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -304,7 +301,7 @@ function valSAR(n){return!isNaN(n)&&n>0&&n<10000000}
 const sb=supabase.createClient(
   'https://ovinfpvwrdmqasxiveek.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92aW5mcHZ3cmRtcWFzeGl2ZWVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0MzcyNjksImV4cCI6MjA5MDAxMzI2OX0.LEPaswPoJAqdW2TSjMxyw6yXxn8wGLdDt38oi0KEqFg',
-  {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'qastni_s1'}}
+  {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'qastni_auth'}}
 )
 
 // ══ STATE ══
@@ -865,65 +862,48 @@ window.submitR=async()=>{
 
 // ══ BOOT ══
 async function startApp(session){
-  if(_started)return
-  _started=true
-  try{
-    if(session){
-      CU=session.user
-      const{data:p}=await sb.from('profiles').select('*').eq('id',CU.id).single()
-      PRF=p||{}
-      await loadDeals()
-      buildShell()
-      await nav('dash')
-      // Realtime subscription
-      _rtChannel=sb.channel('qastni-v2').on('postgres_changes',{event:'*',schema:'public',table:'deals'},async()=>{
-        await loadDeals();updBadge()
-        if(page==='incoming')rInc()
-        if(page==='dash')rDash()
-        if(page==='deals')rDeals()
-      }).subscribe()
-    }else{
-      $('app').innerHTML=getAuthHTML()
-      applyLang()
-    }
-  }catch(e){
-    console.error('Boot error:',e)
-    $('app').innerHTML=getAuthHTML()
-    applyLang()
-  }
-  hideSplash()
+  // handled by onAuthStateChange
 }
 
-// ══ BOOT STRATEGY ══
-// 1. onAuthStateChange fires for login/logout
-// 2. INITIAL_SESSION fires once on page load with existing session
-// 3. Hard timeout as final fallback
-
+// BOOT
 sb.auth.onAuthStateChange(async(event,session)=>{
-  console.log('Auth event:',event)
-  if(event==='INITIAL_SESSION'){
-    // This fires on page load - handles refresh
-    await startApp(session)
-  }
- if(event==='SIGNED_IN'){
-    await startApp(session)
-  }
   if(event==='SIGNED_OUT'){
     _started=false;CU=null;PRF=null;DEALS=[]
     if(_rtChannel)sb.removeChannel(_rtChannel)
     $('app').innerHTML=getAuthHTML()
     applyLang()
+    return
   }
-  if(event==='TOKEN_REFRESHED'&&session) CU=session.user
+  if(!_started&&(event==='SIGNED_IN'||event==='INITIAL_SESSION'||event==='TOKEN_REFRESHED')){
+    _started=true
+    if(session){
+      try{
+        CU=session.user
+        const{data:p}=await sb.from('profiles').select('*').eq('id',CU.id).single()
+        PRF=p||{}
+        await loadDeals()
+        buildShell()
+        await nav('dash')
+        _rtChannel=sb.channel('qrt').on('postgres_changes',{event:'*',schema:'public',table:'deals'},async()=>{
+          await loadDeals();updBadge()
+          if(page==='incoming')rInc()
+          if(page==='dash')rDash()
+          if(page==='deals')rDeals()
+        }).subscribe()
+      }catch(e){
+        _started=false
+        $('app').innerHTML=getAuthHTML()
+        applyLang()
+      }
+    }else{
+      $('app').innerHTML=getAuthHTML()
+      applyLang()
+    }
+    hideSplash()
+  }
 })
 
-// Hard fallback - if nothing happens in 4s, show login
-setTimeout(()=>{
-  if(!_started){
-    console.log('Timeout fallback triggered')
-    startApp(null)
-  }
-},4000)
+setTimeout(()=>{if(!_started){_started=true;$('app').innerHTML=getAuthHTML();applyLang();hideSplash()}},4000)
 </script>
 </body>
 </html>
