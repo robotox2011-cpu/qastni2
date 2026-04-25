@@ -440,7 +440,7 @@ function buildShell(){
         <div class="sb-section ar-t">القائمة</div>
         <button class="ni active" id="ni-dash" onclick="nav('dash')" aria-label="الرئيسية"><span class="nic">🏠</span><span class="ar-t">الرئيسية</span><span class="en-t hidden">Dashboard</span></button>
         <button class="ni" id="ni-create" onclick="nav('create')" aria-label="طلب جديد"><span class="nic">➕</span><span class="ar-t">طلب جديد</span><span class="en-t hidden">New Request</span></button>
-        <button class="ni" id="ni-inc" onclick="nav('incoming')" aria-label="الطلبات الواردة"><span class="nic">📥</span><span class="ar-t">الطلبات الواردة</span><span class="en-t hidden">Incoming</span><span class="nbadge hidden" id="ibadge">0</span></button>
+        <button class="ni" id="ni-inc" onclick="nav('inc')" aria-label="الطلبات الواردة"><span class="nic">📥</span><span class="ar-t">الطلبات الواردة</span><span class="en-t hidden">Incoming</span><span class="nbadge hidden" id="ibadge">0</span></button>
         <button class="ni" id="ni-deals" onclick="nav('deals')" aria-label="صفقاتي"><span class="nic">📋</span><span class="ar-t">صفقاتي</span><span class="en-t hidden">My Deals</span></button>
         <button class="ni" id="ni-profile" onclick="nav('profile')" aria-label="ملفي الشخصي"><span class="nic">👤</span><span class="ar-t">ملفي الشخصي</span><span class="en-t hidden">My Profile</span></button>
       </nav>
@@ -542,8 +542,8 @@ function buildShell(){
   loadSBStars().catch(e=>console.warn('loadSBStars failed:',e))
 }
 
-const PT={dash:{ar:'الرئيسية',en:'Dashboard'},create:{ar:'طلب جديد',en:'New Request'},incoming:{ar:'الطلبات الواردة',en:'Incoming'},deals:{ar:'صفقاتي',en:'My Deals'},detail:{ar:'تفاصيل الصفقة',en:'Deal Details'},profile:{ar:'ملفي الشخصي',en:'My Profile'}}
-const PAGES=['dash','create','incoming','deals','detail','profile']
+const PT={dash:{ar:'الرئيسية',en:'Dashboard'},create:{ar:'طلب جديد',en:'New Request'},inc:{ar:'الطلبات الواردة',en:'Incoming'},deals:{ar:'صفقاتي',en:'My Deals'},detail:{ar:'تفاصيل الصفقة',en:'Deal Details'},profile:{ar:'ملفي الشخصي',en:'My Profile'}}
+const PAGES=['dash','create','inc','deals','detail','profile']
 let _pp={}
 
 window.nav=async(p,pp={})=>{
@@ -556,7 +556,7 @@ window.nav=async(p,pp={})=>{
   updBadge()
   try{
     if(p==='dash')rDash()
-    if(p==='incoming')rInc()
+    if(p==='inc')rInc()
     if(p==='deals')rDeals()
     if(p==='detail')await rDetail(pp.id)
     if(p==='profile')await rProfile()
@@ -569,7 +569,7 @@ function rerender(){
   const tb=$('ptbar');if(tb)tb.textContent=isAr()?(PT[page]?.ar||page):(PT[page]?.en||page)
   try{
     if(page==='dash')rDash()
-    if(page==='incoming')rInc()
+    if(page==='inc')rInc()
     if(page==='deals')rDeals()
     if(page==='profile')rProfile()
     if(page==='detail'&&_pp.id)rDetail(_pp.id)
@@ -868,7 +868,7 @@ async function initSession(session){
     try{
       _rtChannel=sb.channel('qrt_'+CU.id).on('postgres_changes',{event:'*',schema:'public',table:'deals'},async()=>{
         await loadDeals();updBadge()
-        if(page==='incoming')rInc()
+        if(page==='inc')rInc()
         if(page==='dash')rDash()
         if(page==='deals')rDeals()
       }).subscribe()
