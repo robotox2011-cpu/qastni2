@@ -306,7 +306,7 @@ const sb=supabase.createClient(
 
 // ══ STATE ══
 let CU=null,PRF=null,DEALS=[],lang=localStorage.getItem('ql')||'ar',page='dash',filt='all'
-let RS={dealId:null,email:null,stars:0},_started=false,_rtChannel=null
+let RS={dealId:null,email:null,stars:0},_started=false,_rtChannel=null,_splashHidden=false
 
 // ══ HELPERS ══
 const isAr=()=>lang==='ar'
@@ -329,9 +329,10 @@ function sbdg(s){
 }
 
 function toast(msg,type='i'){
+  const tc=$('tc');if(!tc)return
   const el=document.createElement('div')
   el.className=`toast t-${type}`;el.textContent=msg
-  $('tc').appendChild(el)
+  tc.appendChild(el)
   setTimeout(()=>{el.classList.add('t-exit');setTimeout(()=>el.remove(),240)},3200)
 }
 
@@ -358,6 +359,8 @@ window.toggleLang=()=>{lang=isAr()?'en':'ar';applyLang();rerender()}
 
 // ══ SPLASH ══
 function hideSplash(){
+  if(_splashHidden)return
+  _splashHidden=true
   const sp=$('splash')
   if(sp){sp.style.opacity='0';setTimeout(()=>{if(sp.parentNode)sp.remove()},500)}
 }
@@ -442,7 +445,7 @@ window.doRegister=async()=>{
 
 window.doLogout=async()=>{
   _started=false
-  if(_rtChannel)sb.removeChannel(_rtChannel)
+  if(_rtChannel){try{sb.removeChannel(_rtChannel)}catch(e){}_rtChannel=null}
   await sb.auth.signOut()
 }
 
@@ -563,7 +566,7 @@ function buildShell(){
     </div>
   </div>`
   applyLang()
-  loadSBStars()
+  loadSBStars().catch(e=>console.warn('loadSBStars failed:',e))
 }
 
 // ══ NAV ══
@@ -578,22 +581,26 @@ window.nav=async(p,pp={})=>{
   document.getElementById('ni-'+p)?.classList.add('active')
   const tb=$('ptbar');if(tb)tb.textContent=isAr()?(PT[p]?.ar||p):(PT[p]?.en||p)
   updBadge()
-  if(p==='dash')rDash()
-  if(p==='incoming')rInc()
-  if(p==='deals')rDeals()
-  if(p==='detail')rDetail(pp.id)
-  if(p==='profile')rProfile()
-  if(p==='create'){const cd=$('c-date');if(cd&&!cd.value)cd.value=today()}
+  try{
+    if(p==='dash')rDash()
+    if(p==='incoming')rInc()
+    if(p==='deals')rDeals()
+    if(p==='detail')await rDetail(pp.id)
+    if(p==='profile')await rProfile()
+    if(p==='create'){const cd=$('c-date');if(cd&&!cd.value)cd.value=today()}
+  }catch(e){console.error('Render error:',e)}
 }
 
 function rerender(){
   applyLang()
   const tb=$('ptbar');if(tb)tb.textContent=isAr()?(PT[page]?.ar||page):(PT[page]?.en||page)
-  if(page==='dash')rDash()
-  if(page==='incoming')rInc()
-  if(page==='deals')rDeals()
-  if(page==='profile')rProfile()
-  if(page==='detail'&&_pp.id)rDetail(_pp.id)
+  try{
+    if(page==='dash')rDash()
+    if(page==='incoming')rInc()
+    if(page==='deals')rDeals()
+    if(page==='profile')rProfile()
+    if(page==='detail'&&_pp.id)rDetail(_pp.id)
+  }catch(e){console.error('Rerender error:',e)}
 }
 
 function updBadge(){
@@ -602,16 +609,21 @@ function updBadge(){
 }
 
 async function loadSBStars(){
-  const{data}=await sb.from('ratings').select('stars').eq('to_email',CU.email)
-  const el=$('sbstars');if(!el)return
-  if(!data?.length){el.innerHTML=`<span style="font-size:10px;color:var(--g400)">${isAr()?'لا تقييمات':'No ratings'}</span>`;return}
-  const avg=Math.round(data.reduce((s,r)=>s+r.stars,0)/data.length*10)/10
-  el.innerHTML=stars(avg,data.length,11)
+  try{
+    const{data}=await sb.from('ratings').select('stars').eq('to_email',CU.email)
+    const el=$('sbstars');if(!el)return
+    if(!data?.length){el.innerHTML=`<span style="font-size:10px;color:var(--g400)">${isAr()?'لا تقييمات':'No ratings'}</span>`;return}
+    const avg=Math.round(data.reduce((s,r)=>s+r.stars,0)/data.length*10)/10
+    el.innerHTML=stars(avg,data.length,11)
+  }catch(e){console.warn('loadSBStars error:',e)}
 }
 
 async function loadDeals(){
-  const{data}=await sb.from('deals').select('*,payments(*)').or(`buyer_id.eq.${CU.id},seller_email.eq.${CU.email}`).order('created_at',{ascending:false})
-  DEALS=data||[]
+  try{
+    const{data,error}=await sb.from('deals').select('*,payments(*)').or(`buyer_id.eq.${CU.id},seller_email.eq.${CU.email}`).order('created_at',{ascending:false})
+    if(error){console.warn('loadDeals error:',error);DEALS=[];return}
+    DEALS=data||[]
+  }catch(e){console.warn('loadDeals exception:',e);DEALS=[]}
 }
 
 // ══ CALC ══
@@ -672,13 +684,13 @@ function bCard(d){
 // ══ RENDERS ══
 function rDash(){
   const nm=PRF?.full_name||CU.email.split('@')[0]
-  $('dwelcome').textContent=isAr()?`مرحباً، ${nm} 👋`:`Welcome, ${nm} 👋`
-  $('sa').textContent=DEALS.filter(d=>d.status==='active').length
-  $('sd').textContent=DEALS.filter(d=>d.status==='completed').length
-  $('sp').textContent=DEALS.filter(d=>d.status==='pending').length
+  const dw=$('dwelcome');if(dw)dw.textContent=isAr()?`مرحباً، ${nm} 👋`:`Welcome, ${nm} 👋`
+  const sa=$('sa');if(sa)sa.textContent=DEALS.filter(d=>d.status==='active').length
+  const sd=$('sd');if(sd)sd.textContent=DEALS.filter(d=>d.status==='completed').length
+  const sp=$('sp');if(sp)sp.textContent=DEALS.filter(d=>d.status==='pending').length
   const tv=DEALS.filter(d=>['active','completed'].includes(d.status)).reduce((s,d)=>s+d.price,0)
-  $('sv').textContent=tv>=1000?(tv/1000).toFixed(1)+'K':tv
-  $('dl').innerHTML=[...DEALS].slice(0,5).map(bCard).join('')||empt('📄',isAr()?'لا توجد صفقات بعد':'No deals yet')
+  const sv=$('sv');if(sv)sv.textContent=tv>=1000?(tv/1000).toFixed(1)+'K':tv
+  const dl=$('dl');if(dl)dl.innerHTML=[...DEALS].slice(0,5).map(bCard).join('')||empt('📄',isAr()?'لا توجد صفقات بعد':'No deals yet')
 }
 
 function rInc(){
@@ -714,80 +726,89 @@ async function rDetail(id){
   if(!id)return
   const el=$('detc');if(!el)return
   el.innerHTML=`<div style="text-align:center;padding:36px">${LOGO_S(50,'spin')}</div>`
-  let d=DEALS.find(x=>x.id===id)
-  if(!d){const{data}=await sb.from('deals').select('*,payments(*),ratings(*)').eq('id',id).single();d=data}
-  if(!d){el.innerHTML=empt('❌','Not found');return}
-  const pay=(d.payments||[]).sort((a,b)=>a.month_num-b.month_num)
-  const iB=d.buyer_id===CU.id||d.buyer_email===CU.email
-  const paid=pay.filter(p=>p.is_paid).length,tot=d.months||1,pct=Math.round((paid/tot)*100)
-  const paidAmt=paid*d.installment,rem=Math.max(d.price-d.down_payment-paidAmt,0)
-  const{data:myR}=await sb.from('ratings').select('id').eq('deal_id',id).eq('from_user_id',CU.id).maybeSingle()
-  const canR=d.status==='completed'&&!myR,rte=iB?d.seller_email:d.buyer_email
-  const rows=pay.map(p=>{
-    const ov=!p.is_paid&&new Date(p.due_date)<new Date()
-    const cm=d.status==='active'&&iB&&!p.is_paid
-    return`<tr class="${p.is_paid?'rpaid':ov?'rov':''}">
-      <td>${isAr()?'الشهر':'Month'} ${p.month_num}</td>
-      <td style="color:${ov?'var(--am600)':'inherit'}">${fmtD(p.due_date)}${ov&&!p.is_paid?' ⚠️':''}</td>
-      <td><strong>${fmtSAR(p.amount)}</strong></td>
-      <td>${p.is_paid?`<span class="badge b-green">✓ ${isAr()?'مدفوع':'Paid'}</span>`:ov?`<span class="badge b-amber">${isAr()?'متأخر':'Overdue'}</span>`:`<span class="badge b-gray">${isAr()?'غير مدفوع':'Unpaid'}</span>`}</td>
-      <td>${cm?`<button class="btn bp bsm" onclick="markP('${d.id}','${p.id}')">💳 ${isAr()?'تحديد كمدفوع':'Mark Paid'}</button>`:'—'}</td>
-    </tr>`}).join('')
-  const rats=d.ratings||[]
-  const rHTML=rats.length?rats.map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--g100)"><div class="flex aic jsb mb8"><strong class="text-sm">${san(r.from_name)}</strong>${stars(r.stars,1)}</div>${r.comment?`<p class="text-sm text-m">"${san(r.comment)}"</p>`:''}<div class="text-xs text-m mt8">${fmtD(r.created_at)}</div></div>`).join(''):`<div class="text-sm text-m">${isAr()?'لا توجد تقييمات':'No ratings'}</div>`
-  el.innerHTML=`
-    <button class="btn bg bsm mb16" onclick="nav('deals')">← ${isAr()?'رجوع':'Back'}</button>
-    <div class="flex aic jsb mb20" style="flex-wrap:wrap;gap:12px">
-      <div><h1 style="font-size:18px;font-weight:800">${ico(d.item)} ${san(d.item)}${d.description?' — '+san(d.description):''}</h1><div class="text-sm text-m mt8">${isAr()?'رقم العقد':'Contract #'}: <strong>${d.contract_num}</strong></div></div>
-      <div class="flex aic gap10">${sbdg(d.status)}${canR?`<button class="btn bsec bsm" onclick="openRM('${d.id}','${rte}')">⭐ ${isAr()?'تقييم':'Rate'}</button>`:''}</div>
-    </div>
-    <div class="card mb16">
-      <div class="chdr"><h2>${isAr()?'طرفا الصفقة والتفاصيل المالية':'Parties & Financial Details'}</h2></div>
-      <div class="cbody">
-        <div class="igrid mb16">
-          <div class="iitem"><div class="ilbl">${isAr()?'المشتري':'Buyer'}</div><div class="ival">${san(d.buyer_name)}</div><div class="isub">${san(d.buyer_email)}</div></div>
-          <div class="iitem"><div class="ilbl">${isAr()?'البائع':'Seller'}</div><div class="ival">${san(d.seller_email)}</div></div>
-        </div>
-        <div class="igrid3">
-          <div class="iitem"><div class="ilbl">${isAr()?'السعر':'Price'}</div><div class="ival teal">${fmtSAR(d.price)}</div></div>
-          <div class="iitem"><div class="ilbl">${isAr()?'الدفعة الأولى':'Down'}</div><div class="ival">${fmtSAR(d.down_payment)}</div></div>
-          <div class="iitem"><div class="ilbl">${isAr()?'القسط':'Monthly'}</div><div class="ival teal">${fmtSAR(d.installment)}</div></div>
-          <div class="iitem"><div class="ilbl">${isAr()?'الأشهر':'Months'}</div><div class="ival">${d.months}</div></div>
-          <div class="iitem"><div class="ilbl">${isAr()?'البداية':'Start'}</div><div class="ival">${fmtD(d.start_date)}</div></div>
-          <div class="iitem"><div class="ilbl">${isAr()?'المتبقي':'Remaining'}</div><div class="ival" style="color:${rem>0?'var(--am600)':'var(--gr600)'}">${fmtSAR(rem)}</div></div>
-        </div>
-        ${d.notes?`<div class="divider"></div><p class="text-sm text-m"><strong>${isAr()?'ملاحظات:':'Notes:'}</strong> ${san(d.notes)}</p>`:''}
+  try{
+    let d=DEALS.find(x=>x.id===id)
+    if(!d){const{data}=await sb.from('deals').select('*,payments(*),ratings(*)').eq('id',id).maybeSingle();d=data}
+    if(!d){el.innerHTML=empt('❌','Not found');return}
+    const pay=(d.payments||[]).sort((a,b)=>a.month_num-b.month_num)
+    const iB=d.buyer_id===CU.id||d.buyer_email===CU.email
+    const paid=pay.filter(p=>p.is_paid).length,tot=d.months||1,pct=Math.round((paid/tot)*100)
+    const paidAmt=paid*d.installment,rem=Math.max(d.price-d.down_payment-paidAmt,0)
+    const{data:myR}=await sb.from('ratings').select('id').eq('deal_id',id).eq('from_user_id',CU.id).maybeSingle()
+    const canR=d.status==='completed'&&!myR,rte=iB?d.seller_email:d.buyer_email
+    const rows=pay.map(p=>{
+      const ov=!p.is_paid&&new Date(p.due_date)<new Date()
+      const cm=d.status==='active'&&iB&&!p.is_paid
+      return`<tr class="${p.is_paid?'rpaid':ov?'rov':''}">
+        <td>${isAr()?'الشهر':'Month'} ${p.month_num}</td>
+        <td style="color:${ov?'var(--am600)':'inherit'}">${fmtD(p.due_date)}${ov&&!p.is_paid?' ⚠️':''}</td>
+        <td><strong>${fmtSAR(p.amount)}</strong></td>
+        <td>${p.is_paid?`<span class="badge b-green">✓ ${isAr()?'مدفوع':'Paid'}</span>`:ov?`<span class="badge b-amber">${isAr()?'متأخر':'Overdue'}</span>`:`<span class="badge b-gray">${isAr()?'غير مدفوع':'Unpaid'}</span>`}</td>
+        <td>${cm?`<button class="btn bp bsm" onclick="markP('${d.id}','${p.id}')">💳 ${isAr()?'تحديد كمدفوع':'Mark Paid'}</button>`:'—'}</td>
+      </tr>`}).join('')
+    const rats=d.ratings||[]
+    const rHTML=rats.length?rats.map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--g100)"><div class="flex aic jsb mb8"><strong class="text-sm">${san(r.from_name)}</strong>${stars(r.stars,1)}</div>${r.comment?`<p class="text-sm text-m">"${san(r.comment)}"</p>`:''}<div class="text-xs text-m mt8">${fmtD(r.created_at)}</div></div>`).join(''):`<div class="text-sm text-m">${isAr()?'لا توجد تقييمات':'No ratings'}</div>`
+    el.innerHTML=`
+      <button class="btn bg bsm mb16" onclick="nav('deals')">← ${isAr()?'رجوع':'Back'}</button>
+      <div class="flex aic jsb mb20" style="flex-wrap:wrap;gap:12px">
+        <div><h1 style="font-size:18px;font-weight:800">${ico(d.item)} ${san(d.item)}${d.description?' — '+san(d.description):''}</h1><div class="text-sm text-m mt8">${isAr()?'رقم العقد':'Contract #'}: <strong>${d.contract_num}</strong></div></div>
+        <div class="flex aic gap10">${sbdg(d.status)}${canR?`<button class="btn bsec bsm" onclick="openRM('${d.id}','${rte}')">⭐ ${isAr()?'تقييم':'Rate'}</button>`:''}</div>
       </div>
-    </div>
-    ${d.status==='active'?`<div class="card mb16"><div class="cbody">
-      <div class="flex aic jsb mb12"><h3>${isAr()?'تقدم السداد':'Progress'}</h3><span class="badge b-teal">${paid}/${tot}</span></div>
-      <div class="plbl"><span>${isAr()?'مدفوع:':'Paid:'} ${fmtSAR(paidAmt)}</span><span>${pct}%</span></div>
-      <div class="ptrack" style="height:10px"><div class="pfill" style="width:${pct}%"></div></div>
-    </div></div>`:''}
-    <div class="card mb16">
-      <div class="chdr"><h2>${isAr()?'جدول الأقساط':'Payment Schedule'}</h2><span class="text-sm text-m">${paid}/${tot} ${isAr()?'مدفوع':'paid'}</span></div>
-      <div class="tscroll"><table class="ptbl"><thead><tr><th>${isAr()?'الشهر':'Month'}</th><th>${isAr()?'الاستحقاق':'Due'}</th><th>${isAr()?'المبلغ':'Amount'}</th><th>${isAr()?'الحالة':'Status'}</th><th>${isAr()?'إجراء':'Action'}</th></tr></thead><tbody>${rows}</tbody></table></div>
-    </div>
-    <div class="mb16">
-      <div class="shdr"><h2>${isAr()?'عقد الاتفاقية':'Contract'}</h2><button class="btn bsec bsm" onclick="printC('${d.id}')">🖨️ ${isAr()?'طباعة':'Print'}</button></div>
-      <div class="cw" id="cw-${d.id}">
-        <div class="cwh"><div style="font-size:17px;font-weight:900;margin-bottom:3px">قسطني — Qastni</div><div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:6px">${isAr()?'عقد اتفاقية تقسيط':'Installment Agreement Contract'}</div><div style="display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:5px;padding:3px 10px;font-size:11px;color:rgba(255,255,255,.8);font-weight:600">${d.contract_num}</div></div>
-        <div class="cwb">
-          <div style="margin-bottom:18px"><div class="cwst">${isAr()?'أطراف الاتفاقية':'Parties'}</div><div class="cwpar"><div class="cwp"><div class="cwpr">${isAr()?'المشتري':'Buyer'}</div><div class="cwpn">${san(d.buyer_name)}</div><div style="font-size:11px;color:var(--g500);margin-top:2px">${san(d.buyer_email)}</div></div><div class="cwp"><div class="cwpr">${isAr()?'البائع':'Seller'}</div><div class="cwpn">${san(d.seller_email)}</div></div></div></div>
-          <div style="margin-bottom:18px"><div class="cwst">${isAr()?'التفاصيل المالية':'Financial Details'}</div><div class="cwfin"><div class="cwfi"><div class="cwfl">${isAr()?'السلعة':'Item'}</div><div class="cwfv" style="font-size:13px">${san(d.item)}${d.description?' — '+san(d.description):''}</div></div><div class="cwfi"><div class="cwfl">${isAr()?'السعر الإجمالي':'Total'}</div><div class="cwfv">${fmtSAR(d.price)}</div></div><div class="cwfi"><div class="cwfl">${isAr()?'الدفعة الأولى':'Down'}</div><div class="cwfv">${fmtSAR(d.down_payment)}</div></div><div class="cwfi"><div class="cwfl">${isAr()?'القسط الشهري':'Monthly'}</div><div class="cwfv">${fmtSAR(d.installment)}</div></div></div></div>
-          <div style="margin-bottom:18px"><div class="cwst">${isAr()?'البنود والشروط':'Terms & Conditions'}</div><div class="cwterms"><ol>${(isAr()?['يلتزم المشتري بسداد الأقساط الشهرية في مواعيدها المحددة.','يلتزم البائع بتسليم السلعة عند استلام الدفعة الأولى.','في حال التأخر يحق للبائع إخطار المشتري عبر المنصة.','قسطني وسيط مُيسّر فقط وليست طرفاً في هذه الاتفاقية.']:['Buyer commits to paying monthly installments on time.','Seller commits to deliver item upon down payment.','Late payments allow seller to notify buyer via platform.','Qastni is facilitating intermediary only.']).map(t=>`<li>${t}</li>`).join('')}</ol></div></div>
-          ${d.notes?`<div style="margin-bottom:18px"><div class="cwst">${isAr()?'ملاحظات':'Notes'}</div><div class="cwterms">${san(d.notes)}</div></div>`:''}
-          <div class="cwsig"><div class="cwsg"><div>${isAr()?'توقيع المشتري':'Buyer Signature'}</div><div style="margin-top:3px;font-weight:700;color:var(--g700)">${san(d.buyer_name)}</div></div><div class="cwsg"><div>${isAr()?'توقيع البائع':'Seller Signature'}</div><div style="margin-top:3px;font-weight:700;color:var(--g700)">${san(d.seller_email)}</div></div></div>
+      <div class="card mb16">
+        <div class="chdr"><h2>${isAr()?'طرفا الصفقة والتفاصيل المالية':'Parties & Financial Details'}</h2></div>
+        <div class="cbody">
+          <div class="igrid mb16">
+            <div class="iitem"><div class="ilbl">${isAr()?'المشتري':'Buyer'}</div><div class="ival">${san(d.buyer_name)}</div><div class="isub">${san(d.buyer_email)}</div></div>
+            <div class="iitem"><div class="ilbl">${isAr()?'البائع':'Seller'}</div><div class="ival">${san(d.seller_email)}</div></div>
+          </div>
+          <div class="igrid3">
+            <div class="iitem"><div class="ilbl">${isAr()?'السعر':'Price'}</div><div class="ival teal">${fmtSAR(d.price)}</div></div>
+            <div class="iitem"><div class="ilbl">${isAr()?'الدفعة الأولى':'Down'}</div><div class="ival">${fmtSAR(d.down_payment)}</div></div>
+            <div class="iitem"><div class="ilbl">${isAr()?'القسط':'Monthly'}</div><div class="ival teal">${fmtSAR(d.installment)}</div></div>
+            <div class="iitem"><div class="ilbl">${isAr()?'الأشهر':'Months'}</div><div class="ival">${d.months}</div></div>
+            <div class="iitem"><div class="ilbl">${isAr()?'البداية':'Start'}</div><div class="ival">${fmtD(d.start_date)}</div></div>
+            <div class="iitem"><div class="ilbl">${isAr()?'المتبقي':'Remaining'}</div><div class="ival" style="color:${rem>0?'var(--am600)':'var(--gr600)'}">${fmtSAR(rem)}</div></div>
+          </div>
+          ${d.notes?`<div class="divider"></div><p class="text-sm text-m"><strong>${isAr()?'ملاحظات:':'Notes:'}</strong> ${san(d.notes)}</p>`:''}
         </div>
-        <div class="cwft">${isAr()?'وثيقة صادرة من منصة قسطني للتوثيق الرقمي — لأغراض الاتفاق فقط':'Issued by Qastni digital platform — for agreement purposes only'}<br>${isAr()?'تاريخ الإصدار:':'Issued:'} ${fmtD(d.created_at)}</div>
       </div>
-    </div>
-    <div class="card"><div class="chdr"><h2>⭐ ${isAr()?'التقييمات':'Ratings'}</h2></div><div class="cbody">${rHTML}</div></div>`
+      ${d.status==='active'?`<div class="card mb16"><div class="cbody">
+        <div class="flex aic jsb mb12"><h3>${isAr()?'تقدم السداد':'Progress'}</h3><span class="badge b-teal">${paid}/${tot}</span></div>
+        <div class="plbl"><span>${isAr()?'مدفوع:':'Paid:'} ${fmtSAR(paidAmt)}</span><span>${pct}%</span></div>
+        <div class="ptrack" style="height:10px"><div class="pfill" style="width:${pct}%"></div></div>
+      </div></div>`:''}
+      <div class="card mb16">
+        <div class="chdr"><h2>${isAr()?'جدول الأقساط':'Payment Schedule'}</h2><span class="text-sm text-m">${paid}/${tot} ${isAr()?'مدفوع':'paid'}</span></div>
+        <div class="tscroll"><table class="ptbl"><thead><tr><th>${isAr()?'الشهر':'Month'}</th><th>${isAr()?'الاستحقاق':'Due'}</th><th>${isAr()?'المبلغ':'Amount'}</th><th>${isAr()?'الحالة':'Status'}</th><th>${isAr()?'إجراء':'Action'}</th></tr></thead><tbody>${rows}</tbody></table></div>
+      </div>
+      <div class="mb16">
+        <div class="shdr"><h2>${isAr()?'عقد الاتفاقية':'Contract'}</h2><button class="btn bsec bsm" onclick="printC('${d.id}')">🖨️ ${isAr()?'طباعة':'Print'}</button></div>
+        <div class="cw" id="cw-${d.id}">
+          <div class="cwh"><div style="font-size:17px;font-weight:900;margin-bottom:3px">قسطني — Qastni</div><div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:6px">${isAr()?'عقد اتفاقية تقسيط':'Installment Agreement Contract'}</div><div style="display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:5px;padding:3px 10px;font-size:11px;color:rgba(255,255,255,.8);font-weight:600">${d.contract_num}</div></div>
+          <div class="cwb">
+            <div style="margin-bottom:18px"><div class="cwst">${isAr()?'أطراف الاتفاقية':'Parties'}</div><div class="cwpar"><div class="cwp"><div class="cwpr">${isAr()?'المشتري':'Buyer'}</div><div class="cwpn">${san(d.buyer_name)}</div><div style="font-size:11px;color:var(--g500);margin-top:2px">${san(d.buyer_email)}</div></div><div class="cwp"><div class="cwpr">${isAr()?'البائع':'Seller'}</div><div class="cwpn">${san(d.seller_email)}</div></div></div></div>
+            <div style="margin-bottom:18px"><div class="cwst">${isAr()?'التفاصيل المالية':'Financial Details'}</div><div class="cwfin"><div class="cwfi"><div class="cwfl">${isAr()?'السلعة':'Item'}</div><div class="cwfv" style="font-size:13px">${san(d.item)}${d.description?' — '+san(d.description):''}</div></div><div class="cwfi"><div class="cwfl">${isAr()?'السعر الإجمالي':'Total'}</div><div class="cwfv">${fmtSAR(d.price)}</div></div><div class="cwfi"><div class="cwfl">${isAr()?'الدفعة الأولى':'Down'}</div><div class="cwfv">${fmtSAR(d.down_payment)}</div></div><div class="cwfi"><div class="cwfl">${isAr()?'القسط الشهري':'Monthly'}</div><div class="cwfv">${fmtSAR(d.installment)}</div></div></div></div>
+            <div style="margin-bottom:18px"><div class="cwst">${isAr()?'البنود والشروط':'Terms & Conditions'}</div><div class="cwterms"><ol>${(isAr()?['يلتزم المشتري بسداد الأقساط الشهرية في مواعيدها المحددة.','يلتزم البائع بتسليم السلعة عند استلام الدفعة الأولى.','في حال التأخر يحق للبائع إخطار المشتري عبر المنصة.','قسطني وسيط مُيسّر فقط وليست طرفاً في هذه الاتفاقية.']:['Buyer commits to paying monthly installments on time.','Seller commits to deliver item upon down payment.','Late payments allow seller to notify buyer via platform.','Qastni is facilitating intermediary only.']).map(t=>`<li>${t}</li>`).join('')}</ol></div></div>
+            ${d.notes?`<div style="margin-bottom:18px"><div class="cwst">${isAr()?'ملاحظات':'Notes'}</div><div class="cwterms">${san(d.notes)}</div></div>`:''}
+            <div class="cwsig"><div class="cwsg"><div>${isAr()?'توقيع المشتري':'Buyer Signature'}</div><div style="margin-top:3px;font-weight:700;color:var(--g700)">${san(d.buyer_name)}</div></div><div class="cwsg"><div>${isAr()?'توقيع البائع':'Seller Signature'}</div><div style="margin-top:3px;font-weight:700;color:var(--g700)">${san(d.seller_email)}</div></div></div>
+          </div>
+          <div class="cwft">${isAr()?'وثيقة صادرة من منصة قسطني للتوثيق الرقمي — لأغراض الاتفاق فقط':'Issued by Qastni digital platform — for agreement purposes only'}<br>${isAr()?'تاريخ الإصدار:':'Issued:'} ${fmtD(d.created_at)}</div>
+        </div>
+      </div>
+      <div class="card"><div class="chdr"><h2>⭐ ${isAr()?'التقييمات':'Ratings'}</h2></div><div class="cbody">${rHTML}</div></div>`
+  }catch(e){
+    console.error('rDetail error:',e)
+    el.innerHTML=empt('❌',isAr()?'حدث خطأ':'Error loading')
+  }
 }
 
 async function rProfile(){
   const nm=PRF?.full_name||CU.email.split('@')[0],color=PRF?.avatar_color||avc(CU.email)
-  const{data:rats=[]}=await sb.from('ratings').select('*').eq('to_email',CU.email)
+  let rats=[]
+  try{
+    const{data}=await sb.from('ratings').select('*').eq('to_email',CU.email)
+    rats=data||[]
+  }catch(e){console.warn('rProfile ratings error:',e)}
   const avg=rats.length?Math.round(rats.reduce((s,r)=>s+r.stars,0)/rats.length*10)/10:null
   const el=$('prfc');if(!el)return
   el.innerHTML=`
@@ -860,50 +881,88 @@ window.submitR=async()=>{
   rDetail(RS.dealId);loadSBStars()
 }
 
-// ══ BOOT ══
-async function startApp(session){
-  // handled by onAuthStateChange
-}
-
-// BOOT
-sb.auth.onAuthStateChange(async(event,session)=>{
-  if(event==='SIGNED_OUT'){
-    _started=false;CU=null;PRF=null;DEALS=[]
-    if(_rtChannel)sb.removeChannel(_rtChannel)
+// ══ BOOT — main session initializer ══
+async function initSession(session){
+  try{
+    CU=session.user
+    // Use maybeSingle so missing profile row doesn't throw
+    const{data:p,error:pe}=await sb.from('profiles').select('*').eq('id',CU.id).maybeSingle()
+    if(pe)console.warn('Profile fetch warning:',pe)
+    PRF=p||{full_name:CU.user_metadata?.full_name||'',phone:CU.user_metadata?.phone||'',national_id:CU.user_metadata?.national_id||''}
+    await loadDeals()
+    buildShell()
+    await nav('dash')
+    // Setup realtime channel (non-blocking)
+    try{
+      _rtChannel=sb.channel('qrt_'+CU.id).on('postgres_changes',{event:'*',schema:'public',table:'deals'},async()=>{
+        await loadDeals();updBadge()
+        if(page==='incoming')rInc()
+        if(page==='dash')rDash()
+        if(page==='deals')rDeals()
+      }).subscribe()
+    }catch(e){console.warn('Realtime setup failed (non-critical):',e)}
+  }catch(e){
+    console.error('Session init failed:',e)
+    // Fall back to auth screen on critical failure
+    _started=false
+    CU=null;PRF=null;DEALS=[]
     $('app').innerHTML=getAuthHTML()
     applyLang()
+    toast(isAr()?'⚠️ حدث خطأ في تحميل البيانات':'⚠️ Error loading data','e')
+  }finally{
+    hideSplash()
+  }
+}
+
+// ══ AUTH STATE LISTENER ══
+sb.auth.onAuthStateChange(async(event,session)=>{
+  console.log('[auth]',event,!!session)
+  if(event==='SIGNED_OUT'){
+    _started=false
+    CU=null;PRF=null;DEALS=[]
+    if(_rtChannel){try{sb.removeChannel(_rtChannel)}catch(e){}_rtChannel=null}
+    $('app').innerHTML=getAuthHTML()
+    applyLang()
+    hideSplash()
     return
   }
-  if(!_started&&(event==='SIGNED_IN'||event==='INITIAL_SESSION'||event==='TOKEN_REFRESHED')){
-    _started=true
+  // Only init once per session — ignore TOKEN_REFRESHED after we're started
+  if(!_started&&(event==='SIGNED_IN'||event==='INITIAL_SESSION')){
     if(session){
-      try{
-        CU=session.user
-        const{data:p}=await sb.from('profiles').select('*').eq('id',CU.id).single()
-        PRF=p||{}
-        await loadDeals()
-        buildShell()
-        await nav('dash')
-        _rtChannel=sb.channel('qrt').on('postgres_changes',{event:'*',schema:'public',table:'deals'},async()=>{
-          await loadDeals();updBadge()
-          if(page==='incoming')rInc()
-          if(page==='dash')rDash()
-          if(page==='deals')rDeals()
-        }).subscribe()
-      }catch(e){
-        _started=false
-        $('app').innerHTML=getAuthHTML()
-        applyLang()
-      }
+      _started=true
+      await initSession(session)
     }else{
+      // No session on initial load — show auth
       $('app').innerHTML=getAuthHTML()
       applyLang()
+      hideSplash()
     }
-    hideSplash()
   }
 })
 
-setTimeout(()=>{if(!_started){_started=true;$('app').innerHTML=getAuthHTML();applyLang();hideSplash()}},4000)
+// ══ SAFETY NET: force-hide splash if nothing happens within 6s ══
+setTimeout(async()=>{
+  if(_splashHidden)return
+  console.warn('[boot] Safety timeout reached — forcing init')
+  try{
+    const{data:{session}}=await sb.auth.getSession()
+    if(session&&!_started){
+      _started=true
+      await initSession(session)
+    }else if(!_started){
+      _started=true
+      $('app').innerHTML=getAuthHTML()
+      applyLang()
+      hideSplash()
+    }
+  }catch(e){
+    console.error('[boot] Safety net failed:',e)
+    _started=true
+    $('app').innerHTML=getAuthHTML()
+    applyLang()
+    hideSplash()
+  }
+},6000)
 </script>
 </body>
 </html>
