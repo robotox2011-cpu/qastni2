@@ -1,8 +1,14 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="referrer" content="strict-origin-when-cross-origin"/>
+<meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+<meta http-equiv="X-Frame-Options" content="DENY"/>
+<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=()"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"/>
 <title>قسطني | Qastni</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -93,6 +99,11 @@ textarea.fc{resize:vertical;min-height:70px}
 .calclbl{font-size:12px;font-weight:700;color:var(--teal2)}
 .calcval{font-size:20px;font-weight:900;color:var(--teal2)}
 
+/* PASSWORD STRENGTH */
+.pwm{height:4px;background:var(--g100);border-radius:99px;margin-top:5px;overflow:hidden}
+.pwf{height:100%;border-radius:99px;transition:width .25s,background .25s;width:0}
+.pws{font-size:10.5px;font-weight:600;margin-top:3px}
+
 /* BADGES */
 .badge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:99px;font-size:11px;font-weight:700}
 .bdot{width:5px;height:5px;border-radius:50%}
@@ -161,6 +172,7 @@ textarea.fc{resize:vertical;min-height:70px}
 .afoot{padding:12px 26px;background:var(--g50);border-top:1px solid var(--g200);text-align:center;font-size:11px;color:var(--g400);line-height:1.5}
 .alert{padding:10px 13px;border-radius:var(--r8);font-size:12px;font-weight:600;margin-bottom:13px;border:1px solid transparent}
 .alert-d{background:var(--r50);color:var(--r600);border-color:#fca5a5}
+.honey{position:absolute!important;left:-9999px!important;width:1px;height:1px;opacity:0;pointer-events:none}
 
 /* MODAL */
 .moverlay{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
@@ -266,7 +278,7 @@ textarea.fc{resize:vertical;min-height:70px}
         <span class="srate" onclick="setSR(4)" data-v="4">⭐</span>
         <span class="srate" onclick="setSR(5)" data-v="5">⭐</span>
       </div>
-      <div class="fg mt12"><textarea class="fc" id="rcomment" rows="2" placeholder="تعليق اختياري..."></textarea></div>
+      <div class="fg mt12"><textarea class="fc" id="rcomment" rows="2" maxlength="500" placeholder="تعليق اختياري..."></textarea></div>
     </div>
     <div class="mfoot">
       <button class="btn bg bsm" onclick="closeRM()">إلغاء</button>
@@ -280,35 +292,127 @@ textarea.fc{resize:vertical;min-height:70px}
 <script>
 'use strict'
 
-// ══ SECURITY: Rate limiting ══
-const _rl={login:0,reg:0}
-function checkRL(key,limit=30000){
+/* ════════════════════════════════════════════════════
+   SECURITY LAYER
+   ════════════════════════════════════════════════════ */
+
+// Block embedding (clickjacking defense)
+if(self!==top){try{top.location=self.location}catch(e){document.body.innerHTML='';throw new Error('Embedding blocked')}}
+
+// Force HTTPS in production
+if(location.protocol==='http:'&&!['localhost','127.0.0.1'].includes(location.hostname)){
+  location.replace('https:'+location.href.substring(location.protocol.length))
+}
+
+// Disable browser autocomplete leakage on auth fields, prevent caching
+window.addEventListener('pageshow',e=>{if(e.persisted)location.reload()})
+
+// Rate limiting state (per action, sliding window)
+const _rl={}
+function checkRL(key,minMs=1500,maxAttempts=8,windowMs=60000){
   const now=Date.now()
-  if(now-_rl[key]<limit){toast(isAr()?'⚠️ يرجى الانتظار قليلاً':'⚠️ Please wait','e');return false}
-  _rl[key]=now;return true
+  if(!_rl[key])_rl[key]={last:0,attempts:[]}
+  const r=_rl[key]
+  // cooldown
+  if(now-r.last<minMs){toast(isAr()?'⏱️ يرجى الانتظار قليلاً':'⏱️ Please wait','e');return false}
+  // sliding window
+  r.attempts=r.attempts.filter(t=>now-t<windowMs)
+  if(r.attempts.length>=maxAttempts){
+    const wait=Math.ceil((windowMs-(now-r.attempts[0]))/1000)
+    toast(isAr()?`🚫 محاولات كثيرة، انتظر ${wait}ث`:`🚫 Too many attempts, wait ${wait}s`,'e')
+    return false
+  }
+  r.attempts.push(now);r.last=now
+  return true
 }
 
-// ══ SECURITY: Input sanitization ══
+// HTML sanitization (XSS defense for any user-supplied text rendered into HTML)
 function san(str){
-  if(!str)return''
-  return String(str).replace(/[<>'"&]/g,c=>({'<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;','&':'&amp;'}[c]))
+  if(str===null||str===undefined)return''
+  return String(str).replace(/[<>'"&\\/`=]/g,c=>({
+    '<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;','&':'&amp;',
+    '/':'&#x2F;','\\':'&#x5C;','`':'&#x60;','=':'&#x3D;'
+  }[c]))
 }
 
-function valEmail(e){return/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)}
-function valSAR(n){return!isNaN(n)&&n>0&&n<10000000}
+// Strip dangerous chars from inputs before persisting
+function clean(str,max=500){
+  if(!str)return''
+  return String(str).replace(/[\u0000-\u001F\u007F]/g,'').trim().slice(0,max)
+}
 
-// ══ SUPABASE ══
+// Validators
+function valEmail(e){
+  if(!e||typeof e!=='string')return false
+  if(e.length>254)return false
+  return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(e)
+}
+function valSAR(n){return typeof n==='number'&&!isNaN(n)&&isFinite(n)&&n>0&&n<10000000}
+function valName(n){return typeof n==='string'&&n.length>=2&&n.length<=100&&/^[\p{L}\s.'\-]+$/u.test(n)}
+function valPhone(p){if(!p)return true;return /^[\d+\s()-]{6,20}$/.test(p)}
+function valNID(n){if(!n)return true;return /^\d{10}$/.test(n)}
+
+// Password strength scoring
+function pwScore(pw){
+  if(!pw)return{score:0,label:'',color:'#94a3b8'}
+  let s=0
+  if(pw.length>=8)s++
+  if(pw.length>=12)s++
+  if(/[a-z]/.test(pw)&&/[A-Z]/.test(pw))s++
+  if(/\d/.test(pw))s++
+  if(/[^a-zA-Z0-9]/.test(pw))s++
+  // common-password penalty
+  if(/^(12345678|password|qwerty|111111|123456789|abc123)/i.test(pw))s=1
+  const map=[
+    {label:isAr()?'ضعيفة جداً':'Very weak',color:'#dc2626',pct:10},
+    {label:isAr()?'ضعيفة':'Weak',color:'#f59e0b',pct:25},
+    {label:isAr()?'مقبولة':'Fair',color:'#eab308',pct:50},
+    {label:isAr()?'جيدة':'Good',color:'#16a34a',pct:75},
+    {label:isAr()?'قوية':'Strong',color:'#0d9488',pct:90},
+    {label:isAr()?'ممتازة':'Excellent',color:'#0f766e',pct:100}
+  ]
+  return{score:s,...map[Math.min(s,5)]}
+}
+
+// Idle timeout (auto-logout after 30 min)
+let _idleTimer=null
+const IDLE_MS=30*60*1000
+function resetIdle(){
+  if(_idleTimer)clearTimeout(_idleTimer)
+  if(!CU)return
+  _idleTimer=setTimeout(()=>{
+    toast(isAr()?'🔒 تم تسجيل خروجك تلقائياً لعدم النشاط':'🔒 Auto logout (inactivity)','i')
+    setTimeout(()=>doLogout(),1500)
+  },IDLE_MS)
+}
+['mousemove','keydown','click','scroll','touchstart'].forEach(ev=>document.addEventListener(ev,resetIdle,{passive:true}))
+
+/* ════════════════════════════════════════════════════
+   SUPABASE CLIENT
+   ════════════════════════════════════════════════════ */
 const sb=supabase.createClient(
   'https://ovinfpvwrdmqasxiveek.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92aW5mcHZ3cmRtcWFzeGl2ZWVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0MzcyNjksImV4cCI6MjA5MDAxMzI2OX0.LEPaswPoJAqdW2TSjMxyw6yXxn8wGLdDt38oi0KEqFg',
-  {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'qastni_auth'}}
+  {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'qastni_auth',flowType:'pkce'}}
 )
 
-// ══ STATE ══
-let CU=null,PRF=null,DEALS=[],lang=localStorage.getItem('ql')||'ar',page='dash',filt='all'
-let RS={dealId:null,email:null,stars:0},_started=false,_rtChannel=null,_splashHidden=false
+// Helper: timeout-protected supabase call
+function withTimeout(promise,ms=15000,label='request'){
+  return Promise.race([
+    promise,
+    new Promise((_,rej)=>setTimeout(()=>rej(new Error(label+' timeout')),ms))
+  ])
+}
 
-// ══ HELPERS ══
+/* ════════════════════════════════════════════════════
+   STATE
+   ════════════════════════════════════════════════════ */
+let CU=null,PRF=null,DEALS=[],lang=localStorage.getItem('ql')||'ar',page='dash',filt='all'
+let RS={dealId:null,email:null,stars:0}
+let _mode='boot' /* boot | auth | app */
+let _rtChannel=null
+
+// HELPERS
 const isAr=()=>lang==='ar'
 const $=id=>document.getElementById(id)
 const fmtN=n=>(Math.round((n||0)*100)/100).toLocaleString('en',{minimumFractionDigits:0,maximumFractionDigits:2})
@@ -316,15 +420,18 @@ const fmtSAR=n=>fmtN(n)+(isAr()?' ر.س':' SAR')
 const fmtD=s=>s?new Date(s).toLocaleDateString(isAr()?'ar-SA':'en-GB',{year:'numeric',month:'short',day:'numeric'}):'—'
 const today=()=>new Date().toISOString().split('T')[0]
 const addM=(d,n)=>{const x=new Date(d);x.setMonth(x.getMonth()+n);return x.toISOString().split('T')[0]}
-const genCN=()=>'QST-'+Date.now().toString().slice(-6)
+const genCN=()=>{
+  const arr=new Uint8Array(4);crypto.getRandomValues(arr)
+  return'QST-'+Date.now().toString().slice(-6)+'-'+Array.from(arr).map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,4).toUpperCase()
+}
 const ini=n=>(n||'').trim().split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?'
-const avc=e=>['#0d9488','#0f766e','#7c3aed','#db2777','#059669','#d97706'][e.charCodeAt(0)%6]
+const avc=e=>['#0d9488','#0f766e','#7c3aed','#db2777','#059669','#d97706'][(e||'').charCodeAt(0)%6]
 const ICONS={'سيارة':'🚗','هاتف':'📱','لابتوب':'💻','تلفاز':'📺','أثاث':'🪑','دراجة':'🏍️','أخرى':'📦'}
 const ico=v=>ICONS[v]||'📦'
 
 function sbdg(s){
   const m={pending:['b-amber',isAr()?'بانتظار الموافقة':'Pending'],active:['b-teal',isAr()?'نشطة':'Active'],rejected:['b-red',isAr()?'مرفوضة':'Rejected'],completed:['b-green',isAr()?'مكتملة':'Completed']}
-  const[c,l]=m[s]||['b-gray',s]
+  const[c,l]=m[s]||['b-gray',san(s)]
   return`<span class="badge ${c}"><span class="bdot"></span>${l}</span>`
 }
 
@@ -345,7 +452,7 @@ function stars(avg,cnt,sz=13){
 const LOGO_S=(sz,cls='')=>`<svg ${cls?`class="${cls}"`:''} viewBox="0 0 120 120" width="${sz}" height="${sz}" style="flex-shrink:0"><g transform="translate(60,60)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(30)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(60)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(90)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(120)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(150)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(180)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(210)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(240)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(270)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(300)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(330)"/></g></svg>`
 const LOGO_W=(sz)=>`<svg viewBox="0 0 120 120" width="${sz}" height="${sz}" style="flex-shrink:0"><g transform="translate(60,60)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(30)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(60)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(90)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(120)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(150)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(180)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(210)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(240)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(270)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(300)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(330)"/></g></svg>`
 
-// ══ LANG ══
+// LANG
 function applyLang(){
   document.documentElement.dir=isAr()?'rtl':'ltr'
   document.documentElement.lang=lang
@@ -357,15 +464,15 @@ function applyLang(){
 }
 window.toggleLang=()=>{lang=isAr()?'en':'ar';applyLang();rerender()}
 
-// ══ SPLASH ══
+// SPLASH
 function hideSplash(){
-  if(_splashHidden)return
-  _splashHidden=true
   const sp=$('splash')
   if(sp){sp.style.opacity='0';setTimeout(()=>{if(sp.parentNode)sp.remove()},500)}
 }
 
-// ══ AUTH HTML ══
+/* ════════════════════════════════════════════════════
+   AUTH SCREEN
+   ════════════════════════════════════════════════════ */
 function getAuthHTML(){
   return`<div class="auth-screen">
   <div class="auth-card">
@@ -377,31 +484,39 @@ function getAuthHTML(){
         <div class="asub en-t hidden">Safe P2P Installment Platform</div>
       </div>
       <div class="atabs" style="margin-top:14px">
-        <button class="atab active" id="tl" onclick="switchAT('login')"><span class="ar-t">تسجيل الدخول</span><span class="en-t hidden">Sign In</span></button>
-        <button class="atab" id="tr" onclick="switchAT('register')"><span class="ar-t">حساب جديد</span><span class="en-t hidden">Register</span></button>
+        <button class="atab active" id="tl" onclick="switchAT('login')" data-testid="auth-tab-login"><span class="ar-t">تسجيل الدخول</span><span class="en-t hidden">Sign In</span></button>
+        <button class="atab" id="tr" onclick="switchAT('register')" data-testid="auth-tab-register"><span class="ar-t">حساب جديد</span><span class="en-t hidden">Register</span></button>
       </div>
       <div style="margin-top:10px;text-align:center"><button class="lbtn" data-lb onclick="toggleLang()" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);color:#fff">${isAr()?'English':'عربي'}</button></div>
     </div>
-    <div id="fl" class="abody">
-      <div class="fg"><label class="fl"><span class="ar-t">البريد الإلكتروني</span><span class="en-t hidden">Email</span></label><input class="fc" type="email" id="l-em" placeholder="you@example.com" autocomplete="email" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-      <div class="fg"><label class="fl"><span class="ar-t">كلمة المرور</span><span class="en-t hidden">Password</span></label><input class="fc" type="password" id="l-pw" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <form id="fl" class="abody" autocomplete="on" onsubmit="event.preventDefault();doLogin()" novalidate>
+      <input type="text" name="website" class="honey" tabindex="-1" autocomplete="off" id="l-hp"/>
+      <div class="fg"><label class="fl" for="l-em"><span class="ar-t">البريد الإلكتروني</span><span class="en-t hidden">Email</span></label><input class="fc" type="email" id="l-em" name="email" placeholder="you@example.com" autocomplete="email" maxlength="254" required data-testid="login-email"/></div>
+      <div class="fg"><label class="fl" for="l-pw"><span class="ar-t">كلمة المرور</span><span class="en-t hidden">Password</span></label><input class="fc" type="password" id="l-pw" name="password" placeholder="••••••••" autocomplete="current-password" maxlength="128" required data-testid="login-password"/></div>
       <div id="lerr" class="alert alert-d hidden"></div>
-      <button class="btn bp bfull blg" id="lbtn" onclick="doLogin()"><span class="ar-t">تسجيل الدخول</span><span class="en-t hidden">Sign In</span></button>
-    </div>
-    <div id="fr" class="abody hidden">
-      <div class="fg"><label class="fl"><span class="ar-t">الاسم الكامل</span><span class="en-t hidden">Full Name</span> <span class="req">*</span></label><input class="fc" type="text" id="r-nm" placeholder="${isAr()?'أحمد محمد':'Ahmed Mohammed'}" autocomplete="name"/></div>
-      <div class="fg"><label class="fl"><span class="ar-t">البريد الإلكتروني</span><span class="en-t hidden">Email</span> <span class="req">*</span></label><input class="fc" type="email" id="r-em" placeholder="you@example.com" autocomplete="email"/></div>
+      <button type="submit" class="btn bp bfull blg" id="lbtn" data-testid="login-submit"><span class="ar-t">تسجيل الدخول</span><span class="en-t hidden">Sign In</span></button>
+    </form>
+    <form id="fr" class="abody hidden" autocomplete="on" onsubmit="event.preventDefault();doRegister()" novalidate>
+      <input type="text" name="website" class="honey" tabindex="-1" autocomplete="off" id="r-hp"/>
+      <div class="fg"><label class="fl" for="r-nm"><span class="ar-t">الاسم الكامل</span><span class="en-t hidden">Full Name</span> <span class="req">*</span></label><input class="fc" type="text" id="r-nm" name="name" placeholder="${isAr()?'أحمد محمد':'Ahmed Mohammed'}" autocomplete="name" maxlength="100" required data-testid="reg-name"/></div>
+      <div class="fg"><label class="fl" for="r-em"><span class="ar-t">البريد الإلكتروني</span><span class="en-t hidden">Email</span> <span class="req">*</span></label><input class="fc" type="email" id="r-em" name="email" placeholder="you@example.com" autocomplete="email" maxlength="254" required data-testid="reg-email"/></div>
       <div class="frow">
-        <div class="fg"><label class="fl"><span class="ar-t">رقم الجوال</span><span class="en-t hidden">Phone</span></label><input class="fc" type="tel" id="r-ph" placeholder="+966 5X XXX XXXX"/></div>
-        <div class="fg"><label class="fl"><span class="ar-t">رقم الهوية</span><span class="en-t hidden">ID</span></label><input class="fc" type="text" id="r-ni" placeholder="1XXXXXXXXX" maxlength="10"/></div>
+        <div class="fg"><label class="fl" for="r-ph"><span class="ar-t">رقم الجوال</span><span class="en-t hidden">Phone</span></label><input class="fc" type="tel" id="r-ph" name="phone" placeholder="+966 5X XXX XXXX" maxlength="20" autocomplete="tel" data-testid="reg-phone"/></div>
+        <div class="fg"><label class="fl" for="r-ni"><span class="ar-t">رقم الهوية</span><span class="en-t hidden">ID</span></label><input class="fc" type="text" id="r-ni" name="nid" placeholder="1XXXXXXXXX" maxlength="10" inputmode="numeric" pattern="\\d*" data-testid="reg-nid"/></div>
       </div>
       <div class="frow">
-        <div class="fg"><label class="fl"><span class="ar-t">كلمة المرور</span><span class="en-t hidden">Password</span> <span class="req">*</span></label><input class="fc" type="password" id="r-pw" placeholder="••••••••" autocomplete="new-password" minlength="8"/></div>
-        <div class="fg"><label class="fl"><span class="ar-t">تأكيد كلمة المرور</span><span class="en-t hidden">Confirm</span> <span class="req">*</span></label><input class="fc" type="password" id="r-pw2" placeholder="••••••••" autocomplete="new-password"/></div>
+        <div class="fg">
+          <label class="fl" for="r-pw"><span class="ar-t">كلمة المرور</span><span class="en-t hidden">Password</span> <span class="req">*</span></label>
+          <input class="fc" type="password" id="r-pw" name="password" placeholder="••••••••" autocomplete="new-password" minlength="8" maxlength="128" required oninput="updPwS()" data-testid="reg-password"/>
+          <div class="pwm"><div class="pwf" id="pwf"></div></div>
+          <div class="pws" id="pws"></div>
+        </div>
+        <div class="fg"><label class="fl" for="r-pw2"><span class="ar-t">تأكيد كلمة المرور</span><span class="en-t hidden">Confirm</span> <span class="req">*</span></label><input class="fc" type="password" id="r-pw2" name="password2" placeholder="••••••••" autocomplete="new-password" maxlength="128" required data-testid="reg-password2"/></div>
       </div>
+      <p class="fhint mb12">${isAr()?'8 أحرف على الأقل، تحوي حرفاً كبيراً وصغيراً ورقماً ورمزاً':'Min 8 chars, must include upper/lowercase, digit & symbol'}</p>
       <div id="rerr" class="alert alert-d hidden"></div>
-      <button class="btn bp bfull blg" id="rbtn" onclick="doRegister()"><span class="ar-t">إنشاء الحساب</span><span class="en-t hidden">Create Account</span></button>
-    </div>
+      <button type="submit" class="btn bp bfull blg" id="rbtn" data-testid="reg-submit"><span class="ar-t">إنشاء الحساب</span><span class="en-t hidden">Create Account</span></button>
+    </form>
     <div class="afoot"><span class="ar-t">هذه المنصة تُيسّر الاتفاقيات فقط ولا تُجري أي معاملات مالية</span><span class="en-t hidden">Facilitates agreements only — no real financial transactions.</span></div>
   </div></div>`
 }
@@ -413,43 +528,152 @@ window.switchAT=tab=>{
   $('tr')?.classList.toggle('active',tab==='register')
 }
 
-function showErr(id,msg){const el=$(id);if(el){el.textContent='⚠️ '+msg;el.classList.remove('hidden')}}
+window.updPwS=()=>{
+  const pw=$('r-pw')?.value||''
+  const{score,label,color,pct}=pwScore(pw)
+  const f=$('pwf'),s=$('pws')
+  if(f){f.style.width=pct+'%';f.style.background=color}
+  if(s){s.textContent=pw?label:'';s.style.color=color}
+}
+
+function showErr(id,msg){
+  const el=$(id);if(el){el.textContent='⚠️ '+msg;el.classList.remove('hidden')}
+}
+function clearErr(id){$(id)?.classList.add('hidden')}
+
+function resetBtn(id,arTxt,enTxt){
+  const b=$(id);if(!b)return
+  b.disabled=false
+  b.innerHTML=`<span class="ar-t${isAr()?'':' hidden'}">${arTxt}</span><span class="en-t${isAr()?' hidden':''}">${enTxt}</span>`
+}
 
 window.doLogin=async()=>{
-  if(!checkRL('login',2000))return
-  const em=$('l-em')?.value.trim().toLowerCase(),pw=$('l-pw')?.value
-  $('lerr')?.classList.add('hidden')
+  // Honeypot trap
+  if($('l-hp')?.value){toast('⚠️','e');return}
+  if(!checkRL('login',1500,8,60000))return
+  const em=clean($('l-em')?.value,254).toLowerCase()
+  const pw=$('l-pw')?.value||''
+  clearErr('lerr')
   if(!em||!pw){showErr('lerr',isAr()?'يرجى ملء الحقول':'Fill fields');return}
   if(!valEmail(em)){showErr('lerr',isAr()?'البريد غير صالح':'Invalid email');return}
+  if(pw.length>128){showErr('lerr',isAr()?'كلمة المرور طويلة جداً':'Password too long');return}
   const btn=$('lbtn');btn.innerHTML='<span class="spinner"></span>';btn.disabled=true
-  const{error}=await sb.auth.signInWithPassword({email:em,password:pw})
-  if(error){showErr('lerr',isAr()?'البريد أو كلمة المرور غير صحيحة':'Wrong email or password');btn.innerHTML=isAr()?'تسجيل الدخول':'Sign In';btn.disabled=false}
+  try{
+    const{data,error}=await withTimeout(
+      sb.auth.signInWithPassword({email:em,password:pw}),
+      15000,'login'
+    )
+    if(error){
+      // Generic error to avoid user enumeration
+      showErr('lerr',isAr()?'البريد أو كلمة المرور غير صحيحة':'Wrong email or password')
+      resetBtn('lbtn','تسجيل الدخول','Sign In')
+      return
+    }
+    // Success → onAuthStateChange will boot the app
+    // Safety: if event doesn't fire within 8s, force-boot
+    setTimeout(()=>{if(_mode!=='app'&&data?.session)bootApp(data.session).catch(()=>{
+      resetBtn('lbtn','تسجيل الدخول','Sign In')
+      showErr('lerr',isAr()?'حدث خطأ، حاول مجدداً':'Something went wrong')
+    })},8000)
+  }catch(e){
+    showErr('lerr',isAr()?'تعذر الاتصال، حاول مجدداً':'Connection error, retry')
+    resetBtn('lbtn','تسجيل الدخول','Sign In')
+  }
 }
 
 window.doRegister=async()=>{
-  if(!checkRL('reg',3000))return
-  const nm=$('r-nm')?.value.trim(),em=$('r-em')?.value.trim().toLowerCase()
-  const ph=$('r-ph')?.value.trim(),ni=$('r-ni')?.value.trim()
-  const pw=$('r-pw')?.value,pw2=$('r-pw2')?.value
-  $('rerr')?.classList.add('hidden')
+  if($('r-hp')?.value){toast('⚠️','e');return}
+  if(!checkRL('reg',2500,4,300000))return
+  const nm=clean($('r-nm')?.value,100)
+  const em=clean($('r-em')?.value,254).toLowerCase()
+  const ph=clean($('r-ph')?.value,20)
+  const ni=clean($('r-ni')?.value,10).replace(/\D/g,'')
+  const pw=$('r-pw')?.value||''
+  const pw2=$('r-pw2')?.value||''
+  clearErr('rerr')
   if(!nm||!em||!pw){showErr('rerr',isAr()?'يرجى ملء الحقول المطلوبة':'Fill required fields');return}
+  if(!valName(nm)){showErr('rerr',isAr()?'الاسم غير صالح (حروف فقط)':'Invalid name');return}
   if(!valEmail(em)){showErr('rerr',isAr()?'البريد غير صالح':'Invalid email');return}
+  if(ph&&!valPhone(ph)){showErr('rerr',isAr()?'رقم الجوال غير صالح':'Invalid phone');return}
+  if(ni&&!valNID(ni)){showErr('rerr',isAr()?'رقم الهوية يجب أن يكون 10 أرقام':'ID must be 10 digits');return}
   if(pw.length<8){showErr('rerr',isAr()?'كلمة المرور 8 أحرف على الأقل':'Min 8 chars');return}
+  if(pw.length>128){showErr('rerr',isAr()?'كلمة المرور طويلة جداً':'Too long');return}
+  if(pwScore(pw).score<3){showErr('rerr',isAr()?'كلمة المرور ضعيفة، استخدم حروف كبيرة وصغيرة وأرقام ورموز':'Password too weak');return}
   if(pw!==pw2){showErr('rerr',isAr()?'كلمتا المرور غير متطابقتان':'Passwords do not match');return}
-  if(nm.length<2||nm.length>100){showErr('rerr',isAr()?'الاسم غير صالح':'Invalid name');return}
+  if(pw.toLowerCase().includes(em.split('@')[0].toLowerCase())){showErr('rerr',isAr()?'لا تستخدم بريدك في كلمة المرور':'Don\'t use email in password');return}
   const btn=$('rbtn');btn.innerHTML='<span class="spinner"></span>';btn.disabled=true
-  const{error}=await sb.auth.signUp({email:em,password:pw,options:{data:{full_name:san(nm),phone:san(ph),national_id:san(ni)}}})
-  if(error){showErr('rerr',error.message);btn.innerHTML=isAr()?'إنشاء الحساب':'Create Account';btn.disabled=false;return}
-  await sb.auth.signInWithPassword({email:em,password:pw})
+  try{
+    const{data,error}=await withTimeout(
+      sb.auth.signUp({
+        email:em,password:pw,
+        options:{data:{full_name:nm,phone:ph,national_id:ni}}
+      }),15000,'signup'
+    )
+    if(error){
+      showErr('rerr',error.message||(isAr()?'تعذر إنشاء الحساب':'Could not create account'))
+      resetBtn('rbtn','إنشاء الحساب','Create Account')
+      return
+    }
+    // If email confirmation required → no session yet
+    if(!data.session){
+      toast(isAr()?'✅ تم! تحقق من بريدك لتفعيل الحساب':'✅ Check your email to verify','s')
+      switchAT('login')
+      $('l-em').value=em
+      resetBtn('rbtn','إنشاء الحساب','Create Account')
+      return
+    }
+    // Else session exists → onAuthStateChange will trigger
+    setTimeout(()=>{if(_mode!=='app'&&data?.session)bootApp(data.session).catch(()=>{
+      resetBtn('rbtn','إنشاء الحساب','Create Account')
+    })},8000)
+  }catch(e){
+    showErr('rerr',isAr()?'تعذر الاتصال، حاول مجدداً':'Connection error')
+    resetBtn('rbtn','إنشاء الحساب','Create Account')
+  }
 }
 
 window.doLogout=async()=>{
-  _started=false
-  if(_rtChannel){try{sb.removeChannel(_rtChannel)}catch(e){}_rtChannel=null}
-  await sb.auth.signOut()
+  try{
+    if(_rtChannel){await sb.removeChannel(_rtChannel);_rtChannel=null}
+    await sb.auth.signOut()
+  }catch(e){}
+  CU=null;PRF=null;DEALS=[];_mode='auth'
+  if(_idleTimer)clearTimeout(_idleTimer)
+  $('app').innerHTML=getAuthHTML()
+  applyLang()
 }
 
-// ══ SHELL ══
+/* ════════════════════════════════════════════════════
+   APP SHELL & DATA
+   ════════════════════════════════════════════════════ */
+async function loadProfile(){
+  try{
+    const{data,error}=await withTimeout(
+      sb.from('profiles').select('*').eq('id',CU.id).maybeSingle(),
+      10000,'profile'
+    )
+    if(error&&error.code!=='PGRST116'){console.warn('profile err',error)}
+    PRF=data||{}
+  }catch(e){
+    console.warn('profile fetch failed',e)
+    PRF={}
+  }
+}
+
+async function loadDeals(){
+  try{
+    const{data,error}=await withTimeout(
+      sb.from('deals').select('*,payments(*)').or(`buyer_id.eq.${CU.id},seller_email.eq.${CU.email}`).order('created_at',{ascending:false}),
+      12000,'deals'
+    )
+    if(error){console.warn('deals err',error);DEALS=[];return}
+    DEALS=data||[]
+  }catch(e){
+    console.warn('deals fetch failed',e)
+    DEALS=[]
+  }
+}
+
 function buildShell(){
   const nm=PRF?.full_name||CU.email.split('@')[0]
   const color=PRF?.avatar_color||avc(CU.email)
@@ -465,15 +689,15 @@ function buildShell(){
       </div>
       <nav class="sb-nav" role="navigation">
         <div class="sb-section ar-t">القائمة</div>
-        <button class="ni active" id="ni-dash" onclick="nav('dash')" aria-label="الرئيسية"><span class="nic">🏠</span><span class="ar-t">الرئيسية</span><span class="en-t hidden">Dashboard</span></button>
-        <button class="ni" id="ni-create" onclick="nav('create')" aria-label="طلب جديد"><span class="nic">➕</span><span class="ar-t">طلب جديد</span><span class="en-t hidden">New Request</span></button>
-        <button class="ni" id="ni-inc" onclick="nav('incoming')" aria-label="الطلبات الواردة"><span class="nic">📥</span><span class="ar-t">الطلبات الواردة</span><span class="en-t hidden">Incoming</span><span class="nbadge hidden" id="ibadge">0</span></button>
-        <button class="ni" id="ni-deals" onclick="nav('deals')" aria-label="صفقاتي"><span class="nic">📋</span><span class="ar-t">صفقاتي</span><span class="en-t hidden">My Deals</span></button>
-        <button class="ni" id="ni-profile" onclick="nav('profile')" aria-label="ملفي الشخصي"><span class="nic">👤</span><span class="ar-t">ملفي الشخصي</span><span class="en-t hidden">My Profile</span></button>
+        <button class="ni active" id="ni-dash" onclick="nav('dash')" data-testid="nav-dash"><span class="nic">🏠</span><span class="ar-t">الرئيسية</span><span class="en-t hidden">Dashboard</span></button>
+        <button class="ni" id="ni-create" onclick="nav('create')" data-testid="nav-create"><span class="nic">➕</span><span class="ar-t">طلب جديد</span><span class="en-t hidden">New Request</span></button>
+        <button class="ni" id="ni-incoming" onclick="nav('incoming')" data-testid="nav-incoming"><span class="nic">📥</span><span class="ar-t">الطلبات الواردة</span><span class="en-t hidden">Incoming</span><span class="nbadge hidden" id="ibadge">0</span></button>
+        <button class="ni" id="ni-deals" onclick="nav('deals')" data-testid="nav-deals"><span class="nic">📋</span><span class="ar-t">صفقاتي</span><span class="en-t hidden">My Deals</span></button>
+        <button class="ni" id="ni-profile" onclick="nav('profile')" data-testid="nav-profile"><span class="nic">👤</span><span class="ar-t">ملفي الشخصي</span><span class="en-t hidden">My Profile</span></button>
       </nav>
       <div class="sb-foot">
         <div class="sb-user">
-          <div class="sb-av" style="background:${color}">${av}</div>
+          <div class="sb-av" style="background:${color}">${san(av)}</div>
           <div style="flex:1;min-width:0">
             <div class="sb-uname">${san(nm)}</div>
             <div class="sb-uemail">${san(CU.email)}</div>
@@ -482,7 +706,7 @@ function buildShell(){
         </div>
         <div class="flex gap8">
           <button class="lbtn" data-lb onclick="toggleLang()" style="flex:1">${isAr()?'English':'عربي'}</button>
-          <button class="btn bg bsm" onclick="doLogout()" style="flex:1"><span class="ar-t">خروج</span><span class="en-t hidden">Logout</span></button>
+          <button class="btn bg bsm" onclick="doLogout()" style="flex:1" data-testid="logout-btn"><span class="ar-t">خروج</span><span class="en-t hidden">Logout</span></button>
         </div>
       </div>
     </aside>
@@ -520,17 +744,17 @@ function buildShell(){
         <div class="card">
           <div class="chdr"><h3 class="ar-t">تفاصيل الاتفاقية</h3><h3 class="en-t hidden">Agreement Details</h3></div>
           <div class="cbody">
-            <div class="fg"><label class="fl"><span class="ar-t">البريد الإلكتروني للبائع</span><span class="en-t hidden">Seller Email</span> <span class="req">*</span></label><input class="fc" type="email" id="c-sel" placeholder="seller@example.com"/><p class="fhint ar-t">يجب أن يكون البائع مسجلاً في المنصة</p><p class="fhint en-t hidden">Seller must be registered</p></div>
+            <div class="fg"><label class="fl"><span class="ar-t">البريد الإلكتروني للبائع</span><span class="en-t hidden">Seller Email</span> <span class="req">*</span></label><input class="fc" type="email" id="c-sel" placeholder="seller@example.com" maxlength="254"/><p class="fhint ar-t">يجب أن يكون البائع مسجلاً في المنصة</p><p class="fhint en-t hidden">Seller must be registered</p></div>
             <div class="frow">
               <div class="fg"><label class="fl"><span class="ar-t">نوع السلعة</span><span class="en-t hidden">Item Type</span> <span class="req">*</span></label><select class="fc" id="c-item"><option value="">${isAr()?'-- اختر --':'-- Select --'}</option>${IOPTS}</select></div>
               <div class="fg"><label class="fl"><span class="ar-t">وصف السلعة</span><span class="en-t hidden">Description</span></label><input class="fc" type="text" id="c-desc" placeholder="Toyota Camry 2021" maxlength="200"/></div>
             </div>
             <div class="frow">
-              <div class="fg"><label class="fl"><span class="ar-t">السعر الإجمالي (ر.س)</span><span class="en-t hidden">Total Price (SAR)</span> <span class="req">*</span></label><input class="fc" type="number" id="c-price" placeholder="50000" min="1" max="9999999" oninput="calcI()"/></div>
-              <div class="fg"><label class="fl"><span class="ar-t">الدفعة الأولى (ر.س)</span><span class="en-t hidden">Down Payment</span></label><input class="fc" type="number" id="c-down" placeholder="0" min="0" value="0" oninput="calcI()"/></div>
+              <div class="fg"><label class="fl"><span class="ar-t">السعر الإجمالي (ر.س)</span><span class="en-t hidden">Total Price (SAR)</span> <span class="req">*</span></label><input class="fc" type="number" id="c-price" placeholder="50000" min="1" max="9999999" step="1" oninput="calcI()"/></div>
+              <div class="fg"><label class="fl"><span class="ar-t">الدفعة الأولى (ر.س)</span><span class="en-t hidden">Down Payment</span></label><input class="fc" type="number" id="c-down" placeholder="0" min="0" max="9999999" step="1" value="0" oninput="calcI()"/></div>
             </div>
             <div class="frow">
-              <div class="fg"><label class="fl"><span class="ar-t">عدد الأشهر</span><span class="en-t hidden">Months</span> <span class="req">*</span></label><input class="fc" type="number" id="c-mo" placeholder="12" min="1" max="60" oninput="calcI()"/><p class="fhint">1 – 60</p></div>
+              <div class="fg"><label class="fl"><span class="ar-t">عدد الأشهر</span><span class="en-t hidden">Months</span> <span class="req">*</span></label><input class="fc" type="number" id="c-mo" placeholder="12" min="1" max="60" step="1" oninput="calcI()"/><p class="fhint">1 – 60</p></div>
               <div class="fg"><label class="fl"><span class="ar-t">تاريخ البداية</span><span class="en-t hidden">Start Date</span></label><input class="fc" type="date" id="c-date" value="${today()}"/></div>
             </div>
             <div class="calcbox"><div><div class="calclbl ar-t">القسط الشهري المحسوب</div><div class="calclbl en-t hidden">Monthly Installment</div><div style="font-size:11px;color:var(--teal);margin-top:2px" id="cbrk"></div></div><div class="calcval" id="cval">—</div></div>
@@ -543,7 +767,7 @@ function buildShell(){
         </div>
       </div></div>
 
-      <div class="page hidden" id="pg-inc"><div class="pi">
+      <div class="page hidden" id="pg-incoming"><div class="pi">
         <h1 class="ptit ar-t">الطلبات الواردة</h1><h1 class="ptit en-t hidden">Incoming Requests</h1>
         <p class="psub ar-t">طلبات التقسيط المُرسلة إليك من المشترين</p><p class="psub en-t hidden">Installment requests sent to you</p>
         <div id="incl"></div>
@@ -566,41 +790,37 @@ function buildShell(){
     </div>
   </div>`
   applyLang()
-  loadSBStars().catch(e=>console.warn('loadSBStars failed:',e))
+  loadSBStars().catch(()=>{})
 }
 
-// ══ NAV ══
 const PT={dash:{ar:'الرئيسية',en:'Dashboard'},create:{ar:'طلب جديد',en:'New Request'},incoming:{ar:'الطلبات الواردة',en:'Incoming'},deals:{ar:'صفقاتي',en:'My Deals'},detail:{ar:'تفاصيل الصفقة',en:'Deal Details'},profile:{ar:'ملفي الشخصي',en:'My Profile'}}
 const PAGES=['dash','create','incoming','deals','detail','profile']
 let _pp={}
 
 window.nav=async(p,pp={})=>{
+  if(!PT[p])return
   page=p;_pp=pp
-  PAGES.forEach(x=>{document.getElementById('pg-'+x)?.classList.add('hidden');document.getElementById('ni-'+x)?.classList.remove('active')})
-  document.getElementById('pg-'+p)?.classList.remove('hidden')
-  document.getElementById('ni-'+p)?.classList.add('active')
+  PAGES.forEach(x=>{$('pg-'+x)?.classList.add('hidden');$('ni-'+x)?.classList.remove('active')})
+  $('pg-'+p)?.classList.remove('hidden')
+  $('ni-'+p)?.classList.add('active')
   const tb=$('ptbar');if(tb)tb.textContent=isAr()?(PT[p]?.ar||p):(PT[p]?.en||p)
   updBadge()
-  try{
-    if(p==='dash')rDash()
-    if(p==='incoming')rInc()
-    if(p==='deals')rDeals()
-    if(p==='detail')await rDetail(pp.id)
-    if(p==='profile')await rProfile()
-    if(p==='create'){const cd=$('c-date');if(cd&&!cd.value)cd.value=today()}
-  }catch(e){console.error('Render error:',e)}
+  if(p==='dash')rDash()
+  if(p==='incoming')rInc()
+  if(p==='deals')rDeals()
+  if(p==='detail')rDetail(pp.id)
+  if(p==='profile')rProfile()
+  if(p==='create'){const cd=$('c-date');if(cd&&!cd.value)cd.value=today()}
 }
 
 function rerender(){
   applyLang()
   const tb=$('ptbar');if(tb)tb.textContent=isAr()?(PT[page]?.ar||page):(PT[page]?.en||page)
-  try{
-    if(page==='dash')rDash()
-    if(page==='incoming')rInc()
-    if(page==='deals')rDeals()
-    if(page==='profile')rProfile()
-    if(page==='detail'&&_pp.id)rDetail(_pp.id)
-  }catch(e){console.error('Rerender error:',e)}
+  if(page==='dash')rDash()
+  if(page==='incoming')rInc()
+  if(page==='deals')rDeals()
+  if(page==='profile')rProfile()
+  if(page==='detail'&&_pp.id)rDetail(_pp.id)
 }
 
 function updBadge(){
@@ -610,23 +830,17 @@ function updBadge(){
 
 async function loadSBStars(){
   try{
-    const{data}=await sb.from('ratings').select('stars').eq('to_email',CU.email)
+    const{data}=await withTimeout(
+      sb.from('ratings').select('stars').eq('to_email',CU.email),
+      8000,'sbstars'
+    )
     const el=$('sbstars');if(!el)return
     if(!data?.length){el.innerHTML=`<span style="font-size:10px;color:var(--g400)">${isAr()?'لا تقييمات':'No ratings'}</span>`;return}
     const avg=Math.round(data.reduce((s,r)=>s+r.stars,0)/data.length*10)/10
     el.innerHTML=stars(avg,data.length,11)
-  }catch(e){console.warn('loadSBStars error:',e)}
+  }catch(e){}
 }
 
-async function loadDeals(){
-  try{
-    const{data,error}=await sb.from('deals').select('*,payments(*)').or(`buyer_id.eq.${CU.id},seller_email.eq.${CU.email}`).order('created_at',{ascending:false})
-    if(error){console.warn('loadDeals error:',error);DEALS=[];return}
-    DEALS=data||[]
-  }catch(e){console.warn('loadDeals exception:',e);DEALS=[]}
-}
-
-// ══ CALC ══
 window.calcI=()=>{
   const pr=parseFloat($('c-price')?.value)||0,dn=parseFloat($('c-down')?.value)||0,mo=parseInt($('c-mo')?.value)||0
   const v=$('cval'),b=$('cbrk');if(!v)return
@@ -634,43 +848,56 @@ window.calcI=()=>{
   else{v.textContent='—';if(b)b.textContent=''}
 }
 
-// ══ SUBMIT DEAL ══
 window.submitDeal=async()=>{
-  const se=$('c-sel')?.value.trim().toLowerCase(),it=$('c-item')?.value
-  const de=$('c-desc')?.value.trim(),pr=parseFloat($('c-price')?.value)
-  const dn=parseFloat($('c-down')?.value)||0,mo=parseInt($('c-mo')?.value)
-  const no=$('c-notes')?.value.trim(),sd=$('c-date')?.value||today()
+  const se=clean($('c-sel')?.value,254).toLowerCase()
+  const it=clean($('c-item')?.value,30)
+  const de=clean($('c-desc')?.value,200)
+  const pr=parseFloat($('c-price')?.value)
+  const dn=parseFloat($('c-down')?.value)||0
+  const mo=parseInt($('c-mo')?.value)
+  const no=clean($('c-notes')?.value,500)
+  const sd=$('c-date')?.value||today()
   if(!se||!it||!pr||!mo){toast(isAr()?'⚠️ يرجى ملء الحقول المطلوبة':'⚠️ Fill required fields','e');return}
   if(!valEmail(se)){toast(isAr()?'⚠️ البريد الإلكتروني للبائع غير صالح':'⚠️ Invalid seller email','e');return}
-  if(mo<1||mo>60){toast(isAr()?'⚠️ الأشهر بين 1 و60':'⚠️ Months 1-60','e');return}
+  if(!Number.isInteger(mo)||mo<1||mo>60){toast(isAr()?'⚠️ الأشهر بين 1 و60':'⚠️ Months 1-60','e');return}
   if(!valSAR(pr)){toast(isAr()?'⚠️ السعر غير صالح':'⚠️ Invalid price','e');return}
+  if(dn<0||!isFinite(dn)){toast(isAr()?'⚠️ الدفعة الأولى غير صالحة':'⚠️ Invalid down','e');return}
   if(dn>=pr){toast(isAr()?'⚠️ الدفعة الأولى يجب أن تكون أقل من السعر':'⚠️ Down < total','e');return}
   if(se===CU.email){toast(isAr()?'⚠️ لا يمكنك إرسال طلب لنفسك':'⚠️ Cannot send to yourself','e');return}
+  if(!checkRL('createDeal',2000,15,300000))return
   const btn=$('sbtn');btn.innerHTML='<span class="spinner"></span>';btn.disabled=true
   const inst=Math.round(((pr-dn)/mo)*100)/100
-  const{data:deal,error}=await sb.from('deals').insert({
-    contract_num:genCN(),buyer_id:CU.id,buyer_email:CU.email,
-    buyer_name:san(PRF?.full_name||CU.email.split('@')[0]),
-    seller_email:se,item:it,description:san(de),price:pr,down_payment:dn,
-    months:mo,installment:inst,notes:san(no),start_date:sd,status:'pending'
-  }).select().single()
-  if(error){toast('⚠️ '+error.message,'e');btn.innerHTML='📤 '+(isAr()?'إرسال الطلب':'Send');btn.disabled=false;return}
-  const sch=Array.from({length:mo},(_,i)=>({deal_id:deal.id,month_num:i+1,due_date:addM(sd,i+1),amount:inst,is_paid:false}))
-  await sb.from('payments').insert(sch)
-  ;['c-sel','c-desc','c-price','c-notes'].forEach(id=>{const el=$(id);if(el)el.value=''})
-  $('c-item').value='';$('c-down').value='0';$('c-mo').value='';$('c-date').value=today();$('cval').textContent='—'
-  toast(isAr()?'✅ تم إرسال الطلب بنجاح!':'✅ Request sent!','s')
-  await loadDeals();nav('dash')
+  try{
+    const{data:deal,error}=await withTimeout(
+      sb.from('deals').insert({
+        contract_num:genCN(),buyer_id:CU.id,buyer_email:CU.email,
+        buyer_name:PRF?.full_name||CU.email.split('@')[0],
+        seller_email:se,item:it,description:de,price:pr,down_payment:dn,
+        months:mo,installment:inst,notes:no,start_date:sd,status:'pending'
+      }).select().single(),
+      12000,'createDeal'
+    )
+    if(error){throw error}
+    const sch=Array.from({length:mo},(_,i)=>({deal_id:deal.id,month_num:i+1,due_date:addM(sd,i+1),amount:inst,is_paid:false}))
+    await withTimeout(sb.from('payments').insert(sch),12000,'payments')
+    ;['c-sel','c-desc','c-price','c-notes'].forEach(id=>{const el=$(id);if(el)el.value=''})
+    $('c-item').value='';$('c-down').value='0';$('c-mo').value='';$('c-date').value=today();$('cval').textContent='—'
+    toast(isAr()?'✅ تم إرسال الطلب بنجاح!':'✅ Request sent!','s')
+    await loadDeals();nav('dash')
+  }catch(e){
+    toast('⚠️ '+(e?.message||'error'),'e')
+  }finally{
+    const b=$('sbtn');if(b){b.innerHTML='📤 '+(isAr()?'إرسال الطلب':'Send');b.disabled=false}
+  }
 }
 
-// ══ DEAL CARD ══
-function empt(e,t){return`<div class="empty"><div class="eico">${e}</div><div class="etit">${t}</div></div>`}
+function empt(e,t){return`<div class="empty"><div class="eico">${e}</div><div class="etit">${san(t)}</div></div>`}
 
 function bCard(d){
   const iB=d.buyer_id===CU.id||d.buyer_email===CU.email
   const pay=d.payments||[],paid=pay.filter(p=>p.is_paid).length,tot=d.months||1,pct=Math.round((paid/tot)*100)
   const ot=iB?d.seller_email:d.buyer_name,rl=iB?(isAr()?'إلى:':'To:'):(isAr()?'من:':'From:')
-  return`<div class="dcard" onclick="nav('detail',{id:'${d.id}'})" role="button" tabindex="0">
+  return`<div class="dcard" onclick="nav('detail',{id:'${san(d.id)}'})" role="button" tabindex="0">
     <div class="dico">${ico(d.item)}</div>
     <div class="dbody">
       <div class="dtit">${san(d.item)}${d.description?' — '+san(d.description):''}</div>
@@ -681,16 +908,15 @@ function bCard(d){
   </div>`
 }
 
-// ══ RENDERS ══
 function rDash(){
   const nm=PRF?.full_name||CU.email.split('@')[0]
-  const dw=$('dwelcome');if(dw)dw.textContent=isAr()?`مرحباً، ${nm} 👋`:`Welcome, ${nm} 👋`
-  const sa=$('sa');if(sa)sa.textContent=DEALS.filter(d=>d.status==='active').length
-  const sd=$('sd');if(sd)sd.textContent=DEALS.filter(d=>d.status==='completed').length
-  const sp=$('sp');if(sp)sp.textContent=DEALS.filter(d=>d.status==='pending').length
+  $('dwelcome').textContent=isAr()?`مرحباً، ${nm} 👋`:`Welcome, ${nm} 👋`
+  $('sa').textContent=DEALS.filter(d=>d.status==='active').length
+  $('sd').textContent=DEALS.filter(d=>d.status==='completed').length
+  $('sp').textContent=DEALS.filter(d=>d.status==='pending').length
   const tv=DEALS.filter(d=>['active','completed'].includes(d.status)).reduce((s,d)=>s+d.price,0)
-  const sv=$('sv');if(sv)sv.textContent=tv>=1000?(tv/1000).toFixed(1)+'K':tv
-  const dl=$('dl');if(dl)dl.innerHTML=[...DEALS].slice(0,5).map(bCard).join('')||empt('📄',isAr()?'لا توجد صفقات بعد':'No deals yet')
+  $('sv').textContent=tv>=1000?(tv/1000).toFixed(1)+'K':tv
+  $('dl').innerHTML=[...DEALS].slice(0,5).map(bCard).join('')||empt('📄',isAr()?'لا توجد صفقات بعد':'No deals yet')
 }
 
 function rInc(){
@@ -706,15 +932,15 @@ function rInc(){
       <div class="iitem"><div class="ilbl">${isAr()?'الأشهر':'Months'}</div><div class="ival">${d.months}</div></div>
     </div>${d.notes?`<div class="mt12 text-sm text-m"><strong>${isAr()?'ملاحظات:':'Notes:'}</strong> ${san(d.notes)}</div>`:''}</div>
     <div class="cfoot flex jce gap10">
-      <button class="btn bd bsm" onclick="respond('${d.id}','rejected')">✗ ${isAr()?'رفض':'Reject'}</button>
-      <button class="btn bs bsm" onclick="respond('${d.id}','active')">✓ ${isAr()?'قبول':'Accept'}</button>
-      <button class="btn bsec bsm" onclick="nav('detail',{id:'${d.id}'})">👁 ${isAr()?'عرض':'View'}</button>
+      <button class="btn bd bsm" onclick="respond('${san(d.id)}','rejected')">✗ ${isAr()?'رفض':'Reject'}</button>
+      <button class="btn bs bsm" onclick="respond('${san(d.id)}','active')">✓ ${isAr()?'قبول':'Accept'}</button>
+      <button class="btn bsec bsm" onclick="nav('detail',{id:'${san(d.id)}'})">👁 ${isAr()?'عرض':'View'}</button>
     </div>
   </div>`).join('')
 }
 
 window.filtD=f=>{
-  filt=f;['all','active','pending','completed'].forEach(x=>{const id='t'+x.slice(0,2);document.getElementById(id)?.classList.toggle('active',x===f)});rDeals()
+  filt=f;['all','active','pending','completed'].forEach(x=>{const id='t'+x.slice(0,2);$(id)?.classList.toggle('active',x===f)});rDeals()
 }
 
 function rDeals(){
@@ -726,95 +952,93 @@ async function rDetail(id){
   if(!id)return
   const el=$('detc');if(!el)return
   el.innerHTML=`<div style="text-align:center;padding:36px">${LOGO_S(50,'spin')}</div>`
-  try{
-    let d=DEALS.find(x=>x.id===id)
-    if(!d){const{data}=await sb.from('deals').select('*,payments(*),ratings(*)').eq('id',id).maybeSingle();d=data}
-    if(!d){el.innerHTML=empt('❌','Not found');return}
-    const pay=(d.payments||[]).sort((a,b)=>a.month_num-b.month_num)
-    const iB=d.buyer_id===CU.id||d.buyer_email===CU.email
-    const paid=pay.filter(p=>p.is_paid).length,tot=d.months||1,pct=Math.round((paid/tot)*100)
-    const paidAmt=paid*d.installment,rem=Math.max(d.price-d.down_payment-paidAmt,0)
-    const{data:myR}=await sb.from('ratings').select('id').eq('deal_id',id).eq('from_user_id',CU.id).maybeSingle()
-    const canR=d.status==='completed'&&!myR,rte=iB?d.seller_email:d.buyer_email
-    const rows=pay.map(p=>{
-      const ov=!p.is_paid&&new Date(p.due_date)<new Date()
-      const cm=d.status==='active'&&iB&&!p.is_paid
-      return`<tr class="${p.is_paid?'rpaid':ov?'rov':''}">
-        <td>${isAr()?'الشهر':'Month'} ${p.month_num}</td>
-        <td style="color:${ov?'var(--am600)':'inherit'}">${fmtD(p.due_date)}${ov&&!p.is_paid?' ⚠️':''}</td>
-        <td><strong>${fmtSAR(p.amount)}</strong></td>
-        <td>${p.is_paid?`<span class="badge b-green">✓ ${isAr()?'مدفوع':'Paid'}</span>`:ov?`<span class="badge b-amber">${isAr()?'متأخر':'Overdue'}</span>`:`<span class="badge b-gray">${isAr()?'غير مدفوع':'Unpaid'}</span>`}</td>
-        <td>${cm?`<button class="btn bp bsm" onclick="markP('${d.id}','${p.id}')">💳 ${isAr()?'تحديد كمدفوع':'Mark Paid'}</button>`:'—'}</td>
-      </tr>`}).join('')
-    const rats=d.ratings||[]
-    const rHTML=rats.length?rats.map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--g100)"><div class="flex aic jsb mb8"><strong class="text-sm">${san(r.from_name)}</strong>${stars(r.stars,1)}</div>${r.comment?`<p class="text-sm text-m">"${san(r.comment)}"</p>`:''}<div class="text-xs text-m mt8">${fmtD(r.created_at)}</div></div>`).join(''):`<div class="text-sm text-m">${isAr()?'لا توجد تقييمات':'No ratings'}</div>`
-    el.innerHTML=`
-      <button class="btn bg bsm mb16" onclick="nav('deals')">← ${isAr()?'رجوع':'Back'}</button>
-      <div class="flex aic jsb mb20" style="flex-wrap:wrap;gap:12px">
-        <div><h1 style="font-size:18px;font-weight:800">${ico(d.item)} ${san(d.item)}${d.description?' — '+san(d.description):''}</h1><div class="text-sm text-m mt8">${isAr()?'رقم العقد':'Contract #'}: <strong>${d.contract_num}</strong></div></div>
-        <div class="flex aic gap10">${sbdg(d.status)}${canR?`<button class="btn bsec bsm" onclick="openRM('${d.id}','${rte}')">⭐ ${isAr()?'تقييم':'Rate'}</button>`:''}</div>
-      </div>
-      <div class="card mb16">
-        <div class="chdr"><h2>${isAr()?'طرفا الصفقة والتفاصيل المالية':'Parties & Financial Details'}</h2></div>
-        <div class="cbody">
-          <div class="igrid mb16">
-            <div class="iitem"><div class="ilbl">${isAr()?'المشتري':'Buyer'}</div><div class="ival">${san(d.buyer_name)}</div><div class="isub">${san(d.buyer_email)}</div></div>
-            <div class="iitem"><div class="ilbl">${isAr()?'البائع':'Seller'}</div><div class="ival">${san(d.seller_email)}</div></div>
-          </div>
-          <div class="igrid3">
-            <div class="iitem"><div class="ilbl">${isAr()?'السعر':'Price'}</div><div class="ival teal">${fmtSAR(d.price)}</div></div>
-            <div class="iitem"><div class="ilbl">${isAr()?'الدفعة الأولى':'Down'}</div><div class="ival">${fmtSAR(d.down_payment)}</div></div>
-            <div class="iitem"><div class="ilbl">${isAr()?'القسط':'Monthly'}</div><div class="ival teal">${fmtSAR(d.installment)}</div></div>
-            <div class="iitem"><div class="ilbl">${isAr()?'الأشهر':'Months'}</div><div class="ival">${d.months}</div></div>
-            <div class="iitem"><div class="ilbl">${isAr()?'البداية':'Start'}</div><div class="ival">${fmtD(d.start_date)}</div></div>
-            <div class="iitem"><div class="ilbl">${isAr()?'المتبقي':'Remaining'}</div><div class="ival" style="color:${rem>0?'var(--am600)':'var(--gr600)'}">${fmtSAR(rem)}</div></div>
-          </div>
-          ${d.notes?`<div class="divider"></div><p class="text-sm text-m"><strong>${isAr()?'ملاحظات:':'Notes:'}</strong> ${san(d.notes)}</p>`:''}
-        </div>
-      </div>
-      ${d.status==='active'?`<div class="card mb16"><div class="cbody">
-        <div class="flex aic jsb mb12"><h3>${isAr()?'تقدم السداد':'Progress'}</h3><span class="badge b-teal">${paid}/${tot}</span></div>
-        <div class="plbl"><span>${isAr()?'مدفوع:':'Paid:'} ${fmtSAR(paidAmt)}</span><span>${pct}%</span></div>
-        <div class="ptrack" style="height:10px"><div class="pfill" style="width:${pct}%"></div></div>
-      </div></div>`:''}
-      <div class="card mb16">
-        <div class="chdr"><h2>${isAr()?'جدول الأقساط':'Payment Schedule'}</h2><span class="text-sm text-m">${paid}/${tot} ${isAr()?'مدفوع':'paid'}</span></div>
-        <div class="tscroll"><table class="ptbl"><thead><tr><th>${isAr()?'الشهر':'Month'}</th><th>${isAr()?'الاستحقاق':'Due'}</th><th>${isAr()?'المبلغ':'Amount'}</th><th>${isAr()?'الحالة':'Status'}</th><th>${isAr()?'إجراء':'Action'}</th></tr></thead><tbody>${rows}</tbody></table></div>
-      </div>
-      <div class="mb16">
-        <div class="shdr"><h2>${isAr()?'عقد الاتفاقية':'Contract'}</h2><button class="btn bsec bsm" onclick="printC('${d.id}')">🖨️ ${isAr()?'طباعة':'Print'}</button></div>
-        <div class="cw" id="cw-${d.id}">
-          <div class="cwh"><div style="font-size:17px;font-weight:900;margin-bottom:3px">قسطني — Qastni</div><div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:6px">${isAr()?'عقد اتفاقية تقسيط':'Installment Agreement Contract'}</div><div style="display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:5px;padding:3px 10px;font-size:11px;color:rgba(255,255,255,.8);font-weight:600">${d.contract_num}</div></div>
-          <div class="cwb">
-            <div style="margin-bottom:18px"><div class="cwst">${isAr()?'أطراف الاتفاقية':'Parties'}</div><div class="cwpar"><div class="cwp"><div class="cwpr">${isAr()?'المشتري':'Buyer'}</div><div class="cwpn">${san(d.buyer_name)}</div><div style="font-size:11px;color:var(--g500);margin-top:2px">${san(d.buyer_email)}</div></div><div class="cwp"><div class="cwpr">${isAr()?'البائع':'Seller'}</div><div class="cwpn">${san(d.seller_email)}</div></div></div></div>
-            <div style="margin-bottom:18px"><div class="cwst">${isAr()?'التفاصيل المالية':'Financial Details'}</div><div class="cwfin"><div class="cwfi"><div class="cwfl">${isAr()?'السلعة':'Item'}</div><div class="cwfv" style="font-size:13px">${san(d.item)}${d.description?' — '+san(d.description):''}</div></div><div class="cwfi"><div class="cwfl">${isAr()?'السعر الإجمالي':'Total'}</div><div class="cwfv">${fmtSAR(d.price)}</div></div><div class="cwfi"><div class="cwfl">${isAr()?'الدفعة الأولى':'Down'}</div><div class="cwfv">${fmtSAR(d.down_payment)}</div></div><div class="cwfi"><div class="cwfl">${isAr()?'القسط الشهري':'Monthly'}</div><div class="cwfv">${fmtSAR(d.installment)}</div></div></div></div>
-            <div style="margin-bottom:18px"><div class="cwst">${isAr()?'البنود والشروط':'Terms & Conditions'}</div><div class="cwterms"><ol>${(isAr()?['يلتزم المشتري بسداد الأقساط الشهرية في مواعيدها المحددة.','يلتزم البائع بتسليم السلعة عند استلام الدفعة الأولى.','في حال التأخر يحق للبائع إخطار المشتري عبر المنصة.','قسطني وسيط مُيسّر فقط وليست طرفاً في هذه الاتفاقية.']:['Buyer commits to paying monthly installments on time.','Seller commits to deliver item upon down payment.','Late payments allow seller to notify buyer via platform.','Qastni is facilitating intermediary only.']).map(t=>`<li>${t}</li>`).join('')}</ol></div></div>
-            ${d.notes?`<div style="margin-bottom:18px"><div class="cwst">${isAr()?'ملاحظات':'Notes'}</div><div class="cwterms">${san(d.notes)}</div></div>`:''}
-            <div class="cwsig"><div class="cwsg"><div>${isAr()?'توقيع المشتري':'Buyer Signature'}</div><div style="margin-top:3px;font-weight:700;color:var(--g700)">${san(d.buyer_name)}</div></div><div class="cwsg"><div>${isAr()?'توقيع البائع':'Seller Signature'}</div><div style="margin-top:3px;font-weight:700;color:var(--g700)">${san(d.seller_email)}</div></div></div>
-          </div>
-          <div class="cwft">${isAr()?'وثيقة صادرة من منصة قسطني للتوثيق الرقمي — لأغراض الاتفاق فقط':'Issued by Qastni digital platform — for agreement purposes only'}<br>${isAr()?'تاريخ الإصدار:':'Issued:'} ${fmtD(d.created_at)}</div>
-        </div>
-      </div>
-      <div class="card"><div class="chdr"><h2>⭐ ${isAr()?'التقييمات':'Ratings'}</h2></div><div class="cbody">${rHTML}</div></div>`
-  }catch(e){
-    console.error('rDetail error:',e)
-    el.innerHTML=empt('❌',isAr()?'حدث خطأ':'Error loading')
+  let d=DEALS.find(x=>x.id===id)
+  if(!d){
+    try{
+      const{data}=await withTimeout(sb.from('deals').select('*,payments(*),ratings(*)').eq('id',id).maybeSingle(),10000,'deal-detail')
+      d=data
+    }catch(e){}
   }
+  if(!d){el.innerHTML=empt('❌','Not found');return}
+  const pay=(d.payments||[]).sort((a,b)=>a.month_num-b.month_num)
+  const iB=d.buyer_id===CU.id||d.buyer_email===CU.email
+  const paid=pay.filter(p=>p.is_paid).length,tot=d.months||1,pct=Math.round((paid/tot)*100)
+  const paidAmt=paid*d.installment,rem=Math.max(d.price-d.down_payment-paidAmt,0)
+  let myR=null
+  try{const{data}=await sb.from('ratings').select('id').eq('deal_id',id).eq('from_user_id',CU.id).maybeSingle();myR=data}catch(e){}
+  const canR=d.status==='completed'&&!myR,rte=iB?d.seller_email:d.buyer_email
+  const rows=pay.map(p=>{
+    const ov=!p.is_paid&&new Date(p.due_date)<new Date()
+    const cm=d.status==='active'&&iB&&!p.is_paid
+    return`<tr class="${p.is_paid?'rpaid':ov?'rov':''}">
+      <td>${isAr()?'الشهر':'Month'} ${p.month_num}</td>
+      <td style="color:${ov?'var(--am600)':'inherit'}">${fmtD(p.due_date)}${ov&&!p.is_paid?' ⚠️':''}</td>
+      <td><strong>${fmtSAR(p.amount)}</strong></td>
+      <td>${p.is_paid?`<span class="badge b-green">✓ ${isAr()?'مدفوع':'Paid'}</span>`:ov?`<span class="badge b-amber">${isAr()?'متأخر':'Overdue'}</span>`:`<span class="badge b-gray">${isAr()?'غير مدفوع':'Unpaid'}</span>`}</td>
+      <td>${cm?`<button class="btn bp bsm" onclick="markP('${san(d.id)}','${san(p.id)}')">💳 ${isAr()?'تحديد كمدفوع':'Mark Paid'}</button>`:'—'}</td>
+    </tr>`}).join('')
+  const rats=d.ratings||[]
+  const rHTML=rats.length?rats.map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--g100)"><div class="flex aic jsb mb8"><strong class="text-sm">${san(r.from_name)}</strong>${stars(r.stars,1)}</div>${r.comment?`<p class="text-sm text-m">"${san(r.comment)}"</p>`:''}<div class="text-xs text-m mt8">${fmtD(r.created_at)}</div></div>`).join(''):`<div class="text-sm text-m">${isAr()?'لا توجد تقييمات':'No ratings'}</div>`
+  el.innerHTML=`
+    <button class="btn bg bsm mb16" onclick="nav('deals')">← ${isAr()?'رجوع':'Back'}</button>
+    <div class="flex aic jsb mb20" style="flex-wrap:wrap;gap:12px">
+      <div><h1 style="font-size:18px;font-weight:800">${ico(d.item)} ${san(d.item)}${d.description?' — '+san(d.description):''}</h1><div class="text-sm text-m mt8">${isAr()?'رقم العقد':'Contract #'}: <strong>${san(d.contract_num)}</strong></div></div>
+      <div class="flex aic gap10">${sbdg(d.status)}${canR?`<button class="btn bsec bsm" onclick="openRM('${san(d.id)}','${san(rte)}')">⭐ ${isAr()?'تقييم':'Rate'}</button>`:''}</div>
+    </div>
+    <div class="card mb16">
+      <div class="chdr"><h2>${isAr()?'طرفا الصفقة والتفاصيل المالية':'Parties & Financial Details'}</h2></div>
+      <div class="cbody">
+        <div class="igrid mb16">
+          <div class="iitem"><div class="ilbl">${isAr()?'المشتري':'Buyer'}</div><div class="ival">${san(d.buyer_name)}</div><div class="isub">${san(d.buyer_email)}</div></div>
+          <div class="iitem"><div class="ilbl">${isAr()?'البائع':'Seller'}</div><div class="ival">${san(d.seller_email)}</div></div>
+        </div>
+        <div class="igrid3">
+          <div class="iitem"><div class="ilbl">${isAr()?'السعر':'Price'}</div><div class="ival teal">${fmtSAR(d.price)}</div></div>
+          <div class="iitem"><div class="ilbl">${isAr()?'الدفعة الأولى':'Down'}</div><div class="ival">${fmtSAR(d.down_payment)}</div></div>
+          <div class="iitem"><div class="ilbl">${isAr()?'القسط':'Monthly'}</div><div class="ival teal">${fmtSAR(d.installment)}</div></div>
+          <div class="iitem"><div class="ilbl">${isAr()?'الأشهر':'Months'}</div><div class="ival">${d.months}</div></div>
+          <div class="iitem"><div class="ilbl">${isAr()?'البداية':'Start'}</div><div class="ival">${fmtD(d.start_date)}</div></div>
+          <div class="iitem"><div class="ilbl">${isAr()?'المتبقي':'Remaining'}</div><div class="ival" style="color:${rem>0?'var(--am600)':'var(--gr600)'}">${fmtSAR(rem)}</div></div>
+        </div>
+        ${d.notes?`<div class="divider"></div><p class="text-sm text-m"><strong>${isAr()?'ملاحظات:':'Notes:'}</strong> ${san(d.notes)}</p>`:''}
+      </div>
+    </div>
+    ${d.status==='active'?`<div class="card mb16"><div class="cbody">
+      <div class="flex aic jsb mb12"><h3>${isAr()?'تقدم السداد':'Progress'}</h3><span class="badge b-teal">${paid}/${tot}</span></div>
+      <div class="plbl"><span>${isAr()?'مدفوع:':'Paid:'} ${fmtSAR(paidAmt)}</span><span>${pct}%</span></div>
+      <div class="ptrack" style="height:10px"><div class="pfill" style="width:${pct}%"></div></div>
+    </div></div>`:''}
+    <div class="card mb16">
+      <div class="chdr"><h2>${isAr()?'جدول الأقساط':'Payment Schedule'}</h2><span class="text-sm text-m">${paid}/${tot} ${isAr()?'مدفوع':'paid'}</span></div>
+      <div class="tscroll"><table class="ptbl"><thead><tr><th>${isAr()?'الشهر':'Month'}</th><th>${isAr()?'الاستحقاق':'Due'}</th><th>${isAr()?'المبلغ':'Amount'}</th><th>${isAr()?'الحالة':'Status'}</th><th>${isAr()?'إجراء':'Action'}</th></tr></thead><tbody>${rows}</tbody></table></div>
+    </div>
+    <div class="mb16">
+      <div class="shdr"><h2>${isAr()?'عقد الاتفاقية':'Contract'}</h2><button class="btn bsec bsm" onclick="printC('${san(d.id)}')">🖨️ ${isAr()?'طباعة':'Print'}</button></div>
+      <div class="cw" id="cw-${san(d.id)}">
+        <div class="cwh"><div style="font-size:17px;font-weight:900;margin-bottom:3px">قسطني — Qastni</div><div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:6px">${isAr()?'عقد اتفاقية تقسيط':'Installment Agreement Contract'}</div><div style="display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:5px;padding:3px 10px;font-size:11px;color:rgba(255,255,255,.8);font-weight:600">${san(d.contract_num)}</div></div>
+        <div class="cwb">
+          <div style="margin-bottom:18px"><div class="cwst">${isAr()?'أطراف الاتفاقية':'Parties'}</div><div class="cwpar"><div class="cwp"><div class="cwpr">${isAr()?'المشتري':'Buyer'}</div><div class="cwpn">${san(d.buyer_name)}</div><div style="font-size:11px;color:var(--g500);margin-top:2px">${san(d.buyer_email)}</div></div><div class="cwp"><div class="cwpr">${isAr()?'البائع':'Seller'}</div><div class="cwpn">${san(d.seller_email)}</div></div></div></div>
+          <div style="margin-bottom:18px"><div class="cwst">${isAr()?'التفاصيل المالية':'Financial Details'}</div><div class="cwfin"><div class="cwfi"><div class="cwfl">${isAr()?'السلعة':'Item'}</div><div class="cwfv" style="font-size:13px">${san(d.item)}${d.description?' — '+san(d.description):''}</div></div><div class="cwfi"><div class="cwfl">${isAr()?'السعر الإجمالي':'Total'}</div><div class="cwfv">${fmtSAR(d.price)}</div></div><div class="cwfi"><div class="cwfl">${isAr()?'الدفعة الأولى':'Down'}</div><div class="cwfv">${fmtSAR(d.down_payment)}</div></div><div class="cwfi"><div class="cwfl">${isAr()?'القسط الشهري':'Monthly'}</div><div class="cwfv">${fmtSAR(d.installment)}</div></div></div></div>
+          <div style="margin-bottom:18px"><div class="cwst">${isAr()?'البنود والشروط':'Terms & Conditions'}</div><div class="cwterms"><ol>${(isAr()?['يلتزم المشتري بسداد الأقساط الشهرية في مواعيدها المحددة.','يلتزم البائع بتسليم السلعة عند استلام الدفعة الأولى.','في حال التأخر يحق للبائع إخطار المشتري عبر المنصة.','قسطني وسيط مُيسّر فقط وليست طرفاً في هذه الاتفاقية.']:['Buyer commits to paying monthly installments on time.','Seller commits to deliver item upon down payment.','Late payments allow seller to notify buyer via platform.','Qastni is facilitating intermediary only.']).map(t=>`<li>${t}</li>`).join('')}</ol></div></div>
+          ${d.notes?`<div style="margin-bottom:18px"><div class="cwst">${isAr()?'ملاحظات':'Notes'}</div><div class="cwterms">${san(d.notes)}</div></div>`:''}
+          <div class="cwsig"><div class="cwsg"><div>${isAr()?'توقيع المشتري':'Buyer Signature'}</div><div style="margin-top:3px;font-weight:700;color:var(--g700)">${san(d.buyer_name)}</div></div><div class="cwsg"><div>${isAr()?'توقيع البائع':'Seller Signature'}</div><div style="margin-top:3px;font-weight:700;color:var(--g700)">${san(d.seller_email)}</div></div></div>
+        </div>
+        <div class="cwft">${isAr()?'وثيقة صادرة من منصة قسطني للتوثيق الرقمي — لأغراض الاتفاق فقط':'Issued by Qastni digital platform — for agreement purposes only'}<br>${isAr()?'تاريخ الإصدار:':'Issued:'} ${fmtD(d.created_at)}</div>
+      </div>
+    </div>
+    <div class="card"><div class="chdr"><h2>⭐ ${isAr()?'التقييمات':'Ratings'}</h2></div><div class="cbody">${rHTML}</div></div>`
 }
 
 async function rProfile(){
   const nm=PRF?.full_name||CU.email.split('@')[0],color=PRF?.avatar_color||avc(CU.email)
   let rats=[]
-  try{
-    const{data}=await sb.from('ratings').select('*').eq('to_email',CU.email)
-    rats=data||[]
-  }catch(e){console.warn('rProfile ratings error:',e)}
+  try{const{data}=await withTimeout(sb.from('ratings').select('*').eq('to_email',CU.email),8000,'profile-ratings');rats=data||[]}catch(e){}
   const avg=rats.length?Math.round(rats.reduce((s,r)=>s+r.stars,0)/rats.length*10)/10:null
   const el=$('prfc');if(!el)return
   el.innerHTML=`
     <div class="card mb20">
       <div style="background:linear-gradient(135deg,var(--teal2),#065f46);padding:28px 24px;text-align:center;border-radius:var(--r16) var(--r16) 0 0">
-        <div style="width:68px;height:68px;border-radius:50%;background:${color};border:3px solid rgba(255,255,255,.3);display:inline-flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;margin-bottom:10px">${ini(nm)}</div>
+        <div style="width:68px;height:68px;border-radius:50%;background:${color};border:3px solid rgba(255,255,255,.3);display:inline-flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;margin-bottom:10px">${san(ini(nm))}</div>
         <h2 style="color:#fff;font-size:18px;font-weight:800">${san(nm)}</h2>
         <div style="color:rgba(255,255,255,.65);font-size:12px;margin-top:3px">${san(CU.email)}</div>
         <div style="margin-top:9px">${avg?stars(avg,rats.length,14):`<span style="color:rgba(255,255,255,.5);font-size:11px">${isAr()?'لا تقييمات بعد':'No ratings yet'}</span>`}</div>
@@ -841,32 +1065,39 @@ async function rProfile(){
   applyLang()
 }
 
-// ══ ACTIONS ══
 window.respond=async(id,status)=>{
+  if(!checkRL('respond',1000,30,60000))return
   const up={status}
   if(status==='active'){up.accepted_at=new Date().toISOString();up.seller_id=CU.id}
   else up.rejected_at=new Date().toISOString()
-  const{error}=await sb.from('deals').update(up).eq('id',id)
-  if(error){toast('⚠️ '+error.message,'e');return}
-  await loadDeals()
-  toast(status==='active'?(isAr()?'✅ تمت الموافقة على الصفقة':'✅ Deal accepted'):(isAr()?'❌ تم رفض الطلب':'❌ Request rejected'),status==='active'?'s':'e')
-  updBadge();rInc()
+  try{
+    const{error}=await withTimeout(sb.from('deals').update(up).eq('id',id),10000,'respond')
+    if(error)throw error
+    await loadDeals()
+    toast(status==='active'?(isAr()?'✅ تمت الموافقة على الصفقة':'✅ Deal accepted'):(isAr()?'❌ تم رفض الطلب':'❌ Request rejected'),status==='active'?'s':'e')
+    updBadge();rInc()
+  }catch(e){toast('⚠️ '+(e?.message||'error'),'e')}
 }
 
 window.markP=async(did,pid)=>{
-  await sb.from('payments').update({is_paid:true,paid_at:new Date().toISOString()}).eq('id',pid)
-  const{data:ap}=await sb.from('payments').select('is_paid').eq('deal_id',did)
-  const done=ap?.every(p=>p.is_paid)
-  if(done)await sb.from('deals').update({status:'completed',completed_at:new Date().toISOString()}).eq('id',did)
-  await loadDeals()
-  toast(done?(isAr()?'🎉 اكتملت الصفقة بالكامل!':'🎉 Deal fully completed!'):(isAr()?'💰 تم تسجيل الدفعة بنجاح':'💰 Payment recorded'),'s')
-  rDetail(did)
+  if(!checkRL('mark',800,60,60000))return
+  try{
+    await withTimeout(sb.from('payments').update({is_paid:true,paid_at:new Date().toISOString()}).eq('id',pid),10000,'mark')
+    const{data:ap}=await withTimeout(sb.from('payments').select('is_paid').eq('deal_id',did),8000,'check')
+    const done=ap?.every(p=>p.is_paid)
+    if(done)await withTimeout(sb.from('deals').update({status:'completed',completed_at:new Date().toISOString()}).eq('id',did),10000,'complete')
+    await loadDeals()
+    toast(done?(isAr()?'🎉 اكتملت الصفقة بالكامل!':'🎉 Deal fully completed!'):(isAr()?'💰 تم تسجيل الدفعة بنجاح':'💰 Payment recorded'),'s')
+    rDetail(did)
+  }catch(e){toast('⚠️ '+(e?.message||'error'),'e')}
 }
 
 window.printC=id=>{
   const el=document.getElementById('cw-'+id);if(!el)return
-  const w=window.open('','_blank','width=800,height=700')
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Contract - قسطني</title><style>body{font-family:Tajawal,sans-serif;direction:${isAr()?'rtl':'ltr'};padding:20px;color:#0f172a;background:#fff}</style></head><body>${el.outerHTML}</body></html>`)
+  const w=window.open('','_blank','width=800,height=700,noopener,noreferrer')
+  if(!w){toast(isAr()?'⚠️ السماح للنوافذ المنبثقة':'⚠️ Allow popups','e');return}
+  // Use textContent-style write via DOM, not innerHTML from arbitrary
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Contract</title><style>body{font-family:Tajawal,sans-serif;direction:${isAr()?'rtl':'ltr'};padding:20px;color:#0f172a;background:#fff}</style></head><body>${el.outerHTML}</body></html>`)
   w.document.close();w.focus();setTimeout(()=>w.print(),600)
 }
 
@@ -875,94 +1106,89 @@ window.closeRM=()=>$('rmodal').classList.add('hidden')
 window.setSR=val=>{RS.stars=val;document.querySelectorAll('.srate').forEach(s=>s.classList.toggle('active',parseInt(s.dataset.v)<=val))}
 window.submitR=async()=>{
   if(!RS.stars){toast(isAr()?'⚠️ اختر عدد النجوم':'⚠️ Select stars','e');return}
-  const{error}=await sb.from('ratings').insert({deal_id:RS.dealId,from_user_id:CU.id,from_email:CU.email,from_name:san(PRF?.full_name||CU.email.split('@')[0]),to_email:RS.email,stars:RS.stars,comment:san($('rcomment').value.trim())||null})
-  if(error){toast('⚠️ '+error.message,'e');return}
-  closeRM();toast(isAr()?'⭐ شكراً! تم إرسال تقييمك':'⭐ Rating submitted!','s')
-  rDetail(RS.dealId);loadSBStars()
+  if(!checkRL('rate',1500,5,300000))return
+  try{
+    const{error}=await withTimeout(sb.from('ratings').insert({
+      deal_id:RS.dealId,from_user_id:CU.id,from_email:CU.email,
+      from_name:PRF?.full_name||CU.email.split('@')[0],
+      to_email:RS.email,stars:RS.stars,
+      comment:clean($('rcomment').value,500)||null
+    }),10000,'rate')
+    if(error)throw error
+    closeRM();toast(isAr()?'⭐ شكراً! تم إرسال تقييمك':'⭐ Rating submitted!','s')
+    rDetail(RS.dealId);loadSBStars()
+  }catch(e){toast('⚠️ '+(e?.message||'error'),'e')}
 }
 
-// ══ BOOT — main session initializer ══
-async function initSession(session){
+/* ════════════════════════════════════════════════════
+   BOOT (FIXED)
+   ════════════════════════════════════════════════════ */
+async function bootApp(session){
+  if(_mode==='app')return
+  _mode='app'
+  CU=session.user
+  await loadProfile()
+  await loadDeals()
+  buildShell()
+  await nav('dash')
+  resetIdle()
+  // Realtime subscription
   try{
-    CU=session.user
-    // Use maybeSingle so missing profile row doesn't throw
-    const{data:p,error:pe}=await sb.from('profiles').select('*').eq('id',CU.id).maybeSingle()
-    if(pe)console.warn('Profile fetch warning:',pe)
-    PRF=p||{full_name:CU.user_metadata?.full_name||'',phone:CU.user_metadata?.phone||'',national_id:CU.user_metadata?.national_id||''}
-    await loadDeals()
-    buildShell()
-    await nav('dash')
-    // Setup realtime channel (non-blocking)
-    try{
-      _rtChannel=sb.channel('qrt_'+CU.id).on('postgres_changes',{event:'*',schema:'public',table:'deals'},async()=>{
-        await loadDeals();updBadge()
-        if(page==='incoming')rInc()
-        if(page==='dash')rDash()
-        if(page==='deals')rDeals()
-      }).subscribe()
-    }catch(e){console.warn('Realtime setup failed (non-critical):',e)}
+    if(_rtChannel){await sb.removeChannel(_rtChannel)}
+    _rtChannel=sb.channel('qrt-'+CU.id).on('postgres_changes',{event:'*',schema:'public',table:'deals'},async()=>{
+      await loadDeals();updBadge()
+      if(page==='incoming')rInc()
+      if(page==='dash')rDash()
+      if(page==='deals')rDeals()
+    }).subscribe()
+  }catch(e){console.warn('rt err',e)}
+}
+
+function showAuth(){
+  if(_mode==='auth')return
+  _mode='auth'
+  if(_rtChannel){sb.removeChannel(_rtChannel).catch(()=>{});_rtChannel=null}
+  CU=null;PRF=null;DEALS=[]
+  $('app').innerHTML=getAuthHTML()
+  applyLang()
+}
+
+// State machine: listen + initial check
+sb.auth.onAuthStateChange(async(event,session)=>{
+  if(event==='SIGNED_OUT'){showAuth();hideSplash();return}
+  if(session){
+    try{await bootApp(session)}
+    catch(e){console.warn('boot err',e);showAuth()}
+  }else{
+    showAuth()
+  }
+  hideSplash()
+})
+
+// CRITICAL FIX: actively check session on load (don't only rely on event)
+;(async()=>{
+  try{
+    const{data:{session}}=await withTimeout(sb.auth.getSession(),8000,'getSession')
+    if(session){await bootApp(session)}
+    else{showAuth()}
   }catch(e){
-    console.error('Session init failed:',e)
-    // Fall back to auth screen on critical failure
-    _started=false
-    CU=null;PRF=null;DEALS=[]
-    $('app').innerHTML=getAuthHTML()
-    applyLang()
-    toast(isAr()?'⚠️ حدث خطأ في تحميل البيانات':'⚠️ Error loading data','e')
+    console.warn('init err',e)
+    showAuth()
   }finally{
     hideSplash()
   }
-}
+})()
 
-// ══ AUTH STATE LISTENER ══
-sb.auth.onAuthStateChange(async(event,session)=>{
-  console.log('[auth]',event,!!session)
-  if(event==='SIGNED_OUT'){
-    _started=false
-    CU=null;PRF=null;DEALS=[]
-    if(_rtChannel){try{sb.removeChannel(_rtChannel)}catch(e){}_rtChannel=null}
-    $('app').innerHTML=getAuthHTML()
-    applyLang()
-    hideSplash()
-    return
-  }
-  // Only init once per session — ignore TOKEN_REFRESHED after we're started
-  if(!_started&&(event==='SIGNED_IN'||event==='INITIAL_SESSION')){
-    if(session){
-      _started=true
-      await initSession(session)
-    }else{
-      // No session on initial load — show auth
-      $('app').innerHTML=getAuthHTML()
-      applyLang()
-      hideSplash()
-    }
-  }
-})
-
-// ══ SAFETY NET: force-hide splash if nothing happens within 6s ══
-setTimeout(async()=>{
-  if(_splashHidden)return
-  console.warn('[boot] Safety timeout reached — forcing init')
-  try{
-    const{data:{session}}=await sb.auth.getSession()
-    if(session&&!_started){
-      _started=true
-      await initSession(session)
-    }else if(!_started){
-      _started=true
-      $('app').innerHTML=getAuthHTML()
-      applyLang()
-      hideSplash()
-    }
-  }catch(e){
-    console.error('[boot] Safety net failed:',e)
-    _started=true
-    $('app').innerHTML=getAuthHTML()
-    applyLang()
-    hideSplash()
-  }
+// Hard fallback: always hide splash after 6s no matter what
+setTimeout(()=>{
+  hideSplash()
+  if(_mode==='boot')showAuth()
 },6000)
+
+// Disable common dev-leakage in prod
+window.addEventListener('error',e=>{console.warn('app err',e.message)})
+window.addEventListener('unhandledrejection',e=>{console.warn('promise err',e.reason)})
 </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"7f7b0fd8732c4326aae4b9d58d5c514a","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
