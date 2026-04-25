@@ -4,6 +4,9 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>قسطني | Qastni</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><g transform='translate(60,60)'><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(30)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(60)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(90)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(120)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(150)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(180)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(210)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(240)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(270)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(300)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(330)'/></g></svg>"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><g transform='translate(60,60)'><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(30)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(60)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(90)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(120)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(150)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(180)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(210)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(240)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(270)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(300)'/><rect x='-6' y='-46' width='12' height='12' rx='3' fill='%230d9488' transform='rotate(330)'/></g></svg>"/>
+<meta name="theme-color" content="#0d9488"/>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -30,6 +33,46 @@ body.en{direction:ltr}
 #splash-sub{font-size:12px;color:var(--g400)}
 @keyframes spinDots{to{transform:rotate(360deg)}}
 .spin{animation:spinDots 2.5s linear infinite}
+
+/* ADVANCED LOGO: rotate, converge, shine, diverge — looping */
+.qlogo-wrap{position:relative;width:90px;height:90px;display:inline-flex;align-items:center;justify-content:center}
+.qlogo-wrap.sm{width:34px;height:34px}
+.qlogo-wrap.xs{width:26px;height:26px}
+.qlogo-wrap svg{width:100%;height:100%;animation:qspin 3.6s linear infinite;transform-origin:center}
+.qlogo-wrap svg .qpiece{transform-origin:60px 60px;animation:qpiece 3.6s ease-in-out infinite}
+.qlogo-wrap svg .qpiece:nth-child(1){animation-delay:-0s}
+.qlogo-wrap svg .qpiece:nth-child(2){animation-delay:-.05s}
+.qlogo-wrap svg .qpiece:nth-child(3){animation-delay:-.1s}
+.qlogo-wrap svg .qpiece:nth-child(4){animation-delay:-.15s}
+.qlogo-wrap svg .qpiece:nth-child(5){animation-delay:-.2s}
+.qlogo-wrap svg .qpiece:nth-child(6){animation-delay:-.25s}
+.qlogo-wrap svg .qpiece:nth-child(7){animation-delay:-.3s}
+.qlogo-wrap svg .qpiece:nth-child(8){animation-delay:-.35s}
+.qlogo-wrap svg .qpiece:nth-child(9){animation-delay:-.4s}
+.qlogo-wrap svg .qpiece:nth-child(10){animation-delay:-.45s}
+.qlogo-wrap svg .qpiece:nth-child(11){animation-delay:-.5s}
+.qlogo-wrap svg .qpiece:nth-child(12){animation-delay:-.55s}
+@keyframes qspin{
+  0%{transform:rotate(0deg)}
+  35%{transform:rotate(360deg)}
+  50%{transform:rotate(360deg)}
+  65%{transform:rotate(360deg)}
+  100%{transform:rotate(720deg)}
+}
+@keyframes qpiece{
+  0%,30%{transform:translate(0,0) scale(1)}
+  45%,55%{transform:translate(0,30px) scale(.85)}
+  70%,100%{transform:translate(0,0) scale(1)}
+}
+.qshine{position:absolute;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95) 0%,rgba(204,251,241,.7) 30%,transparent 65%);opacity:0;animation:qshine 3.6s ease-in-out infinite;pointer-events:none;filter:blur(2px)}
+.qlogo-wrap.sm .qshine{width:14px;height:14px}
+.qlogo-wrap.xs .qshine{width:11px;height:11px}
+@keyframes qshine{
+  0%,40%{opacity:0;transform:scale(.4)}
+  50%{opacity:1;transform:scale(1.4)}
+  60%{opacity:.6;transform:scale(1.6)}
+  70%,100%{opacity:0;transform:scale(.4)}
+}
 
 .shell{display:flex;min-height:100vh}
 .sidebar{width:240px;min-width:240px;background:var(--white);border-inline-end:1px solid var(--g200);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;z-index:20;box-shadow:2px 0 8px rgba(0,0,0,.04)}
@@ -213,22 +256,25 @@ textarea.fc{resize:vertical;min-height:70px}
 <body>
 
 <div id="splash">
-  <svg class="spin" viewBox="0 0 120 120" width="90" height="90">
-    <g transform="translate(60,60)">
-      <rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/>
-      <rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(30)"/>
-      <rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(60)"/>
-      <rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(90)"/>
-      <rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(120)"/>
-      <rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(150)"/>
-      <rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(180)"/>
-      <rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(210)"/>
-      <rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(240)"/>
-      <rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(270)"/>
-      <rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(300)"/>
-      <rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(330)"/>
-    </g>
-  </svg>
+  <div class="qlogo-wrap">
+    <svg viewBox="0 0 120 120">
+      <g transform="translate(60,60)">
+        <rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/>
+        <rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(30)"/>
+        <rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(60)"/>
+        <rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(90)"/>
+        <rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(120)"/>
+        <rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(150)"/>
+        <rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(180)"/>
+        <rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(210)"/>
+        <rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(240)"/>
+        <rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(270)"/>
+        <rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(300)"/>
+        <rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(330)"/>
+      </g>
+    </svg>
+    <div class="qshine"></div>
+  </div>
   <div id="splash-name">قسطني</div>
   <div id="splash-sub">جاري التحميل...</div>
 </div>
@@ -319,6 +365,8 @@ function stars(avg,cnt,sz=13){
 }
 
 const LOGO_S=(sz,cls='')=>`<svg ${cls?`class="${cls}"`:''} viewBox="0 0 120 120" width="${sz}" height="${sz}" style="flex-shrink:0"><g transform="translate(60,60)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(30)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(60)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(90)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(120)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(150)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(180)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(210)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(240)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(270)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(300)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(330)"/></g></svg>`
+
+const LOGO_ANIM=(sz=70)=>`<div class="qlogo-wrap" style="width:${sz}px;height:${sz}px"><svg viewBox="0 0 120 120"><g transform="translate(60,60)"><rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/><rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(30)"/><rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(60)"/><rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(90)"/><rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(120)"/><rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(150)"/><rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(180)"/><rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(210)"/><rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(240)"/><rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(270)"/><rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(300)"/><rect class="qpiece" x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(330)"/></g></svg><div class="qshine"></div></div>`
 const LOGO_W=(sz)=>`<svg viewBox="0 0 120 120" width="${sz}" height="${sz}" style="flex-shrink:0"><g transform="translate(60,60)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(30)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(60)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(90)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(120)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(150)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(180)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(210)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(240)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(270)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(300)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(330)"/></g></svg>`
 
 function applyLang(){
@@ -694,7 +742,7 @@ function rDeals(){
 async function rDetail(id){
   if(!id)return
   const el=$('detc');if(!el)return
-  el.innerHTML=`<div style="text-align:center;padding:36px">${LOGO_S(50,'spin')}</div>`
+  el.innerHTML=`<div style="text-align:center;padding:36px;display:flex;justify-content:center">${LOGO_ANIM(50)}</div>`
   try{
     let d=DEALS.find(x=>x.id===id)
     if(!d){const{data}=await sb.from('deals').select('*,payments(*),ratings(*)').eq('id',id).maybeSingle();d=data}
