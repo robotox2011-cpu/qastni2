@@ -225,6 +225,47 @@ textarea.fc{resize:vertical;min-height:70px}
 .tscroll{overflow-x:auto}
 .spinner{width:17px;height:17px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spinDots .7s linear infinite;display:inline-block}
 
+/* PAYMENT MODAL */
+.pmodal{background:#fff;border-radius:var(--r20);box-shadow:var(--shl);width:100%;max-width:430px;animation:pi .25s ease;overflow:hidden}
+.pmod-hdr{background:linear-gradient(135deg,#0f2a2a,var(--teal2));padding:20px;text-align:center;color:#fff}
+.pmod-hdr h2{font-size:16px;font-weight:800;margin-bottom:4px}
+.pmod-hdr .sub{font-size:11px;color:rgba(255,255,255,.7)}
+.pmod-bd{padding:18px 20px}
+.pamt-box{background:linear-gradient(135deg,var(--teal3),#e0f2fe);border:1.5px solid #99f6e4;border-radius:var(--r12);padding:14px;margin-bottom:14px;text-align:center}
+.pamt-lbl{font-size:11px;color:var(--teal2);font-weight:700;margin-bottom:3px}
+.pamt-val{font-size:26px;font-weight:900;color:var(--teal2);line-height:1.1}
+.pbreakdown{background:var(--g50);border-radius:var(--r10);padding:11px 13px;margin-bottom:14px;font-size:12px}
+.pbreakdown .row{display:flex;justify-content:space-between;padding:3px 0;color:var(--g600)}
+.pbreakdown .row.tot{border-top:1.5px dashed var(--g300);margin-top:5px;padding-top:7px;font-weight:800;color:var(--g900);font-size:13px}
+.pmethods{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:13px}
+.pmethod{background:#fff;border:1.5px solid var(--g300);border-radius:var(--r10);padding:11px 8px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:5px;font-family:inherit}
+.pmethod:hover{border-color:var(--teal);background:var(--teal3)}
+.pmethod.active{border-color:var(--teal);background:var(--teal3);box-shadow:0 0 0 3px rgba(13,148,136,.15)}
+.pmethod .micon{font-size:22px}
+.pmethod .mlbl{font-size:11px;font-weight:700;color:var(--g700)}
+.psandbox{background:var(--am50);border:1px solid #fde68a;border-radius:8px;padding:8px 11px;font-size:11px;color:var(--am600);font-weight:600;text-align:center;margin-bottom:13px;display:flex;align-items:center;justify-content:center;gap:5px}
+.pmod-foot{padding:13px 20px;border-top:1px solid var(--g100);background:var(--g50);display:flex;gap:8px}
+.pcard-input{width:100%;padding:10px 13px;border:1.5px solid var(--g300);border-radius:8px;font-size:13px;font-family:inherit;letter-spacing:1.5px;text-align:center;direction:ltr;margin-bottom:8px}
+.pcard-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* FEE INFO BOX in form */
+.feebox{background:linear-gradient(135deg,#dbeafe,#e0e7ff);border:1.5px solid #93c5fd;border-radius:var(--r10);padding:11px 13px;margin-top:8px;display:flex;align-items:center;gap:9px}
+.feebox .ico{font-size:22px}
+.feebox .txt{flex:1;font-size:11.5px;color:#1e40af;line-height:1.5;font-weight:600}
+
+/* SAMA STATUS BADGE */
+.samabadge{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#1e3a8a,#1e40af);color:#fff;padding:4px 10px;border-radius:99px;font-size:10px;font-weight:700;border:1.5px solid #3b82f6}
+.samabadge::before{content:'🛡️';font-size:11px}
+
+/* AUDIT LOG */
+.audit-list{max-height:240px;overflow-y:auto}
+.audit-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--g100);align-items:flex-start}
+.audit-item:last-child{border-bottom:none}
+.audit-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;background:var(--teal3)}
+.audit-body{flex:1;min-width:0}
+.audit-action{font-size:12.5px;font-weight:700;color:var(--g800)}
+.audit-meta{font-size:10.5px;color:var(--g500);margin-top:2px}
+
 @media(max-width:768px){
   .sidebar{display:none}.page{padding:13px}
   .frow{grid-template-columns:1fr}.sgrid{grid-template-columns:1fr 1fr}
@@ -283,6 +324,7 @@ textarea.fc{resize:vertical;min-height:70px}
 </div>
 
 <div class="tc" id="tc"></div>
+<div class="moverlay hidden" id="pm-overlay"></div>
 
 <script>
 'use strict'
@@ -512,7 +554,7 @@ function buildShell(){
       </div>
 
       <div class="page hidden" id="pg-dash"><div class="pi">
-        <div class="disc">⚠️ <span class="ar-t">قسطني منصة وساطة فقط — لا تُجري معاملات مالية حقيقية أو تحتجز أموالاً</span><span class="en-t hidden">Qastni is mediation only — no real transactions or fund holding</span></div>
+        <div class="disc">⚠️ <span class="ar-t">قسطني — قيد الترخيص من البنك المركزي السعودي. الرسوم سعي وتيسير وليست فوائد ربوية. النظام التجريبي حالياً</span><span class="en-t hidden">Qastni — Pending SAMA license. Service fees, not interest. Currently in test mode</span></div>
         <h1 class="ptit" id="dwelcome">مرحباً 👋</h1>
         <p class="psub ar-t">إليك ملخص نشاطك في منصة قسطني</p><p class="psub en-t hidden">Your Qastni activity summary</p>
         <div class="sgrid">
@@ -545,7 +587,11 @@ function buildShell(){
               <div class="fg"><label class="fl"><span class="ar-t">عدد الأشهر</span><span class="en-t hidden">Months</span> <span class="req">*</span></label><input class="fc" type="number" id="c-mo" placeholder="12" min="1" max="24" oninput="calcI()"/><p class="fhint">1 – 24</p></div>
               <div class="fg"><label class="fl"><span class="ar-t">تاريخ البداية</span><span class="en-t hidden">Start Date</span></label><input class="fc" type="date" id="c-date" value="${today()}"/><p class="fhint ar-t">📅 تواريخ السداد ستكون يوم 27 من كل شهر (موعد الرواتب)</p><p class="fhint en-t hidden">📅 Payment dates align with salary day (27th of each month)</p></div>
             </div>
-            <div class="calcbox"><div><div class="calclbl ar-t">القسط الشهري المحسوب</div><div class="calclbl en-t hidden">Monthly Installment</div><div style="font-size:11px;color:var(--teal);margin-top:2px" id="cbrk"></div></div><div class="calcval" id="cval">—</div></div>
+            <div class="calcbox"><div><div class="calclbl ar-t">القسط الشهري الإجمالي</div><div class="calclbl en-t hidden">Total Monthly Installment</div><div style="font-size:11px;color:var(--teal);margin-top:2px" id="cbrk"></div></div><div class="calcval" id="cval">—</div></div>
+            <div class="feebox">
+              <div class="ico">💼</div>
+              <div class="txt"><span class="ar-t">رسوم سعي وتيسير 4% (مدمجة في القسط الشهري). تواريخ السداد على رواتب السعودية (يوم 27 من كل شهر).</span><span class="en-t hidden">4% service fee (included in monthly installment). Payments aligned with Saudi salary day (27th).</span></div>
+            </div>
             <div class="fg mt16"><label class="fl"><span class="ar-t">ملاحظات إضافية</span><span class="en-t hidden">Notes</span></label><textarea class="fc" id="c-notes" rows="2" maxlength="500"></textarea></div>
           </div>
           <div class="cfoot flex jce gap10">
@@ -641,7 +687,15 @@ async function loadDeals(){
 window.calcI=()=>{
   const pr=parseFloat($('c-price')?.value)||0,dn=parseFloat($('c-down')?.value)||0,mo=parseInt($('c-mo')?.value)||0
   const v=$('cval'),b=$('cbrk');if(!v)return
-  if(pr>0&&mo>0&&dn<pr){const r=pr-dn;v.textContent=fmtSAR(r/mo);if(b)b.textContent=`(${fmtSAR(r)} ÷ ${mo})`}
+  if(pr>0&&mo>0&&dn<pr){
+    const r=pr-dn
+    const baseInst=r/mo
+    const fee=Math.round(r*0.04*100)/100
+    const feePerPay=Math.round(fee/mo*100)/100
+    const totalInst=baseInst+feePerPay
+    v.textContent=fmtSAR(totalInst)
+    if(b)b.textContent=isAr()?`القسط ${fmtSAR(baseInst)} + رسوم سعي ${fmtSAR(feePerPay)} = ${fmtSAR(totalInst)} شهرياً`:`Installment ${fmtSAR(baseInst)} + fee ${fmtSAR(feePerPay)} = ${fmtSAR(totalInst)}/mo`
+  }
   else{v.textContent='—';if(b)b.textContent=''}
 }
 
@@ -659,15 +713,42 @@ window.submitDeal=async()=>{
   if(se===CU.email){toast(isAr()?'⚠️ لا يمكنك إرسال طلب لنفسك':'⚠️ Cannot send to yourself','e');return}
   const btn=$('sbtn');btn.innerHTML='<span class="spinner"></span>';btn.disabled=true
   const inst=Math.round(((pr-dn)/mo)*100)/100
+  // العمولة تتحسب في السيرفر تلقائياً عبر trigger — هذي قيم مبدئية بس
   const{data:deal,error}=await sb.from('deals').insert({
     contract_num:genCN(),buyer_id:CU.id,buyer_email:CU.email,
     buyer_name:san(PRF?.full_name||CU.email.split('@')[0]),
     seller_email:se,item:it,description:san(de),price:pr,down_payment:dn,
     months:mo,installment:inst,notes:san(no),start_date:sd,status:'pending'
   }).select().single()
-  if(error){toast('⚠️ '+error.message,'e');btn.innerHTML='📤 '+(isAr()?'إرسال الطلب':'Send');btn.disabled=false;return}
+  if(error){
+    btn.innerHTML='📤 '+(isAr()?'إرسال الطلب':'Send');btn.disabled=false
+    // معالجة أخطاء الـ triggers بشكل ودي
+    const m=error.message||''
+    if(m.includes('EXCEEDED_MONTHLY_LIMIT')){
+      const parts=m.split(':')
+      const cur=parseFloat(parts[1]||0),newAmt=parseFloat(parts[2]||0)
+      const remaining=Math.max(5000-cur,0)
+      toast(isAr()
+        ?`⚠️ تجاوز الحد الشهري! أقساطك الحالية: ${fmtSAR(cur)} | المتبقي لك: ${fmtSAR(remaining)}`
+        :`⚠️ Monthly limit exceeded! Current: ${fmtSAR(cur)} | Available: ${fmtSAR(remaining)}`,'e')
+      return
+    }
+    if(m.includes('ACTIVE_DEAL_EXISTS_WITH_SELLER')){
+      toast(isAr()
+        ?'⚠️ لديك صفقة نشطة أو معلقة مع هذا البائع. أكمل الصفقة الحالية أولاً'
+        :'⚠️ You have an active/pending deal with this seller. Complete it first','e')
+      return
+    }
+    toast('⚠️ '+m,'e')
+    return
+  }
+  // إنشاء الأقساط — العمولة تتحسب في السيرفر عبر trigger
   const sch=Array.from({length:mo},(_,i)=>({deal_id:deal.id,month_num:i+1,due_date:salaryDate(sd,i+1),amount:inst,is_paid:false}))
   await sb.from('payments').insert(sch)
+  // audit log
+  try{
+    await sb.from('audit_log').insert({deal_id:deal.id,user_id:CU.id,user_email:CU.email,action:'deal_created',details:{price:pr,months:mo,seller:se}})
+  }catch(e){}
   ;['c-sel','c-desc','c-price','c-notes'].forEach(id=>{const el=$(id);if(el)el.value=''})
   $('c-item').value='';$('c-down').value='0';$('c-mo').value='';$('c-date').value=today();$('cval').textContent='—'
   toast(isAr()?'✅ تم إرسال الطلب بنجاح!':'✅ Request sent!','s')
@@ -748,12 +829,14 @@ async function rDetail(id){
     const rows=pay.map(p=>{
       const ov=!p.is_paid&&new Date(p.due_date)<new Date()
       const cm=d.status==='active'&&iB&&!p.is_paid
+      const payFee=p.platform_fee||(d.platform_fee_per_payment||0)
+      const payTotal=p.amount+payFee
       return`<tr class="${p.is_paid?'rpaid':ov?'rov':''}">
         <td>${isAr()?'الشهر':'Month'} ${p.month_num}</td>
         <td style="color:${ov?'var(--am600)':'inherit'}">${fmtD(p.due_date)}${ov&&!p.is_paid?' ⚠️':''}</td>
-        <td><strong>${fmtSAR(p.amount)}</strong></td>
+        <td><strong>${fmtSAR(payTotal)}</strong>${payFee>0?`<div style="font-size:10px;color:var(--g500);font-weight:500">${fmtSAR(p.amount)} + ${fmtSAR(payFee)} ${isAr()?'سعي':'fee'}</div>`:''}</td>
         <td>${p.is_paid?`<span class="badge b-green">✓ ${isAr()?'مدفوع':'Paid'}</span>`:ov?`<span class="badge b-amber">${isAr()?'متأخر':'Overdue'}</span>`:`<span class="badge b-gray">${isAr()?'غير مدفوع':'Unpaid'}</span>`}</td>
-        <td>${cm?`<button class="btn bp bsm" onclick="markP('${d.id}','${p.id}')">💳 ${isAr()?'تحديد كمدفوع':'Mark Paid'}</button>`:'—'}</td>
+        <td>${cm?`<button class="btn bp bsm" onclick="markP('${d.id}','${p.id}')">💳 ${isAr()?'دفع الآن':'Pay Now'}</button>`:'—'}</td>
       </tr>`}).join('')
     const rats=d.ratings||[]
     const rHTML=rats.length?rats.map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--g100)"><div class="flex aic jsb mb8"><strong class="text-sm">${san(r.from_name)}</strong>${stars(r.stars,1)}</div>${r.comment?`<p class="text-sm text-m">"${san(r.comment)}"</p>`:''}<div class="text-xs text-m mt8">${fmtD(r.created_at)}</div></div>`).join(''):`<div class="text-sm text-m">${isAr()?'لا توجد تقييمات':'No ratings'}</div>`
@@ -773,10 +856,13 @@ async function rDetail(id){
           <div class="igrid3">
             <div class="iitem"><div class="ilbl">${isAr()?'السعر':'Price'}</div><div class="ival teal">${fmtSAR(d.price)}</div></div>
             <div class="iitem"><div class="ilbl">${isAr()?'الدفعة الأولى':'Down'}</div><div class="ival">${fmtSAR(d.down_payment)}</div></div>
-            <div class="iitem"><div class="ilbl">${isAr()?'القسط':'Monthly'}</div><div class="ival teal">${fmtSAR(d.installment)}</div></div>
+            <div class="iitem"><div class="ilbl">${isAr()?'القسط الأساسي':'Base installment'}</div><div class="ival teal">${fmtSAR(d.installment)}</div></div>
+            <div class="iitem"><div class="ilbl">${isAr()?'رسوم سعي شهرية (4%)':'Monthly fee (4%)'}</div><div class="ival" style="color:#1e40af">${fmtSAR(d.platform_fee_per_payment||0)}</div></div>
+            <div class="iitem"><div class="ilbl">${isAr()?'الإجمالي الشهري':'Total monthly'}</div><div class="ival teal" style="font-size:15px">${fmtSAR((d.installment||0)+(d.platform_fee_per_payment||0))}</div></div>
             <div class="iitem"><div class="ilbl">${isAr()?'الأشهر':'Months'}</div><div class="ival">${d.months}</div></div>
             <div class="iitem"><div class="ilbl">${isAr()?'البداية':'Start'}</div><div class="ival">${fmtD(d.start_date)}</div></div>
             <div class="iitem"><div class="ilbl">${isAr()?'المتبقي':'Remaining'}</div><div class="ival" style="color:${rem>0?'var(--am600)':'var(--gr600)'}">${fmtSAR(rem)}</div></div>
+            <div class="iitem"><div class="ilbl">${isAr()?'إجمالي الرسوم':'Total fees'}</div><div class="ival" style="color:#1e40af">${fmtSAR(d.platform_fee||0)}</div></div>
           </div>
           ${d.notes?`<div class="divider"></div><p class="text-sm text-m"><strong>${isAr()?'ملاحظات:':'Notes:'}</strong> ${san(d.notes)}</p>`:''}
         </div>
@@ -819,10 +905,20 @@ async function rProfile(){
     rats=data||[]
   }catch(e){console.warn('rProfile ratings error:',e)}
   const avg=rats.length?Math.round(rats.reduce((s,r)=>s+r.stars,0)/rats.length*10)/10:null
+  
+  // حساب الأقساط النشطة الحالية للمستخدم كمشتري
+  const activeDeals=DEALS.filter(d=>d.status==='active'&&(d.buyer_id===CU.id||d.buyer_email===CU.email))
+  const monthlyCommitments=activeDeals.reduce((s,d)=>s+(d.installment||0)+(d.platform_fee_per_payment||0),0)
+  const monthlyLimit=PRF?.monthly_salary?Math.round(PRF.monthly_salary*0.33):5000
+  const remainingLimit=Math.max(monthlyLimit-monthlyCommitments,0)
+  const usagePercent=monthlyLimit>0?Math.min(Math.round(monthlyCommitments/monthlyLimit*100),100):0
+  const usageColor=usagePercent>80?'var(--r600)':usagePercent>50?'var(--am600)':'var(--gr600)'
+  
   const el=$('prfc');if(!el)return
   el.innerHTML=`
     <div class="card mb20">
-      <div style="background:linear-gradient(135deg,var(--teal2),#065f46);padding:28px 24px;text-align:center;border-radius:var(--r16) var(--r16) 0 0">
+      <div style="background:linear-gradient(135deg,var(--teal2),#065f46);padding:28px 24px;text-align:center;border-radius:var(--r16) var(--r16) 0 0;position:relative">
+        <div style="position:absolute;top:14px;${isAr()?'left':'right'}:14px"><span class="samabadge">${isAr()?'محمي':'Protected'}</span></div>
         <div style="width:68px;height:68px;border-radius:50%;background:${color};border:3px solid rgba(255,255,255,.3);display:inline-flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;margin-bottom:10px">${ini(nm)}</div>
         <h2 style="color:#fff;font-size:18px;font-weight:800">${san(nm)}</h2>
         <div style="color:rgba(255,255,255,.65);font-size:12px;margin-top:3px">${san(CU.email)}</div>
@@ -837,6 +933,39 @@ async function rProfile(){
         </div>
       </div>
     </div>
+    
+    <div class="card mb20">
+      <div class="chdr"><h2>💼 ${isAr()?'الحد الائتماني الشهري':'Monthly Credit Limit'}</h2></div>
+      <div class="cbody">
+        <div class="flex aic jsb mb8" style="flex-wrap:wrap;gap:8px">
+          <div>
+            <div class="text-xs text-m">${isAr()?'الالتزامات الشهرية الحالية':'Current monthly commitments'}</div>
+            <div style="font-size:20px;font-weight:900;color:${usageColor}">${fmtSAR(monthlyCommitments)}</div>
+          </div>
+          <div style="text-align:end">
+            <div class="text-xs text-m">${isAr()?'المتبقي':'Available'}</div>
+            <div style="font-size:20px;font-weight:900;color:var(--teal2)">${fmtSAR(remainingLimit)}</div>
+          </div>
+        </div>
+        <div class="ptrack" style="height:10px"><div class="pfill" style="width:${usagePercent}%;background:linear-gradient(90deg,${usageColor},${usageColor})"></div></div>
+        <div class="plbl mt8"><span>${usagePercent}% ${isAr()?'مستخدم':'used'}</span><span>${isAr()?'الحد الأقصى':'Max'}: ${fmtSAR(monthlyLimit)}</span></div>
+        
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--g100)">
+          ${PRF?.monthly_salary
+            ?`<div class="text-sm text-m mb8">${isAr()?'حدّك محسوب على راتبك':'Limit calculated on your salary'} (33%)</div>
+              <div class="flex aic gap8">
+                <div class="iitem" style="flex:1"><div class="ilbl">${isAr()?'راتبك المسجّل':'Registered Salary'}</div><div class="ival">${fmtSAR(PRF.monthly_salary)}</div></div>
+                <button class="btn bg bsm" onclick="updateSalary()">✏️ ${isAr()?'تعديل':'Edit'}</button>
+              </div>`
+            :`<div class="feebox" style="margin:0">
+                <div class="ico">💡</div>
+                <div class="txt">${isAr()?'أضف راتبك الشهري لزيادة حدّك الائتماني (33% من راتبك). بدونه الحد الأقصى 5,000 ر.س':'Add your monthly salary to increase your credit limit (33%). Default cap: 5,000 SAR'}</div>
+              </div>
+              <button class="btn bp bsm bfull mt12" onclick="updateSalary()">➕ ${isAr()?'إضافة الراتب':'Add Salary'}</button>`}
+        </div>
+      </div>
+    </div>
+    
     <div class="igrid3 mb20">
       <div class="scard"><div class="sico" style="background:var(--teal3)">📊</div><div class="sval">${DEALS.length}</div><div class="slbl ar-t">إجمالي الصفقات</div><div class="slbl en-t hidden">Total Deals</div></div>
       <div class="scard"><div class="sico" style="background:var(--gr100)">✅</div><div class="sval">${DEALS.filter(d=>d.status==='completed').length}</div><div class="slbl ar-t">مكتملة</div><div class="slbl en-t hidden">Completed</div></div>
@@ -846,8 +975,24 @@ async function rProfile(){
       <div class="chdr"><h2>⭐ ${isAr()?'التقييمات المستلمة':'Reviews Received'}</h2><span class="badge b-teal">${rats.length}</span></div>
       <div class="cbody">${rats.length?rats.map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--g100)"><div class="flex aic jsb mb8"><strong class="text-sm">${san(r.from_name)}</strong>${stars(r.stars,1)}</div>${r.comment?`<p class="text-sm text-m">"${san(r.comment)}"</p>`:''}<div class="text-xs text-m mt8">${fmtD(r.created_at)}</div></div>`).join(''):empt('⭐',isAr()?'لا تقييمات بعد':'No reviews yet')}</div>
     </div>
-    <div class="disc">⚠️ <span class="ar-t">قسطني منصة وساطة فقط — لا تُجري معاملات مالية أو تحتجز أموالاً</span><span class="en-t hidden">Qastni is mediation only — no real transactions or fund holding</span></div>`
+    <div class="disc">⚠️ <span class="ar-t">قسطني — قيد الترخيص من البنك المركزي السعودي. الرسوم سعي وتيسير وليست فوائد ربوية</span><span class="en-t hidden">Qastni — Pending SAMA license. Service fees, not interest. Currently in test mode</span></div>`
   applyLang()
+}
+
+window.updateSalary=async()=>{
+  const cur=PRF?.monthly_salary||''
+  const val=prompt(isAr()?'أدخل راتبك الشهري بالريال السعودي:':'Enter your monthly salary in SAR:',cur)
+  if(val===null)return
+  const n=parseFloat(val)
+  if(!n||n<1000||n>200000){
+    toast(isAr()?'⚠️ أدخل راتب صحيح (1,000 - 200,000)':'⚠️ Enter valid salary (1,000-200,000)','e')
+    return
+  }
+  const{error}=await sb.from('profiles').upsert({id:CU.id,monthly_salary:n},{onConflict:'id'})
+  if(error){toast('⚠️ '+error.message,'e');return}
+  PRF.monthly_salary=n
+  toast(isAr()?'✅ تم تحديث الراتب':'✅ Salary updated','s')
+  rProfile()
 }
 
 window.respond=async(id,status)=>{
@@ -861,14 +1006,140 @@ window.respond=async(id,status)=>{
   updBadge();rInc()
 }
 
-window.markP=async(did,pid)=>{
-  await sb.from('payments').update({is_paid:true,paid_at:new Date().toISOString()}).eq('id',pid)
-  const{data:ap}=await sb.from('payments').select('is_paid').eq('deal_id',did)
-  const done=ap?.every(p=>p.is_paid)
-  if(done)await sb.from('deals').update({status:'completed',completed_at:new Date().toISOString()}).eq('id',did)
-  await loadDeals()
-  toast(done?(isAr()?'🎉 اكتملت الصفقة بالكامل!':'🎉 Deal fully completed!'):(isAr()?'💰 تم تسجيل الدفعة بنجاح':'💰 Payment recorded'),'s')
-  rDetail(did)
+// ═══ PAYMENT FLOW (Sandbox) ═══
+let _PS={dealId:null,paymentId:null,amount:0,fee:0,sellerAmount:0,method:'apple'}
+
+window.markP=(did,pid)=>{
+  // نجيب بيانات القسط من الذاكرة
+  const deal=DEALS.find(d=>d.id===did)
+  if(!deal){toast(isAr()?'⚠️ خطأ في تحميل البيانات':'⚠️ Error loading','e');return}
+  const pay=(deal.payments||[]).find(p=>p.id===pid)
+  if(!pay){toast(isAr()?'⚠️ القسط غير موجود':'⚠️ Payment not found','e');return}
+  
+  const fee=pay.platform_fee||(deal.platform_fee_per_payment||Math.round(deal.installment*0.04*100)/100)
+  const total=pay.amount+fee
+  _PS={dealId:did,paymentId:pid,amount:total,fee:fee,sellerAmount:pay.amount,method:'apple'}
+  openPM(deal,pay)
+}
+
+function openPM(deal,pay){
+  const total=_PS.amount,fee=_PS.fee,sellerAmount=_PS.sellerAmount
+  $('pm-overlay').innerHTML=`
+    <div class="pmodal">
+      <div class="pmod-hdr">
+        <div style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;background:rgba(255,255,255,.15);border-radius:50%;margin-bottom:7px">
+          <span style="font-size:20px">💳</span>
+        </div>
+        <h2>${isAr()?'دفع القسط':'Pay Installment'}</h2>
+        <div class="sub">${isAr()?'الشهر':'Month'} ${pay.month_num} ${isAr()?'من':'of'} ${deal.months} • ${san(deal.item)}</div>
+      </div>
+      <div class="pmod-bd">
+        <div class="psandbox">🧪 ${isAr()?'وضع تجريبي — لن يتم خصم مبلغ فعلي':'Sandbox mode — no real charge'}</div>
+        
+        <div class="pamt-box">
+          <div class="pamt-lbl">${isAr()?'الإجمالي المطلوب':'Total Due'}</div>
+          <div class="pamt-val">${fmtSAR(total)}</div>
+        </div>
+        
+        <div class="pbreakdown">
+          <div class="row"><span>${isAr()?'مبلغ القسط للبائع':'Seller amount'}</span><span>${fmtSAR(sellerAmount)}</span></div>
+          <div class="row"><span>${isAr()?'رسوم سعي وتيسير (4%)':'Service fee (4%)'}</span><span>${fmtSAR(fee)}</span></div>
+          <div class="row tot"><span>${isAr()?'الإجمالي':'Total'}</span><span>${fmtSAR(total)}</span></div>
+        </div>
+        
+        <div class="text-xs text-m mb8" style="font-weight:700">${isAr()?'اختر طريقة الدفع':'Select payment method'}:</div>
+        <div class="pmethods">
+          <button class="pmethod active" data-m="apple" onclick="selPM('apple')">
+            <span class="micon"></span>
+            <span class="mlbl">Apple Pay</span>
+          </button>
+          <button class="pmethod" data-m="mada" onclick="selPM('mada')">
+            <span class="micon">💳</span>
+            <span class="mlbl">mada</span>
+          </button>
+          <button class="pmethod" data-m="visa" onclick="selPM('visa')">
+            <span class="micon">💳</span>
+            <span class="mlbl">Visa / Mastercard</span>
+          </button>
+          <button class="pmethod" data-m="stcpay" onclick="selPM('stcpay')">
+            <span class="micon">📱</span>
+            <span class="mlbl">STC Pay</span>
+          </button>
+        </div>
+        
+        <div id="pm-card-fields" class="hidden">
+          <input type="text" class="pcard-input" placeholder="0000 0000 0000 0000" maxlength="19" id="pm-cardno"/>
+          <div class="pcard-row">
+            <input type="text" class="pcard-input" placeholder="MM/YY" maxlength="5" id="pm-exp"/>
+            <input type="text" class="pcard-input" placeholder="CVV" maxlength="3" id="pm-cvv"/>
+          </div>
+        </div>
+      </div>
+      <div class="pmod-foot">
+        <button class="btn bg" onclick="closePM()" style="flex:1">${isAr()?'إلغاء':'Cancel'}</button>
+        <button class="btn bp" id="pm-pay-btn" onclick="processPM()" style="flex:2">🔒 ${isAr()?'دفع':'Pay'} ${fmtSAR(total)}</button>
+      </div>
+    </div>`
+  $('pm-overlay').classList.remove('hidden')
+}
+
+window.selPM=m=>{
+  _PS.method=m
+  document.querySelectorAll('.pmethod').forEach(b=>b.classList.toggle('active',b.dataset.m===m))
+  const cf=$('pm-card-fields')
+  if(cf)cf.classList.toggle('hidden',m!=='visa'&&m!=='mada')
+}
+
+window.closePM=()=>{$('pm-overlay').classList.add('hidden')}
+
+window.processPM=async()=>{
+  const btn=$('pm-pay-btn')
+  if(!btn)return
+  btn.innerHTML='<span class="spinner"></span> '+(isAr()?'جاري المعالجة...':'Processing...')
+  btn.disabled=true
+  
+  // محاكاة Moyasar Sandbox
+  await new Promise(r=>setTimeout(r,1800))
+  
+  try{
+    // تحديد القسط كمدفوع
+    await sb.from('payments').update({is_paid:true,paid_at:new Date().toISOString()}).eq('id',_PS.paymentId)
+    
+    // تسجيل عملية الدفع
+    await sb.from('payment_transactions').insert({
+      deal_id:_PS.dealId,
+      payment_id:_PS.paymentId,
+      buyer_id:CU.id,
+      amount:_PS.amount,
+      platform_fee:_PS.fee,
+      seller_amount:_PS.sellerAmount,
+      payment_method:_PS.method,
+      is_sandbox:true,
+      moyasar_id:'sandbox_'+Date.now()
+    })
+    
+    // audit log
+    try{
+      await sb.from('audit_log').insert({deal_id:_PS.dealId,user_id:CU.id,user_email:CU.email,action:'payment_completed',details:{amount:_PS.amount,method:_PS.method,sandbox:true}})
+    }catch(e){}
+    
+    // تحقق من اكتمال الصفقة
+    const{data:ap}=await sb.from('payments').select('is_paid').eq('deal_id',_PS.dealId)
+    const done=ap?.every(p=>p.is_paid)
+    if(done){
+      await sb.from('deals').update({status:'completed',completed_at:new Date().toISOString()}).eq('id',_PS.dealId)
+      try{await sb.from('audit_log').insert({deal_id:_PS.dealId,user_id:CU.id,user_email:CU.email,action:'deal_completed'})}catch(e){}
+    }
+    
+    closePM()
+    await loadDeals()
+    toast(done?(isAr()?'🎉 اكتملت الصفقة بالكامل!':'🎉 Deal fully completed!'):(isAr()?'✅ تم الدفع بنجاح':'✅ Payment successful'),'s')
+    rDetail(_PS.dealId)
+  }catch(e){
+    btn.innerHTML='🔒 '+(isAr()?'دفع':'Pay')+' '+fmtSAR(_PS.amount)
+    btn.disabled=false
+    toast('⚠️ '+e.message,'e')
+  }
 }
 
 window.printC=id=>{
