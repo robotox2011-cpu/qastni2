@@ -1231,11 +1231,11 @@ function openPM(deal,pay){
   // Mastercard — الشعار الرسمي بألوانه (دائرتين)
   const LOGO_MC=`<img src="https://cdn.simpleicons.org/mastercard?viewbox=auto" alt="Mastercard" style="height:20px;width:auto;display:block" loading="lazy"/>`
   
-  // mada — شعار سعودي خاص (يدوي بدقة)
-  const LOGO_MADA=`<svg viewBox="0 0 200 70" width="48" height="20"><g><circle cx="38" cy="35" r="6" fill="#84B740"/><text x="50" y="44" font-family="Arial,sans-serif" font-weight="900" font-size="32" letter-spacing="-1"><tspan fill="#1B458F">m</tspan><tspan fill="#84B740">a</tspan><tspan fill="#1B458F">d</tspan><tspan fill="#84B740">a</tspan></text></g></svg>`
+  // mada — حروف بنفسجي وأخضر متناوبة (LTR force)
+  const LOGO_MADA=`<div style="direction:ltr;display:flex;align-items:center;justify-content:center;font-family:Helvetica,Arial,sans-serif;font-weight:900;font-size:18px;letter-spacing:-1px;line-height:1"><span style="color:#84B740">m</span><span style="color:#1B458F">a</span><span style="color:#84B740">d</span><span style="color:#1B458F">a</span></div>`
   
-  // stc pay — شعار سعودي خاص (يدوي بدقة، الشكل الحالي 2024)
-  const LOGO_STC=`<svg viewBox="0 0 240 70" width="56" height="20"><g><text x="0" y="50" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="58" fill="#4F008C" letter-spacing="-3">stc</text><circle cx="58" cy="14" r="5" fill="#84B740"/><circle cx="68" cy="14" r="5" fill="#4F008C"/><text x="120" y="50" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="42" fill="#84B740" letter-spacing="-1">pay</text></g></svg>`
+  // stc pay — stc بنفسجي + pay أخضر (LTR force)
+  const LOGO_STC=`<div style="direction:ltr;display:flex;align-items:center;justify-content:center;font-family:Helvetica,Arial,sans-serif;line-height:1;gap:3px"><span style="color:#4F008C;font-weight:900;font-size:18px;letter-spacing:-1px">stc</span><span style="color:#84B740;font-weight:600;font-size:15px;letter-spacing:-0.5px">pay</span></div>`
   
   $('pm-overlay').innerHTML=`
     <div class="pmodal">
@@ -1275,7 +1275,7 @@ function openPM(deal,pay){
           </button>
           
           <button class="pm-row" data-m="mada" onclick="selPM('mada')">
-            <div class="pm-logo" style="width:60px;height:34px">${LOGO_MADA}</div>
+            <div class="pm-logo" style="width:70px;height:34px;padding:0;overflow:visible">${LOGO_MADA}</div>
             <div class="pm-info">
               <div class="pm-name">${isAr()?'بطاقة مدى':'mada'}</div>
               <div class="pm-desc">${isAr()?'البطاقة البنكية السعودية':'Saudi debit card'}</div>
@@ -1284,7 +1284,7 @@ function openPM(deal,pay){
           </button>
           
           <button class="pm-row" data-m="stcpay" onclick="selPM('stcpay')">
-            <div class="pm-logo" style="width:64px;height:34px">${LOGO_STC}</div>
+            <div class="pm-logo" style="width:78px;height:34px;padding:0;overflow:visible">${LOGO_STC}</div>
             <div class="pm-info">
               <div class="pm-name">stc pay</div>
               <div class="pm-desc">${isAr()?'محفظة إس تي سي باي':'STC pay wallet'}</div>
