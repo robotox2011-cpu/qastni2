@@ -299,6 +299,65 @@ textarea.fc{resize:vertical;min-height:70px}
 .back-btn:hover{background:var(--g200)}
 .back-btn:active{transform:scale(.92)}
 .back-btn.show{display:flex}
+
+/* HAMBURGER MENU BUTTON */
+.hamb-btn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;border:none;background:var(--teal3);color:var(--teal2);cursor:pointer;transition:all .15s;flex-direction:column;gap:3px;padding:0}
+.hamb-btn:hover{background:#a7f3d0;transform:scale(1.05)}
+.hamb-btn:active{transform:scale(.95)}
+.hamb-btn span{display:block;width:18px;height:2px;background:var(--teal2);border-radius:2px;transition:all .2s}
+.hamb-btn:hover span:nth-child(1){width:14px}
+.hamb-btn:hover span:nth-child(3){width:14px}
+
+/* MENU MODAL */
+.menu-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.menu-modal{background:#fff;border-radius:var(--r20);box-shadow:var(--shl);width:100%;max-width:380px;max-height:90vh;overflow-y:auto;animation:slideUp .3s ease;position:relative}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+.menu-hdr{background:linear-gradient(135deg,#0f2a2a,var(--teal2));padding:24px 22px;color:#fff;position:relative;border-radius:var(--r20) var(--r20) 0 0}
+.menu-close{position:absolute;top:12px;inset-inline-end:12px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}
+.menu-close:hover{background:rgba(255,255,255,.25);transform:rotate(90deg)}
+.menu-user{display:flex;align-items:center;gap:11px;margin-top:6px}
+.menu-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;border:2px solid rgba(255,255,255,.3);flex-shrink:0}
+.menu-uname{font-size:15px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:3px}
+.menu-uemail{font-size:11px;color:rgba(255,255,255,.7);word-break:break-all}
+.menu-body{padding:14px 0}
+.menu-section{padding:0 16px 6px;font-size:10px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.6px}
+.menu-item{display:flex;align-items:center;gap:11px;padding:11px 18px;cursor:pointer;border:none;background:none;width:100%;font-family:inherit;text-align:inherit;transition:all .14s;color:var(--g700);font-size:13px;font-weight:500}
+.menu-item:hover{background:var(--teal3);color:var(--teal2);padding-inline-start:22px}
+.menu-item .micon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;background:var(--g100);transition:all .14s}
+.menu-item:hover .micon{background:var(--teal);color:#fff;transform:scale(1.05)}
+.menu-item .mtxt{flex:1;min-width:0}
+.menu-item .mlbl{font-size:13px;font-weight:700;color:var(--g800);line-height:1.2}
+.menu-item:hover .mlbl{color:var(--teal2)}
+.menu-item .msub{font-size:10.5px;color:var(--g500);margin-top:2px}
+.menu-item.danger{color:var(--r600)}
+.menu-item.danger .micon{background:var(--r50);color:var(--r600)}
+.menu-item.danger:hover{background:var(--r50);color:var(--r600)}
+.menu-item.danger:hover .micon{background:var(--r600);color:#fff}
+.menu-item.danger:hover .mlbl{color:var(--r600)}
+.menu-divider{height:1px;background:var(--g100);margin:8px 16px}
+.menu-foot{padding:12px 18px;background:var(--g50);border-top:1px solid var(--g100);font-size:10.5px;color:var(--g400);text-align:center;line-height:1.6;border-radius:0 0 var(--r20) var(--r20)}
+
+/* SUGGESTION FORM */
+.sugg-form{padding:18px 20px}
+.sugg-types{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:14px}
+.sugg-type{padding:10px 6px;border:1.5px solid var(--g300);border-radius:10px;background:#fff;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .15s}
+.sugg-type:hover{border-color:var(--teal)}
+.sugg-type.active{border-color:var(--teal);background:var(--teal3)}
+.sugg-type .ico{font-size:20px}
+.sugg-type .lbl{font-size:11px;font-weight:700;color:var(--g700)}
+.sugg-type.active .lbl{color:var(--teal2)}
+
+/* ABOUT QASTNI */
+.about-card{padding:0}
+.about-hero{background:linear-gradient(135deg,var(--teal3),#e0f2fe);padding:24px 20px;text-align:center;border-radius:var(--r12) var(--r12) 0 0}
+.about-body{padding:18px 20px}
+.about-feature{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--g100);align-items:flex-start}
+.about-feature:last-child{border-bottom:none}
+.about-feature .fico{width:38px;height:38px;border-radius:10px;background:var(--teal3);color:var(--teal2);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.about-feature .ftxt{flex:1}
+.about-feature .ftit{font-size:13px;font-weight:800;color:var(--g800);margin-bottom:2px}
+.about-feature .fdesc{font-size:11.5px;color:var(--g500);line-height:1.55}
 </style>
 </head>
 <body>
@@ -352,6 +411,10 @@ textarea.fc{resize:vertical;min-height:70px}
 
 <div class="tc" id="tc"></div>
 <div class="moverlay hidden" id="pm-overlay"></div>
+<div class="menu-overlay hidden" id="menu-overlay" onclick="if(event.target===this)closeMenu()"></div>
+<div class="menu-overlay hidden" id="sugg-overlay" onclick="if(event.target===this)closeSugg()"></div>
+<div class="menu-overlay hidden" id="about-overlay" onclick="if(event.target===this)closeAbout()"></div>
+<div class="menu-overlay hidden" id="thanks-overlay" onclick="if(event.target===this)closeThanks()"></div>
 
 <script>
 'use strict'
@@ -561,10 +624,6 @@ function buildShell(){
             <div id="sbstars" style="margin-top:3px"></div>
           </div>
         </div>
-        <div class="flex gap8">
-          <button class="lbtn" data-lb onclick="toggleLang()" style="flex:1">${isAr()?'English':'عربي'}</button>
-          <button class="btn bg bsm" onclick="doLogout()" style="flex:1"><span class="ar-t">خروج</span><span class="en-t hidden">Logout</span></button>
-        </div>
       </div>
     </aside>
 
@@ -576,8 +635,9 @@ function buildShell(){
           <span style="font-size:14.5px;font-weight:700;color:var(--g900)" id="ptbar">الرئيسية</span>
         </div>
         <div class="flex aic gap8">
-          <button class="lbtn mobile-hide" data-lb onclick="toggleLang()">${isAr()?'English':'عربي'}</button>
-          <button class="btn bg bsm mobile-hide" onclick="doLogout()"><span class="ar-t">خروج</span><span class="en-t hidden">Logout</span></button>
+          <button class="hamb-btn" onclick="openMenu()" aria-label="القائمة">
+            <span></span><span></span><span></span>
+          </button>
         </div>
       </div>
 
@@ -1055,11 +1115,7 @@ async function rProfile(){
       <div class="chdr"><h2>⭐ ${isAr()?'التقييمات المستلمة':'Reviews Received'}</h2><span class="badge b-teal">${rats.length}</span></div>
       <div class="cbody">${rats.length?rats.map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--g100)"><div class="flex aic jsb mb8"><strong class="text-sm">${san(r.from_name)}</strong>${stars(r.stars,1)}</div>${r.comment?`<p class="text-sm text-m">"${san(r.comment)}"</p>`:''}<div class="text-xs text-m mt8">${fmtD(r.created_at)}</div></div>`).join(''):empt('⭐',isAr()?'لا تقييمات بعد':'No reviews yet')}</div>
     </div>
-    <div class="disc">⚠️ <span class="ar-t">قسطني — قيد الترخيص من البنك المركزي السعودي. الرسوم سعي وتيسير وليست فوائد ربوية</span><span class="en-t hidden">Qastni — Pending SAMA license. Service fees, not interest. Currently in test mode</span></div>
-    <div class="mobile-show flex gap10 mt16" style="display:none">
-      <button class="btn bg blg bfull" data-lb onclick="toggleLang()" style="flex:1">${isAr()?'English':'عربي'}</button>
-      <button class="btn bd blg bfull" onclick="doLogout()" style="flex:1">🚪 <span class="ar-t">تسجيل خروج</span><span class="en-t hidden">Logout</span></button>
-    </div>`
+    <div class="disc">⚠️ <span class="ar-t">قسطني — قيد الترخيص من البنك المركزي السعودي. الرسوم سعي وتيسير وليست فوائد ربوية</span><span class="en-t hidden">Qastni — Pending SAMA license. Service fees, not interest. Currently in test mode</span></div>`
   applyLang()
 }
 
@@ -1268,6 +1324,259 @@ window.submitR=async()=>{
   closeRM();toast(isAr()?'⭐ شكراً! تم إرسال تقييمك':'⭐ Rating submitted!','s')
   rDetail(RS.dealId);loadSBStars()
 }
+
+// ═══════════════════════════════════════════════
+// HAMBURGER MENU
+// ═══════════════════════════════════════════════
+window.openMenu=()=>{
+  const nm=PRF?.full_name||CU.email.split('@')[0]
+  const color=PRF?.avatar_color||avc(CU.email)
+  $('menu-overlay').innerHTML=`
+    <div class="menu-modal" onclick="event.stopPropagation()">
+      <div class="menu-hdr">
+        <button class="menu-close" onclick="closeMenu()" aria-label="إغلاق">✕</button>
+        <div class="menu-user">
+          <div class="menu-av" style="background:${color}">${ini(nm)}</div>
+          <div style="flex:1;min-width:0">
+            <div class="menu-uname">${san(nm)}</div>
+            <div class="menu-uemail">${san(CU.email)}</div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-body">
+        <div class="menu-section ar-t">عام</div>
+        <div class="menu-section en-t hidden">General</div>
+        
+        <button class="menu-item" onclick="openAbout()">
+          <div class="micon">💎</div>
+          <div class="mtxt">
+            <div class="mlbl ar-t">عن قسطني</div><div class="mlbl en-t hidden">About Qastni</div>
+            <div class="msub ar-t">تعرّف على فكرة المنصة</div><div class="msub en-t hidden">Learn about us</div>
+          </div>
+        </button>
+        
+        <button class="menu-item" onclick="toggleLang();closeMenu()">
+          <div class="micon">🌐</div>
+          <div class="mtxt">
+            <div class="mlbl ar-t">English</div><div class="mlbl en-t hidden">عربي</div>
+            <div class="msub ar-t">تغيير اللغة</div><div class="msub en-t hidden">Change language</div>
+          </div>
+        </button>
+        
+        <div class="menu-divider"></div>
+        <div class="menu-section ar-t">تواصل معنا</div>
+        <div class="menu-section en-t hidden">Contact</div>
+        
+        <a class="menu-item" href="https://wa.me/966567189993" target="_blank" rel="noopener" style="text-decoration:none">
+          <div class="micon" style="background:#25d366;color:#fff">📱</div>
+          <div class="mtxt">
+            <div class="mlbl ar-t">واتساب الدعم</div><div class="mlbl en-t hidden">WhatsApp Support</div>
+            <div class="msub" style="direction:ltr;text-align:start">+966 56 718 9993</div>
+          </div>
+        </a>
+        
+        <button class="menu-item" onclick="openSugg()">
+          <div class="micon" style="background:#fef3c7;color:#d97706">💡</div>
+          <div class="mtxt">
+            <div class="mlbl ar-t">اقتراح أو شكوى</div><div class="mlbl en-t hidden">Suggest or Report</div>
+            <div class="msub ar-t">شاركنا رأيك لنطوّر المنصة</div><div class="msub en-t hidden">Help us improve</div>
+          </div>
+        </button>
+        
+        <div class="menu-divider"></div>
+        
+        <button class="menu-item danger" onclick="closeMenu();doLogout()">
+          <div class="micon">🚪</div>
+          <div class="mtxt">
+            <div class="mlbl ar-t">تسجيل خروج</div><div class="mlbl en-t hidden">Logout</div>
+            <div class="msub ar-t">إنهاء الجلسة الحالية</div><div class="msub en-t hidden">End current session</div>
+          </div>
+        </button>
+      </div>
+      <div class="menu-foot">
+        <span class="ar-t">قسطني — منصة التقسيط الآمنة</span>
+        <span class="en-t hidden">Qastni — Secure Installment Platform</span>
+      </div>
+    </div>`
+  $('menu-overlay').classList.remove('hidden')
+  applyLang()
+}
+window.closeMenu=()=>$('menu-overlay').classList.add('hidden')
+
+// ═══════════════════════════════════════════════
+// SUGGESTION / COMPLAINT
+// ═══════════════════════════════════════════════
+let _SUGG_TYPE='suggestion'
+
+window.openSugg=()=>{
+  closeMenu()
+  _SUGG_TYPE='suggestion'
+  $('sugg-overlay').innerHTML=`
+    <div class="menu-modal" onclick="event.stopPropagation()" style="max-width:420px">
+      <div class="menu-hdr" style="padding:20px">
+        <button class="menu-close" onclick="closeSugg()" aria-label="إغلاق">✕</button>
+        <h2 style="font-size:17px;font-weight:800;color:#fff;margin-bottom:3px">${isAr()?'💡 شاركنا رأيك':'💡 Share Your Feedback'}</h2>
+        <div style="font-size:11.5px;color:rgba(255,255,255,.7)">${isAr()?'كل اقتراح يصل مباشرة لمؤسس المنصة':'Goes directly to the platform founder'}</div>
+      </div>
+      <div class="sugg-form">
+        <label class="fl" style="margin-bottom:8px">${isAr()?'نوع الرسالة':'Message Type'}</label>
+        <div class="sugg-types">
+          <button class="sugg-type active" data-t="suggestion" onclick="selSuggType('suggestion')">
+            <span class="ico">💡</span><span class="lbl">${isAr()?'اقتراح':'Suggest'}</span>
+          </button>
+          <button class="sugg-type" data-t="complaint" onclick="selSuggType('complaint')">
+            <span class="ico">⚠️</span><span class="lbl">${isAr()?'شكوى':'Complaint'}</span>
+          </button>
+          <button class="sugg-type" data-t="bug" onclick="selSuggType('bug')">
+            <span class="ico">🐛</span><span class="lbl">${isAr()?'مشكلة':'Bug'}</span>
+          </button>
+        </div>
+        
+        <label class="fl">${isAr()?'رسالتك':'Your Message'} <span class="req">*</span></label>
+        <textarea class="fc" id="sugg-msg" rows="5" maxlength="1000" placeholder="${isAr()?'اكتب رأيك هنا... كل تعليق يهمنا':'Write your feedback here...'}"></textarea>
+        <div class="text-xs text-m mt8">${isAr()?'💬 سيتم الرد عليك على بريدك الإلكتروني المسجّل':'💬 We\\'ll reply to your registered email'}</div>
+      </div>
+      <div class="mfoot" style="padding:13px 20px">
+        <button class="btn bg" onclick="closeSugg()" style="flex:1">${isAr()?'إلغاء':'Cancel'}</button>
+        <button class="btn bp" id="sugg-send" onclick="submitSugg()" style="flex:2">📨 ${isAr()?'إرسال':'Send'}</button>
+      </div>
+    </div>`
+  $('sugg-overlay').classList.remove('hidden')
+  applyLang()
+}
+
+window.closeSugg=()=>$('sugg-overlay').classList.add('hidden')
+
+window.selSuggType=t=>{
+  _SUGG_TYPE=t
+  document.querySelectorAll('.sugg-type').forEach(b=>b.classList.toggle('active',b.dataset.t===t))
+}
+
+window.submitSugg=async()=>{
+  const msg=$('sugg-msg')?.value.trim()
+  if(!msg||msg.length<10){
+    toast(isAr()?'⚠️ الرسالة قصيرة جداً (10 أحرف على الأقل)':'⚠️ Message too short (min 10 chars)','e')
+    return
+  }
+  const btn=$('sugg-send')
+  btn.innerHTML='<span class="spinner"></span>';btn.disabled=true
+  const{error}=await sb.from('suggestions').insert({
+    user_id:CU.id,
+    user_email:CU.email,
+    user_name:san(PRF?.full_name||CU.email.split('@')[0]),
+    type:_SUGG_TYPE,
+    message:san(msg)
+  })
+  if(error){
+    toast('⚠️ '+error.message,'e')
+    btn.innerHTML='📨 '+(isAr()?'إرسال':'Send');btn.disabled=false
+    return
+  }
+  closeSugg()
+  openThanks()
+}
+
+// ═══════════════════════════════════════════════
+// THANKS MODAL
+// ═══════════════════════════════════════════════
+window.openThanks=()=>{
+  $('thanks-overlay').innerHTML=`
+    <div class="menu-modal" onclick="event.stopPropagation()" style="max-width:340px;text-align:center">
+      <div style="padding:32px 24px 18px">
+        <div style="width:74px;height:74px;border-radius:50%;background:linear-gradient(135deg,var(--gr100),var(--teal3));display:inline-flex;align-items:center;justify-content:center;font-size:34px;margin-bottom:14px;animation:thp .5s ease">✅</div>
+        <h2 style="font-size:18px;font-weight:800;color:var(--g900);margin-bottom:7px">${isAr()?'شكراً لك!':'Thank you!'}</h2>
+        <p style="font-size:13px;color:var(--g500);line-height:1.6">${isAr()?'وصلنا تعليقك وسنطلع عليه قريباً. تعليقات مثل تعليقك تساعدنا على تطوير قسطني لتقديم خدمة أفضل لك.':'We received your feedback and will review it shortly. Comments like yours help us improve Qastni.'}</p>
+      </div>
+      <div style="padding:0 24px 24px">
+        <button class="btn bp blg bfull" onclick="closeThanks()">${isAr()?'تمام':'OK'}</button>
+      </div>
+    </div>
+    <style>@keyframes thp{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}</style>`
+  $('thanks-overlay').classList.remove('hidden')
+}
+
+window.closeThanks=()=>$('thanks-overlay').classList.add('hidden')
+
+// ═══════════════════════════════════════════════
+// ABOUT QASTNI
+// ═══════════════════════════════════════════════
+window.openAbout=()=>{
+  closeMenu()
+  $('about-overlay').innerHTML=`
+    <div class="menu-modal" onclick="event.stopPropagation()" style="max-width:430px">
+      <div class="menu-hdr" style="padding:0;border-radius:var(--r20) var(--r20) 0 0;overflow:hidden;position:relative">
+        <button class="menu-close" onclick="closeAbout()" aria-label="إغلاق" style="z-index:5">✕</button>
+        <div class="about-hero">
+          <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;background:#fff;border-radius:50%;margin-bottom:11px;box-shadow:0 4px 14px rgba(13,148,136,.25)">${LOGO_S(46)}</div>
+          <h2 style="font-size:20px;font-weight:900;color:var(--teal2);margin-bottom:5px">قسطني</h2>
+          <p style="font-size:12px;color:var(--g600);line-height:1.6">${isAr()?'منصة سعودية تربط بين البائع والمشتري بثقة':'A Saudi platform connecting buyers and sellers with trust'}</p>
+        </div>
+      </div>
+      <div class="about-body">
+        <p style="font-size:13px;color:var(--g700);line-height:1.85;margin-bottom:14px">${isAr()
+          ?'قسطني فكرة بسيطة لمشكلة كبيرة: التقسيط بين الأفراد كان دايماً يعتمد على الثقة الشخصية فقط، وكثير من الناس خسروا حقوقهم. جينا لنوفّر لك مكان آمن، شفاف، ومنظّم تقدر فيه تبيع وتشتري بالتقسيط بكل ثقة.'
+          :'Qastni is a simple idea for a big problem: peer-to-peer installments used to rely solely on personal trust, leaving many without recourse. We built a safe, transparent, and organized space where you can buy and sell with confidence.'}</p>
+        
+        <div class="about-feature">
+          <div class="fico">🛡️</div>
+          <div class="ftxt">
+            <div class="ftit">${isAr()?'حقوق محفوظة':'Rights Protected'}</div>
+            <div class="fdesc">${isAr()?'كل صفقة موثّقة بعقد رقمي مفصّل، وكل دفعة مسجّلة بتاريخها':'Every deal documented with digital contract, every payment timestamped'}</div>
+          </div>
+        </div>
+        
+        <div class="about-feature">
+          <div class="fico">📅</div>
+          <div class="ftxt">
+            <div class="ftit">${isAr()?'يحترم راتبك':'Respects Your Salary'}</div>
+            <div class="fdesc">${isAr()?'مواعيد الأقساط على يوم الراتب (27)، والحد الأقصى لا يتجاوز ٣٣٪ من دخلك':'Payment dates align with payday (27th). Max 33% of your income'}</div>
+          </div>
+        </div>
+        
+        <div class="about-feature">
+          <div class="fico">💰</div>
+          <div class="ftxt">
+            <div class="ftit">${isAr()?'بدون فوائد ربوية':'No Riba'}</div>
+            <div class="fdesc">${isAr()?'رسوم سعي وتيسير شفافة ومحدودة فقط، لا فوائد ولا مخالفات شرعية':'Transparent service fees only — Sharia compliant'}</div>
+          </div>
+        </div>
+        
+        <div class="about-feature">
+          <div class="fico">🤝</div>
+          <div class="ftxt">
+            <div class="ftit">${isAr()?'تقييمات حقيقية':'Real Reviews'}</div>
+            <div class="fdesc">${isAr()?'تعرف من تتعامل معه قبل ما تبدأ، عبر تقييمات من تجارب سابقة':'Know who you deal with through real user ratings'}</div>
+          </div>
+        </div>
+        
+        <div class="about-feature">
+          <div class="fico">🇸🇦</div>
+          <div class="ftxt">
+            <div class="ftit">${isAr()?'صُنع في المملكة':'Made in Saudi Arabia'}</div>
+            <div class="fdesc">${isAr()?'منصة سعودية تعمل على الترخيص من البنك المركزي السعودي (ساما)':'Saudi platform pursuing SAMA regulatory license'}</div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-foot">
+        <span class="ar-t">شكراً لثقتك ❤️ — فريق قسطني</span>
+        <span class="en-t hidden">Thank you for your trust ❤️ — Qastni Team</span>
+      </div>
+    </div>`
+  $('about-overlay').classList.remove('hidden')
+  applyLang()
+}
+
+window.closeAbout=()=>$('about-overlay').classList.add('hidden')
+
+// ESC key closes any open modal
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape')return
+  ;['menu-overlay','sugg-overlay','about-overlay','thanks-overlay','pm-overlay','rmodal'].forEach(id=>{
+    const el=$(id);if(el&&!el.classList.contains('hidden'))el.classList.add('hidden')
+  })
+})
+
+// ═══════════════════════════════════════════════
 
 async function initSession(session){
   try{
