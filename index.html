@@ -1434,7 +1434,7 @@ window.openSugg=()=>{
         
         <label class="fl">${isAr()?'رسالتك':'Your Message'} <span class="req">*</span></label>
         <textarea class="fc" id="sugg-msg" rows="5" maxlength="1000" placeholder="${isAr()?'اكتب رأيك هنا... كل تعليق يهمنا':'Write your feedback here...'}"></textarea>
-        <div class="text-xs text-m mt8">${isAr()?'💬 سيتم الرد عليك على بريدك الإلكتروني المسجّل':'💬 We\\'ll reply to your registered email'}</div>
+        <div class="text-xs text-m mt8">${isAr()?'💬 سيتم الرد عليك على بريدك الإلكتروني المسجّل':"💬 We'll reply to your registered email"}</div>
       </div>
       <div class="mfoot" style="padding:13px 20px">
         <button class="btn bg" onclick="closeSugg()" style="flex:1">${isAr()?'إلغاء':'Cancel'}</button>
