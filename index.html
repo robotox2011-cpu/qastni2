@@ -342,8 +342,8 @@ textarea.fc{resize:vertical;min-height:70px}
 .menu-modal{background:#fff;border-radius:var(--r20);box-shadow:var(--shl);width:100%;max-width:380px;max-height:90vh;overflow-y:auto;animation:slideUp .3s ease;position:relative}
 @keyframes slideUp{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
 .menu-hdr{background:linear-gradient(135deg,#0f2a2a,var(--teal2));padding:24px 22px;color:#fff;position:relative;border-radius:var(--r20) var(--r20) 0 0}
-.menu-close{position:absolute;top:12px;inset-inline-end:12px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}
-.menu-close:hover{background:rgba(255,255,255,.25);transform:rotate(90deg)}
+.menu-close{position:absolute;top:12px;inset-inline-start:12px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;transition:all .2s;line-height:1;z-index:10}
+.menu-close:hover{background:rgba(255,255,255,.28);transform:scale(1.08)}
 .menu-user{display:flex;align-items:center;gap:11px;margin-top:6px}
 .menu-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;border:2px solid rgba(255,255,255,.3);flex-shrink:0}
 .menu-uname{font-size:15px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:3px}
@@ -440,8 +440,8 @@ textarea.fc{resize:vertical;min-height:70px}
 <div class="tc" id="tc"></div>
 <div class="moverlay hidden" id="pm-overlay"></div>
 <div class="menu-overlay hidden" id="menu-overlay" onclick="if(event.target===this)closeMenu()"></div>
-<div class="menu-overlay hidden" id="sugg-overlay" onclick="if(event.target===this)closeSugg()"></div>
-<div class="menu-overlay hidden" id="about-overlay" onclick="if(event.target===this)closeAbout()"></div>
+<div class="menu-overlay hidden" id="sugg-overlay" onclick="if(event.target===this)backToMenu('sugg-overlay')"></div>
+<div class="menu-overlay hidden" id="about-overlay" onclick="if(event.target===this)backToMenu('about-overlay')"></div>
 <div class="menu-overlay hidden" id="thanks-overlay" onclick="if(event.target===this)closeThanks()"></div>
 
 <script>
@@ -1489,18 +1489,24 @@ window.openMenu=()=>{
 }
 window.closeMenu=()=>$('menu-overlay').classList.add('hidden')
 
+// رجوع من نافذة فرعية (sugg/about) إلى القائمة الرئيسية
+window.backToMenu=(overlayId)=>{
+  $(overlayId).classList.add('hidden')
+  // التأكد من أن القائمة الرئيسية ظاهرة
+  if($('menu-overlay').classList.contains('hidden'))openMenu()
+}
+
 // ═══════════════════════════════════════════════
 // SUGGESTION / COMPLAINT
 // ═══════════════════════════════════════════════
 let _SUGG_TYPE='suggestion'
 
 window.openSugg=()=>{
-  closeMenu()
   _SUGG_TYPE='suggestion'
   $('sugg-overlay').innerHTML=`
     <div class="menu-modal" onclick="event.stopPropagation()" style="max-width:420px">
       <div class="menu-hdr" style="padding:20px">
-        <button class="menu-close" onclick="closeSugg()" aria-label="إغلاق">✕</button>
+        <button class="menu-close" onclick="backToMenu('sugg-overlay')" aria-label="رجوع">${isAr()?'→':'←'}</button>
         <h2 style="font-size:17px;font-weight:800;color:#fff;margin-bottom:3px">${isAr()?'💡 شاركنا رأيك':'💡 Share Your Feedback'}</h2>
         <div style="font-size:11.5px;color:rgba(255,255,255,.7)">${isAr()?'كل اقتراح يصل مباشرة لمؤسس المنصة':'Goes directly to the platform founder'}</div>
       </div>
@@ -1523,7 +1529,7 @@ window.openSugg=()=>{
         <div class="text-xs text-m mt8">${isAr()?'💬 سيتم الرد عليك على بريدك الإلكتروني المسجّل':"💬 We'll reply to your registered email"}</div>
       </div>
       <div class="mfoot" style="padding:13px 20px">
-        <button class="btn bg" onclick="closeSugg()" style="flex:1">${isAr()?'إلغاء':'Cancel'}</button>
+        <button class="btn bg" onclick="backToMenu('sugg-overlay')" style="flex:1">${isAr()?'رجوع':'Back'}</button>
         <button class="btn bp" id="sugg-send" onclick="submitSugg()" style="flex:2">📨 ${isAr()?'إرسال':'Send'}</button>
       </div>
     </div>`
@@ -1559,6 +1565,7 @@ window.submitSugg=async()=>{
     return
   }
   closeSugg()
+  closeMenu()
   openThanks()
 }
 
@@ -1587,11 +1594,10 @@ window.closeThanks=()=>$('thanks-overlay').classList.add('hidden')
 // ABOUT QASTNI
 // ═══════════════════════════════════════════════
 window.openAbout=()=>{
-  closeMenu()
   $('about-overlay').innerHTML=`
     <div class="menu-modal" onclick="event.stopPropagation()" style="max-width:430px">
       <div class="menu-hdr" style="padding:0;border-radius:var(--r20) var(--r20) 0 0;overflow:hidden;position:relative">
-        <button class="menu-close" onclick="closeAbout()" aria-label="إغلاق" style="z-index:5">✕</button>
+        <button class="menu-close" onclick="backToMenu('about-overlay')" aria-label="رجوع" style="z-index:5">${isAr()?'→':'←'}</button>
         <div class="about-hero">
           <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;background:#fff;border-radius:50%;margin-bottom:11px;box-shadow:0 4px 14px rgba(13,148,136,.25)">${LOGO_S(46)}</div>
           <h2 style="font-size:20px;font-weight:900;color:var(--teal2);margin-bottom:5px">قسطني</h2>
