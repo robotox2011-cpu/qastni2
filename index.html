@@ -225,25 +225,102 @@ textarea.fc{resize:vertical;min-height:70px}
 .tscroll{overflow-x:auto}
 .spinner{width:17px;height:17px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spinDots .7s linear infinite;display:inline-block}
 
-/* MULTI-PAYMENT SELECTION */
-.multi-bar{background:linear-gradient(135deg,var(--teal2),#0d9488);color:#fff;padding:12px 16px;border-radius:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;box-shadow:0 4px 14px rgba(13,148,136,.25);animation:slideDown .25s ease}
-@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
-.multi-bar-info{flex:1;min-width:0}
-.multi-bar-count{font-size:14px;font-weight:800;line-height:1.2}
-.multi-bar-total{font-size:11.5px;color:rgba(255,255,255,.85);margin-top:2px}
-.multi-bar-actions{display:flex;gap:6px;flex-wrap:wrap}
-.multi-bar-btn{background:#fff;color:var(--teal2);border:none;padding:8px 14px;border-radius:8px;font-family:inherit;font-weight:800;font-size:12px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
-.multi-bar-btn:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(0,0,0,.15)}
-.multi-bar-clear{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.35);padding:8px 12px;border-radius:8px;font-family:inherit;font-weight:600;font-size:12px;cursor:pointer;transition:all .15s}
-.multi-bar-clear:hover{background:rgba(255,255,255,.28)}
+/* ═══ PREMIUM UPGRADE PAGE ═══ */
+.prem-page{min-height:calc(100vh - 100px);background:linear-gradient(180deg,#fff 0%,var(--teal3) 100%);padding:30px 20px;animation:fadeIn .4s ease}
+.prem-hero{max-width:680px;margin:0 auto 28px;text-align:center}
+.prem-hero-badge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--teal2),#0d9488);color:#fff;padding:8px 18px;border-radius:30px;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;box-shadow:0 6px 18px rgba(13,148,136,.3)}
+.prem-hero-title{font-size:32px;font-weight:900;color:var(--g900);margin:0 0 10px;line-height:1.25}
+.prem-hero-title .accent{background:linear-gradient(135deg,var(--teal2),#0d9488);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.prem-hero-sub{font-size:15px;color:var(--g600);line-height:1.6;max-width:520px;margin:0 auto}
 
-/* Payment checkbox */
-.pay-check{width:18px;height:18px;border:2px solid var(--g300);border-radius:5px;background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;vertical-align:middle}
-.pay-check:hover{border-color:var(--teal)}
-.pay-check.checked{background:var(--teal);border-color:var(--teal)}
-.pay-check.checked::after{content:'✓';color:#fff;font-size:13px;font-weight:900;line-height:1}
-.pay-check.disabled{opacity:.3;cursor:not-allowed;pointer-events:none}
-tr.row-selected{background:linear-gradient(90deg,var(--teal3) 0%,transparent 100%)}
+.prem-card-wrap{max-width:480px;margin:0 auto 24px}
+.prem-card{background:#fff;border-radius:24px;padding:0;overflow:hidden;box-shadow:0 24px 60px -12px rgba(15,118,110,.25),0 0 0 1px var(--teal3);position:relative}
+.prem-card-glow{position:absolute;inset:0;border-radius:24px;background:linear-gradient(135deg,rgba(13,148,136,.08),transparent 60%);pointer-events:none}
+.prem-card-top{background:linear-gradient(135deg,#0f766e,#0d9488);color:#fff;padding:28px 26px 22px;position:relative;overflow:hidden}
+.prem-card-top::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:radial-gradient(circle,rgba(255,255,255,.15),transparent 70%);border-radius:50%}
+.prem-card-top::after{content:'';position:absolute;bottom:-30px;left:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(255,255,255,.1),transparent 70%);border-radius:50%}
+.prem-card-label{font-size:11px;font-weight:800;letter-spacing:2px;color:rgba(255,255,255,.85);position:relative;z-index:1}
+.prem-card-name{font-size:24px;font-weight:900;margin:6px 0 12px;position:relative;z-index:1;display:flex;align-items:center;gap:10px}
+.prem-card-name .star{color:#fbbf24;font-size:22px;filter:drop-shadow(0 0 6px rgba(251,191,36,.5))}
+.prem-card-price{display:flex;align-items:baseline;gap:8px;position:relative;z-index:1}
+.prem-card-price .num{font-size:46px;font-weight:900;line-height:1}
+.prem-card-price .cur{font-size:14px;font-weight:700;opacity:.85}
+.prem-card-price .per{font-size:13px;font-weight:600;opacity:.8;margin-inline-start:6px}
+.prem-card-saving{display:inline-block;margin-top:10px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;position:relative;z-index:1}
+
+.prem-card-body{padding:26px 26px 22px}
+.prem-feat{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--g100)}
+.prem-feat:last-of-type{border-bottom:none}
+.prem-feat-ic{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--teal3);color:var(--teal2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;margin-top:1px}
+.prem-feat-txt{flex:1;font-size:13.5px;color:var(--g800);line-height:1.5}
+.prem-feat-txt strong{color:var(--g900);font-weight:800}
+
+.prem-cta{display:block;width:100%;background:linear-gradient(135deg,var(--teal2),#0d9488);color:#fff;border:none;padding:16px 22px;border-radius:14px;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;margin-top:18px;box-shadow:0 8px 22px rgba(13,148,136,.35);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.prem-cta:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(13,148,136,.45)}
+.prem-cta:active{transform:translateY(0)}
+.prem-cta-mini{font-size:11px;font-weight:600;opacity:.85;margin-top:3px}
+
+.prem-foot-note{text-align:center;font-size:11px;color:var(--g500);margin-top:14px;line-height:1.5}
+
+/* CURRENT PLAN STATE */
+.prem-active{background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:22px;border-radius:18px;margin-bottom:22px;box-shadow:0 12px 30px rgba(16,185,129,.3);display:flex;align-items:center;gap:14px}
+.prem-active-ic{font-size:36px;line-height:1}
+.prem-active-info{flex:1}
+.prem-active-title{font-size:16px;font-weight:800;margin-bottom:3px}
+.prem-active-exp{font-size:12px;opacity:.85}
+
+/* ═══ VERIFIED BADGE ═══ */
+.vbadge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:800;border:1px solid #fcd34d;vertical-align:middle;line-height:1.4;flex-shrink:0}
+.vbadge-lg{padding:5px 12px;font-size:12px;border-radius:14px}
+.vbadge .star{color:#d97706;font-size:11px;line-height:1}
+.vbadge-lg .star{font-size:13px}
+
+/* ═══ PROMO BANNER (in-app marketing) ═══ */
+.promo-banner{background:linear-gradient(135deg,#0f766e,#0d9488);color:#fff;padding:14px 16px;border-radius:14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;box-shadow:0 6px 18px rgba(13,148,136,.25);position:relative;overflow:hidden;border:none;width:100%;text-align:start;font-family:inherit}
+.promo-banner::before{content:'';position:absolute;top:-30px;inset-inline-end:-30px;width:90px;height:90px;background:radial-gradient(circle,rgba(255,255,255,.15),transparent 70%);border-radius:50%}
+.promo-banner:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(13,148,136,.35)}
+.promo-banner:active{transform:translateY(0)}
+.promo-icon{flex-shrink:0;width:42px;height:42px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;backdrop-filter:blur(10px);position:relative;z-index:1}
+.promo-content{flex:1;min-width:0;position:relative;z-index:1}
+.promo-title{font-size:13.5px;font-weight:800;line-height:1.3;margin-bottom:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.promo-mini-badge{display:inline-flex;align-items:center;gap:3px;background:rgba(255,255,255,.25);padding:1px 7px;border-radius:8px;font-size:10px;font-weight:700;letter-spacing:.3px}
+.promo-desc{font-size:11.5px;color:rgba(255,255,255,.9);line-height:1.4}
+.promo-arrow{flex-shrink:0;font-size:18px;font-weight:300;opacity:.85;position:relative;z-index:1}
+[dir="rtl"] .promo-arrow{transform:scaleX(-1)}
+
+.promo-mini{background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;padding:10px 14px;border-radius:12px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;border:1px solid #fcd34d;cursor:pointer;transition:all .15s;width:100%;font-family:inherit;text-align:start}
+.promo-mini:hover{background:linear-gradient(135deg,#fde68a,#fcd34d)}
+.promo-mini-ic{font-size:18px}
+.promo-mini-txt{flex:1;line-height:1.4}
+.promo-mini-link{color:#0f766e;font-weight:800;text-decoration:underline}
+
+/* ═══ NAFATH VERIFICATION SCREEN ═══ */
+.nafath-overlay{position:fixed;inset:0;background:rgba(15,42,42,.78);backdrop-filter:blur(8px);z-index:1100;display:flex;align-items:center;justify-content:center;padding:18px;animation:fadeIn .3s ease}
+.nafath-card{background:#fff;border-radius:24px;width:100%;max-width:440px;overflow:hidden;box-shadow:0 30px 80px -10px rgba(0,0,0,.4);animation:slideUp .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+.nafath-hdr{background:linear-gradient(135deg,#0f766e,#0d9488);color:#fff;padding:26px 22px 22px;text-align:center;position:relative;overflow:hidden}
+.nafath-hdr::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:radial-gradient(circle,rgba(255,255,255,.15),transparent 70%);border-radius:50%}
+.nafath-hdr::after{content:'';position:absolute;bottom:-30px;left:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(255,255,255,.1),transparent 70%);border-radius:50%}
+.nafath-icon{position:relative;z-index:1;width:64px;height:64px;background:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 8px 22px rgba(0,0,0,.2)}
+.nafath-icon svg{width:36px;height:36px;color:#0d9488}
+.nafath-title{font-size:20px;font-weight:900;position:relative;z-index:1;margin-bottom:5px}
+.nafath-sub{font-size:12.5px;opacity:.92;position:relative;z-index:1}
+.nafath-bd{padding:24px 22px}
+.nafath-step{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--g100)}
+.nafath-step:last-of-type{border-bottom:none}
+.nafath-num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--teal3);color:var(--teal2);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px}
+.nafath-step-txt{flex:1;font-size:13px;color:var(--g700);line-height:1.5}
+.nafath-step-txt strong{color:var(--g900);font-weight:800}
+.nafath-cost{background:var(--teal3);border:1px dashed var(--teal-light);padding:11px 14px;border-radius:12px;margin:14px 0 16px;font-size:12px;color:var(--teal-dk);text-align:center;font-weight:600;line-height:1.5}
+.nafath-cost strong{color:var(--teal2);font-weight:800}
+.nafath-actions{display:flex;gap:8px}
+.nafath-actions .btn{flex:1}
+
+/* ═══ MOTHAQ HIGHLIGHT ON DEAL CARDS ═══ */
+.deal-card.has-premium{border:1px solid #fcd34d;box-shadow:0 4px 14px rgba(217,119,6,.08)}
+.deal-card.has-premium::before{content:'';position:absolute;top:0;inset-inline-start:0;width:3px;height:100%;background:linear-gradient(180deg,#fbbf24,#f59e0b);border-radius:2px 0 0 2px}
+
+/* PAYMENT MODAL — Luxury login-style */
 .pmodal{background:#fff;border-radius:var(--r24);box-shadow:0 24px 60px rgba(0,0,0,.2);width:100%;max-width:420px;animation:pi .3s ease;overflow:hidden;max-height:92vh;display:flex;flex-direction:column}
 .pmod-hdr{background:linear-gradient(145deg,#0f2a2a,#0f766e 60%,#0d9488);padding:32px 26px 26px;text-align:center;color:#fff;position:relative;overflow:hidden;flex-shrink:0}
 .pmod-hdr::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(13,148,136,.4),transparent 60%);pointer-events:none}
@@ -705,6 +782,7 @@ function buildShell(){
       <div class="page hidden" id="pg-create"><div class="pi" style="max-width:680px">
         <h1 class="ptit ar-t">إنشاء طلب تقسيط</h1><h1 class="ptit en-t hidden">New Installment Request</h1>
         <p class="psub ar-t">سيتم إرسال الطلب للبائع للموافقة عليه</p><p class="psub en-t hidden">Request will be sent to seller for approval</p>
+        <div id="cr-promo-slot"></div>
         <div class="card">
           <div class="chdr"><h3 class="ar-t">تفاصيل الاتفاقية</h3><h3 class="en-t hidden">Agreement Details</h3></div>
           <div class="cbody">
@@ -724,7 +802,7 @@ function buildShell(){
             <div class="calcbox"><div><div class="calclbl ar-t">القسط الشهري الإجمالي</div><div class="calclbl en-t hidden">Total Monthly Installment</div><div style="font-size:11px;color:var(--teal);margin-top:2px" id="cbrk"></div></div><div class="calcval" id="cval">—</div></div>
             <div class="feebox">
               <div class="ico">💼</div>
-              <div class="txt"><span class="ar-t">رسوم سعي وتيسير 4% (مدمجة في القسط الشهري). تواريخ السداد على رواتب السعودية (يوم 27 من كل شهر).</span><span class="en-t hidden">4% service fee (included in monthly installment). Payments aligned with Saudi salary day (27th).</span></div>
+              <div class="txt"><span class="ar-t">رسوم سعي وتيسير 7% (3.5% من البائع + 3.5% من المشتري). تواريخ السداد على رواتب السعودية (يوم 27 من كل شهر).</span><span class="en-t hidden">7% service fee (3.5% seller + 3.5% buyer). Payments aligned with Saudi salary day (27th).</span></div>
             </div>
             <div class="fg mt16"><label class="fl"><span class="ar-t">ملاحظات إضافية</span><span class="en-t hidden">Notes</span></label><textarea class="fc" id="c-notes" rows="2" maxlength="500"></textarea></div>
           </div>
@@ -755,7 +833,11 @@ function buildShell(){
 
       <div class="page hidden" id="pg-detail"><div class="pi" id="detc"></div></div>
       <div class="page hidden" id="pg-profile"><div class="pi" id="prfc"></div></div>
+      <div class="page hidden" id="pg-prem"><div id="premc"></div></div>
     </div>
+
+    <!-- Nafath verification overlay -->
+    <div id="nafath-overlay" class="nafath-overlay hidden"></div>
 
     <nav class="bottom-nav mobile-show" role="navigation" aria-label="Mobile navigation">
       <button class="bn-item active" id="bn-dash" onclick="nav('dash')" aria-label="الرئيسية">
@@ -785,18 +867,14 @@ function buildShell(){
   loadSBStars().catch(e=>console.warn('loadSBStars failed:',e))
 }
 
-const PT={dash:{ar:'الرئيسية',en:'Dashboard'},create:{ar:'طلب جديد',en:'New Request'},inc:{ar:'الطلبات الواردة',en:'Incoming'},deals:{ar:'صفقاتي',en:'My Deals'},detail:{ar:'تفاصيل الصفقة',en:'Deal Details'},profile:{ar:'ملفي الشخصي',en:'My Profile'}}
-const PAGES=['dash','create','inc','deals','detail','profile']
+const PT={dash:{ar:'الرئيسية',en:'Dashboard'},create:{ar:'طلب جديد',en:'New Request'},inc:{ar:'الطلبات الواردة',en:'Incoming'},deals:{ar:'صفقاتي',en:'My Deals'},detail:{ar:'تفاصيل الصفقة',en:'Deal Details'},profile:{ar:'ملفي الشخصي',en:'My Profile'},prem:{ar:'الترقية لموثّق',en:'Upgrade to Verified'}}
+const PAGES=['dash','create','inc','deals','detail','profile','prem']
 let _pp={}
 
 // History stack for back button
 let _navHistory=[]
 
 window.nav=async(p,pp={},fromBack=false)=>{
-  // مسح تحديد الأقساط عند الخروج من تفاصيل صفقة لصفقة ثانية
-  if(p!=='detail'||(pp.id&&pp.id!==_MPDealId)){
-    if(_MPSel.size>0){_MPSel.clear();_MPDealId=null}
-  }
   // إضافة الصفحة السابقة للـ history stack (إذا مو رجوع)
   if(!fromBack&&page&&page!==p){
     _navHistory.push({p:page,pp:_pp})
@@ -823,7 +901,30 @@ window.nav=async(p,pp={},fromBack=false)=>{
     if(p==='deals')rDeals()
     if(p==='detail')await rDetail(pp.id)
     if(p==='profile')await rProfile()
-    if(p==='create'){const cd=$('c-date');if(cd&&!cd.value)cd.value=today()}
+    if(p==='create'){
+      const cd=$('c-date');if(cd&&!cd.value)cd.value=today()
+      // عرض banner الترقية للحسابات المجانية
+      const slot=$('cr-promo-slot')
+      if(slot){
+        if(PRF?.is_premium){
+          slot.innerHTML=''
+        }else{
+          slot.innerHTML=`
+            <button class="promo-banner" onclick="nav('prem')">
+              <div class="promo-icon">⭐</div>
+              <div class="promo-content">
+                <div class="promo-title">
+                  ${isAr()?'كن موثّقاً':'Become Verified'}
+                  <span class="promo-mini-badge">${isAr()?'150 ر.س/سنة':'150 SAR/yr'}</span>
+                </div>
+                <div class="promo-desc">${isAr()?'شارة موثّق · 5 صفقات نشطة · رفع سند بـ 20 ر.س فقط':'Verified badge · 5 active deals · 20 SAR sukuk filing'}</div>
+              </div>
+              <div class="promo-arrow">›</div>
+            </button>`
+        }
+      }
+    }
+    if(p==='prem')rPrem()
   }catch(e){console.error('Render error:',e)}
   // scroll to top
   window.scrollTo({top:0,behavior:'smooth'})
@@ -843,6 +944,7 @@ function rerender(){
     if(page==='inc')rInc()
     if(page==='deals')rDeals()
     if(page==='profile')rProfile()
+    if(page==='prem')rPrem()
     if(page==='detail'&&_pp.id)rDetail(_pp.id)
   }catch(e){console.error('Rerender error:',e)}
 }
@@ -877,13 +979,30 @@ window.calcI=()=>{
   if(pr>0&&mo>0&&dn<pr){
     const r=pr-dn
     const baseInst=r/mo
-    const fee=Math.round(r*0.04*100)/100
-    const feePerPay=Math.round(fee/mo*100)/100
+    // 7% إجمالي = 3.5% من البائع + 3.5% من المشتري
+    const feeBuyer=Math.round(r*0.035*100)/100
+    const feeSeller=Math.round(r*0.035*100)/100
+    const feePerPay=Math.round(feeBuyer/mo*100)/100
     const totalInst=baseInst+feePerPay
+    const sellerNet=pr-feeSeller
     v.textContent=fmtSAR(totalInst)
-    if(b)b.textContent=isAr()?`القسط ${fmtSAR(baseInst)} + رسوم سعي ${fmtSAR(feePerPay)} = ${fmtSAR(totalInst)} شهرياً`:`Installment ${fmtSAR(baseInst)} + fee ${fmtSAR(feePerPay)} = ${fmtSAR(totalInst)}/mo`
+    if(b){
+      b.innerHTML=isAr()
+        ?`<div style="font-size:12px;line-height:1.7">
+          <div>القسط ${fmtSAR(baseInst)} + رسوم سعي ${fmtSAR(feePerPay)} = <strong>${fmtSAR(totalInst)}</strong> شهرياً</div>
+          <div style="margin-top:6px;padding-top:6px;border-top:1px dashed var(--g300);color:var(--g600)">
+            البائع يستلم: <strong style="color:var(--teal2)">${fmtSAR(sellerNet)}</strong> (السعر ${fmtSAR(pr)} − رسوم 3.5% ${fmtSAR(feeSeller)})
+          </div>
+        </div>`
+        :`<div style="font-size:12px;line-height:1.7">
+          <div>Installment ${fmtSAR(baseInst)} + fee ${fmtSAR(feePerPay)} = <strong>${fmtSAR(totalInst)}</strong>/mo</div>
+          <div style="margin-top:6px;padding-top:6px;border-top:1px dashed var(--g300);color:var(--g600)">
+            Seller receives: <strong style="color:var(--teal2)">${fmtSAR(sellerNet)}</strong> (Price ${fmtSAR(pr)} − 3.5% fee ${fmtSAR(feeSeller)})
+          </div>
+        </div>`
+    }
   }
-  else{v.textContent='—';if(b)b.textContent=''}
+  else{v.textContent='—';if(b)b.innerHTML=''}
 }
 
 window.submitDeal=async()=>{
@@ -898,9 +1017,22 @@ window.submitDeal=async()=>{
   if(!valSAR(pr)){toast(isAr()?'⚠️ السعر غير صالح':'⚠️ Invalid price','e');return}
   if(dn>=pr){toast(isAr()?'⚠️ الدفعة الأولى يجب أن تكون أقل من السعر':'⚠️ Down < total','e');return}
   if(se===CU.email){toast(isAr()?'⚠️ لا يمكنك إرسال طلب لنفسك':'⚠️ Cannot send to yourself','e');return}
+
+  // ═══ Nafath check ═══ — لو ما تحقّق من نافذ، نعرض شاشة نافذ أولاً
+  if(!PRF?.nafath_verified){
+    openNafath({se,it,de,pr,dn,mo,no,sd},()=>{
+      // بعد التحقق من نافذ، نكمل إنشاء الصفقة
+      _submitDealAfterNafath(se,it,de,pr,dn,mo,no,sd)
+    })
+    return
+  }
+
+  await _submitDealAfterNafath(se,it,de,pr,dn,mo,no,sd)
+}
+
+async function _submitDealAfterNafath(se,it,de,pr,dn,mo,no,sd){
   const btn=$('sbtn');btn.innerHTML='<span class="spinner"></span>';btn.disabled=true
   const inst=Math.round(((pr-dn)/mo)*100)/100
-  // العمولة تتحسب في السيرفر تلقائياً عبر trigger — هذي قيم مبدئية بس
   const{data:deal,error}=await sb.from('deals').insert({
     contract_num:genCN(),buyer_id:CU.id,buyer_email:CU.email,
     buyer_name:san(PRF?.full_name||CU.email.split('@')[0]),
@@ -1020,9 +1152,7 @@ async function rDetail(id){
       const cm=d.status==='active'&&iB&&!p.is_paid
       const payFee=p.platform_fee||(d.platform_fee_per_payment||0)
       const payTotal=p.amount+payFee
-      const isSel=_MPSel.has(p.id)
-      return`<tr class="${p.is_paid?'rpaid':ov?'rov':''} ${isSel?'row-selected':''}" data-pid="${p.id}">
-        <td>${cm?`<span class="pay-check ${isSel?'checked':''}" onclick="togSel('${p.id}',${payTotal})" role="checkbox" aria-checked="${isSel}" tabindex="0"></span>`:''}</td>
+      return`<tr class="${p.is_paid?'rpaid':ov?'rov':''}">
         <td>${isAr()?'الشهر':'Month'} ${p.month_num}</td>
         <td style="color:${ov?'var(--am600)':'inherit'}">${fmtD(p.due_date)}${ov&&!p.is_paid?' ⚠️':''}</td>
         <td><strong>${fmtSAR(payTotal)}</strong>${payFee>0?`<div style="font-size:10px;color:var(--g500);font-weight:500">${fmtSAR(p.amount)} + ${fmtSAR(payFee)} ${isAr()?'سعي':'fee'}</div>`:''}</td>
@@ -1049,7 +1179,7 @@ async function rDetail(id){
             <div class="iitem"><div class="ilbl">${isAr()?'السعر':'Price'}</div><div class="ival teal">${fmtSAR(d.price)}</div></div>
             <div class="iitem"><div class="ilbl">${isAr()?'الدفعة الأولى':'Down'}</div><div class="ival">${fmtSAR(d.down_payment)}</div></div>
             <div class="iitem"><div class="ilbl">${isAr()?'القسط الأساسي':'Base installment'}</div><div class="ival teal">${fmtSAR(d.installment)}</div></div>
-            <div class="iitem"><div class="ilbl">${isAr()?'رسوم سعي شهرية (4%)':'Monthly fee (4%)'}</div><div class="ival" style="color:#1e40af">${fmtSAR(d.platform_fee_per_payment||0)}</div></div>
+            <div class="iitem"><div class="ilbl">${isAr()?'رسوم سعي شهرية (3.5%)':'Monthly fee (3.5%)'}</div><div class="ival" style="color:#1e40af">${fmtSAR(d.platform_fee_per_payment||0)}</div></div>
             <div class="iitem"><div class="ilbl">${isAr()?'الإجمالي الشهري':'Total monthly'}</div><div class="ival teal" style="font-size:15px">${fmtSAR((d.installment||0)+(d.platform_fee_per_payment||0))}</div></div>
             <div class="iitem"><div class="ilbl">${isAr()?'الأشهر':'Months'}</div><div class="ival">${d.months}</div></div>
             <div class="iitem"><div class="ilbl">${isAr()?'البداية':'Start'}</div><div class="ival">${fmtD(d.start_date)}</div></div>
@@ -1066,8 +1196,7 @@ async function rDetail(id){
       </div></div>`:''}
       <div class="card mb16">
         <div class="chdr"><h2>${isAr()?'جدول الأقساط':'Payment Schedule'}</h2><span class="text-sm text-m">${paid}/${tot} ${isAr()?'مدفوع':'paid'}</span></div>
-        <div id="multi-bar-container"></div>
-        <div class="tscroll"><table class="ptbl"><thead><tr><th style="width:32px"></th><th>${isAr()?'الشهر':'Month'}</th><th>${isAr()?'الاستحقاق':'Due'}</th><th>${isAr()?'المبلغ':'Amount'}</th><th>${isAr()?'الحالة':'Status'}</th><th>${isAr()?'إجراء':'Action'}</th></tr></thead><tbody>${rows}</tbody></table></div>
+        <div class="tscroll"><table class="ptbl"><thead><tr><th>${isAr()?'الشهر':'Month'}</th><th>${isAr()?'الاستحقاق':'Due'}</th><th>${isAr()?'المبلغ':'Amount'}</th><th>${isAr()?'الحالة':'Status'}</th><th>${isAr()?'إجراء':'Action'}</th></tr></thead><tbody>${rows}</tbody></table></div>
       </div>
       <div class="mb16">
         <div class="shdr"><h2>${isAr()?'عقد الاتفاقية':'Contract'}</h2><button class="btn bsec bsm" onclick="printC('${d.id}')">🖨️ ${isAr()?'طباعة':'Print'}</button></div>
@@ -1108,12 +1237,42 @@ async function rProfile(){
   const usageColor=usagePercent>80?'var(--r600)':usagePercent>50?'var(--am600)':'var(--gr600)'
   
   const el=$('prfc');if(!el)return
+  const isPrem=PRF?.is_premium===true
+  const profileBadge=isPrem?`<span class="vbadge vbadge-lg" style="margin-inline-start:8px"><span class="star">⭐</span>${isAr()?'موثّق':'Verified'}</span>`:''
+
+  // CTA card to upgrade or show active state
+  const subscriptionCard=isPrem?`
+    <div class="card mb20" style="border:1px solid #fcd34d;background:linear-gradient(135deg,#fffbeb 0%,#fff 60%)">
+      <div class="cbody">
+        <div class="flex aic gap8" style="margin-bottom:8px">
+          <div style="font-size:30px">⭐</div>
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:800;color:var(--g900)">${isAr()?'حسابك موثّق':'Your account is Verified'}</div>
+            <div style="font-size:12px;color:var(--g600)">${isAr()?'ينتهي في':'Expires on'}: ${fmtD(PRF.premium_expires_at)}</div>
+          </div>
+          <button class="btn bg bsm" onclick="nav('prem')" style="white-space:nowrap">${isAr()?'عرض المزايا':'View benefits'}</button>
+        </div>
+      </div>
+    </div>`:`
+    <button class="promo-banner" style="margin-bottom:20px;width:100%" onclick="nav('prem')">
+      <div class="promo-icon">⭐</div>
+      <div class="promo-content">
+        <div class="promo-title">
+          ${isAr()?'احصل على شارة موثّق':'Get the Verified badge'}
+          <span class="promo-mini-badge">${isAr()?'150 ر.س/سنة':'150 SAR/yr'}</span>
+        </div>
+        <div class="promo-desc">${isAr()?'5 صفقات نشطة · رفع سند بـ 20 ر.س · أولوية في الظهور':'5 active deals · 20 SAR sukuk · priority listing'}</div>
+      </div>
+      <div class="promo-arrow">›</div>
+    </button>`
+
   el.innerHTML=`
+    ${subscriptionCard}
     <div class="card mb20">
       <div style="background:linear-gradient(135deg,var(--teal2),#065f46);padding:28px 24px;text-align:center;border-radius:var(--r16) var(--r16) 0 0;position:relative">
         <div style="position:absolute;top:14px;${isAr()?'left':'right'}:14px"><span class="samabadge">${isAr()?'محمي':'Protected'}</span></div>
         <div style="width:68px;height:68px;border-radius:50%;background:${color};border:3px solid rgba(255,255,255,.3);display:inline-flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;margin-bottom:10px">${ini(nm)}</div>
-        <h2 style="color:#fff;font-size:18px;font-weight:800">${san(nm)}</h2>
+        <h2 style="color:#fff;font-size:18px;font-weight:800;display:inline-flex;align-items:center;flex-wrap:wrap;justify-content:center">${san(nm)}${profileBadge}</h2>
         <div style="color:rgba(255,255,255,.65);font-size:12px;margin-top:3px">${san(CU.email)}</div>
         <div style="margin-top:9px">${avg?stars(avg,rats.length,14):`<span style="color:rgba(255,255,255,.5);font-size:11px">${isAr()?'لا تقييمات بعد':'No ratings yet'}</span>`}</div>
       </div>
@@ -1225,162 +1384,159 @@ window.deleteDeal=async(id,e)=>{
 }
 
 // ═══ PAYMENT FLOW (Sandbox) ═══
-let _PS={dealId:null,paymentId:null,amount:0,fee:0,sellerAmount:0,method:'apple',multi:false,paymentIds:[]}
+let _PS={dealId:null,paymentId:null,amount:0,fee:0,sellerAmount:0,method:'apple',multi:false,paymentIds:[],isPremium:false}
 
-// ═══ Multi-Payment Selection ═══
-let _MPSel=new Set() // IDs of selected payments
-let _MPDealId=null
+// ═══════════════════════════════════════════════
+// PREMIUM SUBSCRIPTION PAGE
+// ═══════════════════════════════════════════════
 
-window.togSel=(pid,total)=>{
-  // أول مرة، نسجل الـ deal id الحالي
-  if(!_MPDealId)_MPDealId=_pp.id
-  // لو غيّر صفقة، صفر التحديد
-  if(_MPDealId!==_pp.id){_MPSel.clear();_MPDealId=_pp.id}
-  
-  if(_MPSel.has(pid))_MPSel.delete(pid)
-  else _MPSel.add(pid)
-  
-  // تحديث UI
-  const cb=document.querySelector(`[data-pid="${pid}"] .pay-check`)
-  const tr=document.querySelector(`tr[data-pid="${pid}"]`)
-  if(cb)cb.classList.toggle('checked',_MPSel.has(pid))
-  if(tr)tr.classList.toggle('row-selected',_MPSel.has(pid))
-  if(cb)cb.setAttribute('aria-checked',_MPSel.has(pid))
-  
-  renderMultiBar()
-}
+function rPrem(){
+  const c=$('premc');if(!c)return
+  const isPrem=PRF?.is_premium===true
+  const expDate=PRF?.premium_expires_at?fmtD(PRF.premium_expires_at):''
 
-function renderMultiBar(){
-  const c=$('multi-bar-container')
-  if(!c)return
-  const count=_MPSel.size
-  if(count===0){c.innerHTML='';return}
-  
-  // حساب الإجمالي من الأقساط المحددة
-  const deal=DEALS.find(d=>d.id===_MPDealId)
-  if(!deal){c.innerHTML='';return}
-  let total=0
-  ;(deal.payments||[]).forEach(p=>{
-    if(_MPSel.has(p.id)){
-      const fee=p.platform_fee||deal.platform_fee_per_payment||0
-      total+=(p.amount+fee)
-    }
-  })
-  
-  c.innerHTML=`
-    <div class="multi-bar">
-      <div class="multi-bar-info">
-        <div class="multi-bar-count">${isAr()?`✓ تم تحديد ${count} ${count===1?'قسط':count===2?'قسطين':count<=10?'أقساط':'قسط'}`:`✓ ${count} payment${count>1?'s':''} selected`}</div>
-        <div class="multi-bar-total">${isAr()?'الإجمالي':'Total'}: <strong>${fmtSAR(total)}</strong></div>
+  const featuresAr=[
+    {ic:'⭐',t:'<strong>شارة "موثّق"</strong> بارزة في ملفك الشخصي وفي كل صفقاتك'},
+    {ic:'🛡️',t:'<strong>تحقق نافذ مشمول</strong> بدون أي رسوم إضافية'},
+    {ic:'📦',t:'<strong>5 صفقات نشطة</strong> في وقت واحد بدلاً من 3'},
+    {ic:'⚖️',t:'<strong>رفع سند لأمر بـ 20 ر.س فقط</strong> بدلاً من 50 (توفير 60%)'},
+    {ic:'💰',t:'<strong>رسوم استرداد 3% فقط</strong> بدلاً من 5% عند تنفيذ السند'},
+    {ic:'🔝',t:'<strong>ظهور صفقاتك في أعلى</strong> القوائم لزيادة فرص القبول'},
+    {ic:'💬',t:'<strong>تنبيهات WhatsApp</strong> قبل موعد كل قسط بـ 3 أيام'},
+    {ic:'⚡',t:'<strong>دعم بأولوية</strong> — استجابة خلال 6 ساعات'},
+    {ic:'📊',t:'<strong>تقارير سنوية</strong> مفصّلة عن سجلك المالي'}
+  ]
+  const featuresEn=[
+    {ic:'⭐',t:'<strong>"Verified" badge</strong> on your profile and every deal'},
+    {ic:'🛡️',t:'<strong>Free Nafath verification</strong> — no extra fees'},
+    {ic:'📦',t:'<strong>5 active deals</strong> at once instead of 3'},
+    {ic:'⚖️',t:'<strong>Promissory note for 20 SAR</strong> instead of 50 (60% off)'},
+    {ic:'💰',t:'<strong>Recovery fee 3% only</strong> instead of 5% on enforcement'},
+    {ic:'🔝',t:'<strong>Priority listing</strong> — your deals appear at the top'},
+    {ic:'💬',t:'<strong>WhatsApp alerts</strong> 3 days before each installment'},
+    {ic:'⚡',t:'<strong>Priority support</strong> — response within 6 hours'},
+    {ic:'📊',t:'<strong>Annual reports</strong> with detailed financial history'}
+  ]
+  const features=isAr()?featuresAr:featuresEn
+
+  const featRows=features.map(f=>`
+    <div class="prem-feat">
+      <div class="prem-feat-ic">${f.ic}</div>
+      <div class="prem-feat-txt">${f.t}</div>
+    </div>`).join('')
+
+  const heroSection=isPrem?`
+    <div class="prem-active">
+      <div class="prem-active-ic">⭐</div>
+      <div class="prem-active-info">
+        <div class="prem-active-title">${isAr()?'حسابك الموثّق نشط ✨':'Your Verified account is active ✨'}</div>
+        <div class="prem-active-exp">${isAr()?'ينتهي في':'Expires on'}: ${expDate||'-'}</div>
       </div>
-      <div class="multi-bar-actions">
-        <button class="multi-bar-clear" onclick="clearSel()">${isAr()?'إلغاء':'Clear'}</button>
-        <button class="multi-bar-btn" onclick="payMulti()">💳 ${isAr()?'دفع الآن':'Pay Now'}</button>
-      </div>
+    </div>
+    <div class="prem-hero">
+      <div class="prem-hero-badge">⭐ ${isAr()?'موثّق · فعّال':'VERIFIED · ACTIVE'}</div>
+      <h1 class="prem-hero-title">${isAr()?'أنت تستمتع بكل':"You're enjoying all"} <span class="accent">${isAr()?'مزايا الموثّق':'Verified benefits'}</span></h1>
+      <p class="prem-hero-sub">${isAr()?'شكراً لثقتك في قسطني. تحت قائمة المزايا اللي تستفيد منها حالياً:':"Thank you for trusting Qastni. Below are the benefits you're enjoying:"}</p>
+    </div>`:`
+    <div class="prem-hero">
+      <div class="prem-hero-badge">⭐ ${isAr()?'الترقية لموثّق':'UPGRADE TO VERIFIED'}</div>
+      <h1 class="prem-hero-title">${isAr()?'كن':'Become a'} <span class="accent">${isAr()?'موثّق ⭐':'Verified ⭐'}</span> ${isAr()?'في قسطني':'on Qastni'}</h1>
+      <p class="prem-hero-sub">${isAr()?'احصل على شارة موثّقة، حماية مدمجة، وتجربة مميّزة في كل تعاملاتك':'Get a verified badge, built-in protection, and a premium experience for all your transactions'}</p>
     </div>`
+
+  c.innerHTML=`
+    <div class="prem-page">
+      ${heroSection}
+
+      <div class="prem-card-wrap">
+        <div class="prem-card">
+          <div class="prem-card-glow"></div>
+          <div class="prem-card-top">
+            <div class="prem-card-label">${isAr()?'باقة موثّق':'VERIFIED PLAN'}</div>
+            <div class="prem-card-name">${isAr()?'موثّق':'Verified'} <span class="star">⭐</span></div>
+            <div class="prem-card-price">
+              <span class="num">150</span>
+              <span class="cur">${isAr()?'ر.س':'SAR'}</span>
+              <span class="per">/ ${isAr()?'سنة':'year'}</span>
+            </div>
+            <div class="prem-card-saving">${isAr()?'فقط 12.5 ر.س شهرياً':'Only 12.5 SAR/month'}</div>
+          </div>
+          <div class="prem-card-body">
+            ${featRows}
+            ${isPrem?`
+              <button class="prem-cta" disabled style="background:var(--g300);color:var(--g600);box-shadow:none;cursor:default">
+                ✓ ${isAr()?'اشتراكك نشط':'Subscription active'}
+              </button>
+            `:`
+              <button class="prem-cta" onclick="upgradeToPremium()">
+                <span>⭐ ${isAr()?'الترقية الآن — 150 ر.س':'Upgrade Now — 150 SAR'}</span>
+              </button>
+              <div class="prem-foot-note">
+                ${isAr()
+                  ?'🧪 وضع تجريبي — لن يتم خصم مبلغ فعلي. الفعلي يبدأ بعد ترخيص ساما.'
+                  :'🧪 Sandbox mode — no real charge. Real billing starts after SAMA license.'}
+              </div>
+            `}
+          </div>
+        </div>
+      </div>
+    </div>
+  `
 }
 
-window.clearSel=()=>{
-  _MPSel.clear();_MPDealId=null
-  document.querySelectorAll('.pay-check').forEach(cb=>cb.classList.remove('checked'))
-  document.querySelectorAll('tr.row-selected').forEach(tr=>tr.classList.remove('row-selected'))
-  renderMultiBar()
-}
+// تفعيل اشتراك مميّز (Sandbox)
+window.upgradeToPremium=async()=>{
+  if(!confirm(isAr()
+    ?'هل أنت متأكد من ترقية حسابك لموثّق ⭐؟\n\n(وضع تجريبي — لن يتم خصم مبلغ فعلي)'
+    :'Confirm upgrade to Verified ⭐?\n\n(Sandbox mode — no real charge)')) return
 
-window.payMulti=()=>{
-  if(_MPSel.size===0)return
-  const deal=DEALS.find(d=>d.id===_MPDealId)
-  if(!deal){toast(isAr()?'⚠️ خطأ':'⚠️ Error','e');return}
-  
-  // جمع الأقساط المحددة
-  const selectedPays=(deal.payments||[]).filter(p=>_MPSel.has(p.id)).sort((a,b)=>a.month_num-b.month_num)
-  if(selectedPays.length===0)return
-  
-  let totalAmount=0,totalFee=0,totalSellerAmount=0
-  const paymentIds=[]
-  selectedPays.forEach(p=>{
-    const fee=p.platform_fee||deal.platform_fee_per_payment||0
-    totalAmount+=(p.amount+fee)
-    totalFee+=fee
-    totalSellerAmount+=p.amount
-    paymentIds.push(p.id)
-  })
-  
+  // افتح payment modal بمبلغ 150
   _PS={
-    dealId:_MPDealId,
-    paymentId:null,
-    amount:totalAmount,
-    fee:totalFee,
-    sellerAmount:totalSellerAmount,
-    method:'apple',
-    multi:true,
-    paymentIds:paymentIds,
-    months:selectedPays.map(p=>p.month_num)
+    dealId:null,paymentId:null,
+    amount:150,fee:0,sellerAmount:0,
+    method:'apple',multi:false,paymentIds:[],
+    isPremium:true
   }
-  openPMMulti(deal,selectedPays)
+  openPMPremium()
 }
 
-window.markP=(did,pid)=>{
-  const deal=DEALS.find(d=>d.id===did)
-  if(!deal){toast(isAr()?'⚠️ خطأ في تحميل البيانات':'⚠️ Error loading','e');return}
-  const pay=(deal.payments||[]).find(p=>p.id===pid)
-  if(!pay){toast(isAr()?'⚠️ القسط غير موجود':'⚠️ Payment not found','e');return}
-  
-  const fee=pay.platform_fee||(deal.platform_fee_per_payment||Math.round(deal.installment*0.04*100)/100)
-  const total=pay.amount+fee
-  _PS={dealId:did,paymentId:pid,amount:total,fee:fee,sellerAmount:pay.amount,method:'apple',multi:false,paymentIds:[]}
-  openPM(deal,pay)
-}
-
-function openPMMulti(deal,pays){
-  // الشعارات
+function openPMPremium(){
   const LOGO_APPLE=`<img src="https://cdn.simpleicons.org/applepay/000000?viewbox=auto" alt="Apple Pay" style="height:22px;width:auto;display:block" loading="lazy"/>`
   const LOGO_PAYPAL=`<img src="https://cdn.simpleicons.org/paypal?viewbox=auto" alt="PayPal" style="height:18px;width:auto;display:block" loading="lazy"/>`
   const LOGO_VISA=`<img src="https://cdn.simpleicons.org/visa/1A1F71?viewbox=auto" alt="Visa" style="height:14px;width:auto;display:block" loading="lazy"/>`
   const LOGO_MC=`<img src="https://cdn.simpleicons.org/mastercard?viewbox=auto" alt="Mastercard" style="height:20px;width:auto;display:block" loading="lazy"/>`
   const LOGO_MADA=`<div style="direction:ltr;display:flex;align-items:center;justify-content:center;gap:5px;line-height:1"><div style="display:flex;flex-direction:column;gap:2px"><div style="width:14px;height:5px;background:#27A2DB;border-radius:1px"></div><div style="width:14px;height:5px;background:#84B740;border-radius:1px"></div></div><div style="display:flex;flex-direction:column;font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#231F20;line-height:1;gap:1px"><span style="font-size:11px;letter-spacing:-0.3px">مدى</span><span style="font-size:11px;letter-spacing:-0.5px">mada</span></div></div>`
   const LOGO_STC=`<div style="direction:ltr;display:flex;align-items:center;justify-content:center;font-family:Helvetica,Arial,sans-serif;line-height:1;gap:3px"><span style="color:#4F008C;font-weight:900;font-size:18px;letter-spacing:-1px">stc</span><span style="color:#84B740;font-weight:600;font-size:15px;letter-spacing:-0.5px">pay</span></div>`
-  
-  const total=_PS.amount,fee=_PS.fee,sellerAmount=_PS.sellerAmount
-  const monthsList=pays.map(p=>p.month_num).join('، ')
-  
-  // قائمة الأقساط المحددة
-  const paysList=pays.map(p=>{
-    const f=p.platform_fee||deal.platform_fee_per_payment||0
-    return`<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:11.5px;color:var(--g600);border-bottom:1px dashed var(--g200)">
-      <span>${isAr()?'الشهر':'Month'} ${p.month_num} • ${fmtD(p.due_date)}</span>
-      <span><strong>${fmtSAR(p.amount+f)}</strong></span>
-    </div>`
-  }).join('')
-  
+
   $('pm-overlay').innerHTML=`
     <div class="pmodal">
       <div class="pmod-hdr">
         <button class="pmod-close" onclick="closePM()" aria-label="إغلاق">✕</button>
         <div class="pmod-hdr-content">
           <div class="pmod-logo">${LOGO_W(48)}</div>
-          <div class="pmod-brand">قسطني</div>
-          <div class="pmod-sub">${isAr()?`دفع ${pays.length} أقساط دفعة واحدة`:`Pay ${pays.length} installments at once`}</div>
+          <div class="pmod-brand">${isAr()?'الترقية لموثّق ⭐':'Upgrade to Verified ⭐'}</div>
+          <div class="pmod-sub">${isAr()?'اشتراك سنوي · 150 ر.س':'Annual subscription · 150 SAR'}</div>
         </div>
       </div>
       <div class="pmod-bd">
         <div class="psandbox">🧪 ${isAr()?'وضع تجريبي — لن يتم خصم مبلغ فعلي':'Sandbox mode — no real charge'}</div>
-        
+
         <div class="pamt-box">
-          <div class="pamt-lbl">${isAr()?`إجمالي ${pays.length} أقساط`:`Total of ${pays.length} payments`}</div>
-          <div class="pamt-val">${fmtN(total)}<span class="cur">${isAr()?'ر.س':'SAR'}</span></div>
+          <div class="pamt-lbl">${isAr()?'إجمالي الاشتراك السنوي':'Annual subscription total'}</div>
+          <div class="pamt-val">150<span class="cur">${isAr()?'ر.س':'SAR'}</span></div>
         </div>
-        
+
         <div class="pbreakdown">
-          <div class="row" style="font-weight:700;color:var(--g800);padding-bottom:6px;border-bottom:1px solid var(--g200);margin-bottom:6px"><span>${san(deal.item)} — ${isAr()?'الأقساط':'Installments'}: ${monthsList}</span></div>
-          ${paysList}
-          <div class="row" style="margin-top:6px"><span>${isAr()?'إجمالي مبالغ الأقساط':'Total installments'}</span><span>${fmtSAR(sellerAmount)}</span></div>
-          <div class="row"><span>${isAr()?'إجمالي رسوم السعي (4%)':'Total service fee (4%)'}</span><span>${fmtSAR(fee)}</span></div>
-          <div class="row tot"><span>${isAr()?'الإجمالي':'Total'}</span><span>${fmtSAR(total)}</span></div>
+          <div class="row" style="font-weight:700;color:var(--g800);padding-bottom:6px;border-bottom:1px solid var(--g200);margin-bottom:6px">
+            <span>${isAr()?'باقة موثّق ⭐ — سنة كاملة':'Verified Plan ⭐ — Full year'}</span>
+          </div>
+          <div class="row"><span>${isAr()?'مدة الاشتراك':'Duration'}</span><span>${isAr()?'12 شهراً':'12 months'}</span></div>
+          <div class="row"><span>${isAr()?'القيمة الشهرية':'Monthly value'}</span><span>${isAr()?'12.5 ر.س':'12.5 SAR'}</span></div>
+          <div class="row tot"><span>${isAr()?'الإجمالي':'Total'}</span><span>150 ${isAr()?'ر.س':'SAR'}</span></div>
         </div>
-        
+
         <div class="pm-section-title">${isAr()?'اختر طريقة الدفع':'Select payment method'}</div>
-        
+
         <div class="pm-list">
           <button class="pm-row active" data-m="apple" onclick="selPM('apple')">
             <div class="pm-logo" style="width:60px;height:34px">${LOGO_APPLE}</div>
@@ -1408,7 +1564,7 @@ function openPMMulti(deal,pays){
             <div class="pm-radio"></div>
           </button>
         </div>
-        
+
         <div id="pm-card-fields" class="pm-card-fields">
           <div class="text-xs text-m mb8" style="font-weight:700">${isAr()?'بيانات البطاقة':'Card details'}</div>
           <input type="text" class="pcard-input" placeholder="0000 0000 0000 0000" maxlength="19" id="pm-cardno" autocomplete="off"/>
@@ -1417,7 +1573,7 @@ function openPMMulti(deal,pays){
             <input type="text" class="pcard-input" placeholder="CVV" maxlength="3" id="pm-cvv" autocomplete="off"/>
           </div>
         </div>
-        
+
         <div class="pm-security">
           <div class="sec-item"><span class="sec-icon">🔒</span><span>${isAr()?'تشفير 256-bit':'256-bit encryption'}</span></div>
           <div class="sec-item"><span class="sec-icon">🛡️</span><span>${isAr()?'PCI DSS':'PCI DSS'}</span></div>
@@ -1426,10 +1582,168 @@ function openPMMulti(deal,pays){
       </div>
       <div class="pmod-foot">
         <button class="btn bg" onclick="closePM()" style="flex:1">${isAr()?'إلغاء':'Cancel'}</button>
-        <button class="btn bp" id="pm-pay-btn" onclick="processPM()" style="flex:2.2">🔒 ${isAr()?'ادفع الآن':'Pay Now'} ${fmtSAR(total)}</button>
+        <button class="btn bp" id="pm-pay-btn" onclick="processPMPremium()" style="flex:2.2">⭐ ${isAr()?'فعّل الاشتراك':'Activate'} 150 ${isAr()?'ر.س':'SAR'}</button>
       </div>
     </div>`
   $('pm-overlay').classList.remove('hidden')
+}
+
+window.processPMPremium=async()=>{
+  const btn=$('pm-pay-btn')
+  if(!btn)return
+  btn.innerHTML='<span class="spinner" style="border-color:#fff;border-top-color:transparent"></span>'
+  btn.disabled=true
+
+  try{
+    // محاكاة معالجة
+    await new Promise(r=>setTimeout(r,1500))
+
+    // تحديث الـ profile
+    const expDate=new Date()
+    expDate.setFullYear(expDate.getFullYear()+1)
+
+    const{error}=await sb.from('profiles').update({
+      is_premium:true,
+      premium_expires_at:expDate.toISOString()
+    }).eq('id',CU.id)
+
+    if(error)throw error
+
+    // audit log
+    try{
+      await sb.from('audit_log').insert({
+        user_id:CU.id,user_email:CU.email,
+        action:'premium_activated',
+        details:{amount:150,method:_PS.method,sandbox:true,expires_at:expDate.toISOString()}
+      })
+    }catch(e){}
+
+    // تحديث PRF محلياً
+    PRF.is_premium=true
+    PRF.premium_expires_at=expDate.toISOString()
+
+    closePM()
+    toast(isAr()?'⭐ مبروك! حسابك الآن موثّق 🎉':'⭐ Congrats! You\'re now Verified 🎉','s')
+
+    // إعادة عرض الصفحة
+    rerender()
+  }catch(e){
+    btn.innerHTML='⭐ '+(isAr()?'فعّل الاشتراك':'Activate')+' 150 '+(isAr()?'ر.س':'SAR')
+    btn.disabled=false
+    toast(isAr()?'⚠️ فشل التفعيل، حاول مرة ثانية':'⚠️ Activation failed','e')
+    console.error(e)
+  }
+}
+
+// ═══════════════════════════════════════════════
+// NAFATH VERIFICATION (Sandbox simulation)
+// ═══════════════════════════════════════════════
+
+let _nafathPending=null  // { dealData: {...}, callback }
+
+window.openNafath=(dealData,callback)=>{
+  _nafathPending={dealData,callback}
+  const isPrem=PRF?.is_premium===true
+  const o=$('nafath-overlay')
+  if(!o)return
+
+  o.innerHTML=`
+    <div class="nafath-card">
+      <div class="nafath-hdr">
+        <div class="nafath-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+        </div>
+        <div class="nafath-title">${isAr()?'تحقق من هويتك عبر نافذ':'Verify your identity via Nafath'}</div>
+        <div class="nafath-sub">${isAr()?'خطوة واحدة لتفعيل أول صفقة لك':'One step to activate your first deal'}</div>
+      </div>
+      <div class="nafath-bd">
+        <div class="nafath-step">
+          <div class="nafath-num">1</div>
+          <div class="nafath-step-txt">${isAr()
+            ?'افتح <strong>تطبيق نفاذ</strong> على جوالك'
+            :'Open <strong>Nafath app</strong> on your phone'}</div>
+        </div>
+        <div class="nafath-step">
+          <div class="nafath-num">2</div>
+          <div class="nafath-step-txt">${isAr()
+            ?'اختر <strong>طلب التحقق</strong> ووافق على الرقم الذي يظهر'
+            :'Select <strong>Verify request</strong> and approve the displayed code'}</div>
+        </div>
+        <div class="nafath-step">
+          <div class="nafath-num">3</div>
+          <div class="nafath-step-txt">${isAr()
+            ?'سيتم <strong>تأكيد هويتك تلقائياً</strong> وتفعيل صفقتك'
+            :'Your <strong>identity will be confirmed</strong> and your deal activated'}</div>
+        </div>
+
+        <div class="nafath-cost">
+          ${isPrem
+            ?(isAr()?'⭐ <strong>الموثّقون: التحقق مجاني تماماً</strong>':'⭐ <strong>Verified members: free verification</strong>')
+            :(isAr()?'🧪 وضع تجريبي — التكلفة الفعلية <strong>~10 ر.س</strong> تتحمّلها قسطني':'🧪 Sandbox — actual cost <strong>~10 SAR</strong> covered by Qastni')}
+        </div>
+
+        <div class="nafath-actions">
+          <button class="btn bg" onclick="closeNafath()">${isAr()?'إلغاء':'Cancel'}</button>
+          <button class="btn bp" onclick="confirmNafath()">${isAr()?'✓ تم التحقق':'✓ Verified'}</button>
+        </div>
+      </div>
+    </div>
+  `
+  o.classList.remove('hidden')
+}
+
+window.closeNafath=()=>{
+  $('nafath-overlay')?.classList.add('hidden')
+  _nafathPending=null
+}
+
+window.confirmNafath=async()=>{
+  if(!_nafathPending)return
+  const{callback}=_nafathPending
+
+  // تحديث nafath_verified
+  try{
+    await sb.from('profiles').update({
+      nafath_verified:true,
+      nafath_verified_at:new Date().toISOString()
+    }).eq('id',CU.id)
+
+    PRF.nafath_verified=true
+    PRF.nafath_verified_at=new Date().toISOString()
+
+    try{
+      await sb.from('audit_log').insert({
+        user_id:CU.id,user_email:CU.email,
+        action:'nafath_verified',
+        details:{sandbox:true}
+      })
+    }catch(e){}
+  }catch(e){console.warn(e)}
+
+  $('nafath-overlay')?.classList.add('hidden')
+  toast(isAr()?'✓ تم التحقق من هويتك بنجاح':'✓ Identity verified','s')
+
+  // استكمال العملية
+  if(callback)callback()
+  _nafathPending=null
+}
+
+
+
+window.markP=(did,pid)=>{
+  // نجيب بيانات القسط من الذاكرة
+  const deal=DEALS.find(d=>d.id===did)
+  if(!deal){toast(isAr()?'⚠️ خطأ في تحميل البيانات':'⚠️ Error loading','e');return}
+  const pay=(deal.payments||[]).find(p=>p.id===pid)
+  if(!pay){toast(isAr()?'⚠️ القسط غير موجود':'⚠️ Payment not found','e');return}
+  
+  const fee=pay.platform_fee||(deal.platform_fee_per_payment||Math.round(deal.installment*0.035*100)/100)
+  const total=pay.amount+fee
+  _PS={dealId:did,paymentId:pid,amount:total,fee:fee,sellerAmount:pay.amount,method:'apple'}
+  openPM(deal,pay)
 }
 
 function openPM(deal,pay){
@@ -1475,7 +1789,7 @@ function openPM(deal,pay){
         <div class="pbreakdown">
           <div class="row"><span>${isAr()?'الشهر':'Month'} ${pay.month_num} ${isAr()?'من':'of'} ${deal.months} • ${san(deal.item)}</span><span></span></div>
           <div class="row"><span>${isAr()?'مبلغ القسط':'Installment'}</span><span>${fmtSAR(sellerAmount)}</span></div>
-          <div class="row"><span>${isAr()?'رسوم سعي (4%)':'Service fee (4%)'}</span><span>${fmtSAR(fee)}</span></div>
+          <div class="row"><span>${isAr()?'رسوم سعي (3.5%)':'Service fee (3.5%)'}</span><span>${fmtSAR(fee)}</span></div>
           <div class="row tot"><span>${isAr()?'الإجمالي':'Total'}</span><span>${fmtSAR(total)}</span></div>
         </div>
         
@@ -1570,78 +1884,38 @@ window.processPM=async()=>{
   await new Promise(r=>setTimeout(r,1800))
   
   try{
-    if(_PS.multi&&_PS.paymentIds&&_PS.paymentIds.length>0){
-      // ═══ دفع متعدد ═══
-      const ts=new Date().toISOString()
-      // تحديث كل الأقساط المحددة كمدفوعة
-      await sb.from('payments').update({is_paid:true,paid_at:ts}).in('id',_PS.paymentIds)
-      
-      // تسجيل عملية واحدة للمجموع
-      await sb.from('payment_transactions').insert({
-        deal_id:_PS.dealId,
-        payment_id:_PS.paymentIds[0], // المرجع للقسط الأول
-        buyer_id:CU.id,
-        amount:_PS.amount,
-        platform_fee:_PS.fee,
-        seller_amount:_PS.sellerAmount,
-        payment_method:_PS.method,
-        is_sandbox:true,
-        moyasar_id:'sandbox_multi_'+Date.now()
-      })
-      
-      // audit log
-      try{
-        await sb.from('audit_log').insert({deal_id:_PS.dealId,user_id:CU.id,user_email:CU.email,action:'multi_payment_completed',details:{amount:_PS.amount,count:_PS.paymentIds.length,months:_PS.months,method:_PS.method,sandbox:true}})
-      }catch(e){}
-    }else{
-      // ═══ دفع فردي ═══
-      await sb.from('payments').update({is_paid:true,paid_at:new Date().toISOString()}).eq('id',_PS.paymentId)
-      
-      await sb.from('payment_transactions').insert({
-        deal_id:_PS.dealId,
-        payment_id:_PS.paymentId,
-        buyer_id:CU.id,
-        amount:_PS.amount,
-        platform_fee:_PS.fee,
-        seller_amount:_PS.sellerAmount,
-        payment_method:_PS.method,
-        is_sandbox:true,
-        moyasar_id:'sandbox_'+Date.now()
-      })
-      
-      try{
-        await sb.from('audit_log').insert({deal_id:_PS.dealId,user_id:CU.id,user_email:CU.email,action:'payment_completed',details:{amount:_PS.amount,method:_PS.method,sandbox:true}})
-      }catch(e){}
-    }
+    // تحديد القسط كمدفوع
+    await sb.from('payments').update({is_paid:true,paid_at:new Date().toISOString()}).eq('id',_PS.paymentId)
+    
+    // تسجيل عملية الدفع
+    await sb.from('payment_transactions').insert({
+      deal_id:_PS.dealId,
+      payment_id:_PS.paymentId,
+      buyer_id:CU.id,
+      amount:_PS.amount,
+      platform_fee:_PS.fee,
+      seller_amount:_PS.sellerAmount,
+      payment_method:_PS.method,
+      is_sandbox:true,
+      moyasar_id:'sandbox_'+Date.now()
+    })
+    
+    // audit log
+    try{
+      await sb.from('audit_log').insert({deal_id:_PS.dealId,user_id:CU.id,user_email:CU.email,action:'payment_completed',details:{amount:_PS.amount,method:_PS.method,sandbox:true}})
+    }catch(e){}
     
     // تحقق من اكتمال الصفقة
     const{data:ap}=await sb.from('payments').select('is_paid').eq('deal_id',_PS.dealId)
     const done=ap?.every(p=>p.is_paid)
-    const remaining=(ap||[]).filter(p=>!p.is_paid).length
     if(done){
       await sb.from('deals').update({status:'completed',completed_at:new Date().toISOString()}).eq('id',_PS.dealId)
       try{await sb.from('audit_log').insert({deal_id:_PS.dealId,user_id:CU.id,user_email:CU.email,action:'deal_completed'})}catch(e){}
     }
     
     closePM()
-    // مسح التحديد
-    _MPSel.clear();_MPDealId=null
-    
     await loadDeals()
-    
-    // رسالة تشجيعية
-    let msg
-    if(done){
-      msg=isAr()?'🎉 مبروك! اكتملت الصفقة بالكامل! 🎊':'🎉 Congrats! Deal fully completed! 🎊'
-    }else if(_PS.multi&&_PS.paymentIds.length>1){
-      const c=_PS.paymentIds.length
-      msg=isAr()
-        ?`🎉 ممتاز! خلّصت ${c} ${c===2?'قسطين':'أقساط'} مرة وحدة، باقي ${remaining} ${remaining===1?'قسط':remaining===2?'قسطين':'أقساط'} فقط 💪`
-        :`🎉 Awesome! You paid ${c} installments at once, only ${remaining} left 💪`
-    }else{
-      msg=isAr()?'✅ تم الدفع بنجاح':'✅ Payment successful'
-    }
-    toast(msg,'s')
+    toast(done?(isAr()?'🎉 اكتملت الصفقة بالكامل!':'🎉 Deal fully completed!'):(isAr()?'✅ تم الدفع بنجاح':'✅ Payment successful'),'s')
     rDetail(_PS.dealId)
   }catch(e){
     btn.innerHTML='🔒 '+(isAr()?'دفع':'Pay')+' '+fmtSAR(_PS.amount)
@@ -1674,6 +1948,23 @@ window.submitR=async()=>{
 window.openMenu=()=>{
   const nm=PRF?.full_name||CU.email.split('@')[0]
   const color=PRF?.avatar_color||avc(CU.email)
+  const isPrem=PRF?.is_premium===true
+  const premBadge=isPrem?`<span class="vbadge" style="margin-inline-start:6px"><span class="star">⭐</span>${isAr()?'موثّق':'Verified'}</span>`:''
+
+  // بطاقة ترويجية للحسابات المجانية
+  const promoCard=isPrem?'':`
+    <button class="promo-banner" style="margin:0 16px 14px" onclick="closeMenu();nav('prem')">
+      <div class="promo-icon">⭐</div>
+      <div class="promo-content">
+        <div class="promo-title">
+          ${isAr()?'الترقية لموثّق':'Upgrade to Verified'}
+          <span class="promo-mini-badge">${isAr()?'150 ر.س/سنة':'150 SAR/yr'}</span>
+        </div>
+        <div class="promo-desc">${isAr()?'احصل على شارة ⭐ ومميزات حصرية':'Get the ⭐ badge & exclusive perks'}</div>
+      </div>
+      <div class="promo-arrow">›</div>
+    </button>`
+
   $('menu-overlay').innerHTML=`
     <div class="menu-modal" onclick="event.stopPropagation()">
       <div class="menu-hdr">
@@ -1681,12 +1972,27 @@ window.openMenu=()=>{
         <div class="menu-user">
           <div class="menu-av" style="background:${color}">${ini(nm)}</div>
           <div style="flex:1;min-width:0">
-            <div class="menu-uname">${san(nm)}</div>
+            <div class="menu-uname">${san(nm)}${premBadge}</div>
             <div class="menu-uemail">${san(CU.email)}</div>
           </div>
         </div>
       </div>
+      ${promoCard}
       <div class="menu-body">
+        ${isPrem?`
+        <div class="menu-section ar-t">الاشتراك</div>
+        <div class="menu-section en-t hidden">Subscription</div>
+
+        <button class="menu-item" onclick="closeMenu();nav('prem')">
+          <div class="micon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e">⭐</div>
+          <div class="mtxt">
+            <div class="mlbl ar-t">حسابك الموثّق</div><div class="mlbl en-t hidden">Your Verified Plan</div>
+            <div class="msub ar-t">عرض المزايا والتفاصيل</div><div class="msub en-t hidden">View benefits & details</div>
+          </div>
+        </button>
+
+        <div class="menu-divider"></div>
+        `:''}
         <div class="menu-section ar-t">عام</div>
         <div class="menu-section en-t hidden">General</div>
         
@@ -1920,7 +2226,7 @@ window.closeAbout=()=>$('about-overlay').classList.add('hidden')
 // ESC key closes any open modal
 document.addEventListener('keydown',e=>{
   if(e.key!=='Escape')return
-  ;['menu-overlay','sugg-overlay','about-overlay','thanks-overlay','pm-overlay','rmodal'].forEach(id=>{
+  ;['menu-overlay','sugg-overlay','about-overlay','thanks-overlay','pm-overlay','rmodal','nafath-overlay'].forEach(id=>{
     const el=$(id);if(el&&!el.classList.contains('hidden'))el.classList.add('hidden')
   })
 })
