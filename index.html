@@ -226,14 +226,16 @@ textarea.fc{resize:vertical;min-height:70px}
 .spinner{width:17px;height:17px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spinDots .7s linear infinite;display:inline-block}
 
 /* ═══ PREMIUM UPGRADE PAGE ═══ */
-.prem-page{min-height:calc(100vh - 100px);background:linear-gradient(180deg,#fff 0%,var(--teal3) 100%);padding:30px 20px;animation:fadeIn .4s ease}
-.prem-hero{max-width:680px;margin:0 auto 28px;text-align:center}
-.prem-hero-badge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--teal2),#0d9488);color:#fff;padding:8px 18px;border-radius:30px;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;box-shadow:0 6px 18px rgba(13,148,136,.3)}
-.prem-hero-title{font-size:32px;font-weight:900;color:var(--g900);margin:0 0 10px;line-height:1.25}
-.prem-hero-title .accent{background:linear-gradient(135deg,var(--teal2),#0d9488);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.prem-hero-sub{font-size:15px;color:var(--g600);line-height:1.6;max-width:520px;margin:0 auto}
+.prem-page{min-height:calc(100vh - 100px);background:linear-gradient(180deg,#fff 0%,var(--teal3) 100%);padding:30px 20px;animation:fadeIn .4s ease;position:relative}
+.prem-page::before{content:'';position:absolute;top:-60px;inset-inline-end:-80px;width:240px;height:240px;background:radial-gradient(circle,rgba(13,148,136,.12),transparent 70%);border-radius:50%;pointer-events:none}
+.prem-page::after{content:'';position:absolute;bottom:120px;inset-inline-start:-100px;width:280px;height:280px;background:radial-gradient(circle,rgba(94,234,212,.18),transparent 70%);border-radius:50%;pointer-events:none}
+.prem-hero{max-width:680px;margin:0 auto 28px;text-align:center;position:relative;z-index:1}
+.prem-hero-badge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--teal2),#0d9488);color:#fff;padding:8px 18px;border-radius:30px;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:18px;box-shadow:0 8px 22px rgba(13,148,136,.35)}
+.prem-hero-title{font-size:34px;font-weight:900;color:var(--g900);margin:0 0 12px;line-height:1.25;text-shadow:0 1px 0 rgba(255,255,255,.8)}
+.prem-hero-title .accent{background:linear-gradient(135deg,var(--teal2),#0d9488);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:inline-block;padding:0 4px}
+.prem-hero-sub{font-size:15px;color:var(--g700);line-height:1.65;max-width:540px;margin:0 auto;font-weight:500}
 
-.prem-card-wrap{max-width:480px;margin:0 auto 24px}
+.prem-card-wrap{max-width:480px;margin:0 auto 24px;position:relative;z-index:1}
 .prem-card{background:#fff;border-radius:24px;padding:0;overflow:hidden;box-shadow:0 24px 60px -12px rgba(15,118,110,.25),0 0 0 1px var(--teal3);position:relative}
 .prem-card-glow{position:absolute;inset:0;border-radius:24px;background:linear-gradient(135deg,rgba(13,148,136,.08),transparent 60%);pointer-events:none}
 .prem-card-top{background:linear-gradient(135deg,#0f766e,#0d9488);color:#fff;padding:28px 26px 22px;position:relative;overflow:hidden}
@@ -319,6 +321,79 @@ textarea.fc{resize:vertical;min-height:70px}
 /* ═══ MOTHAQ HIGHLIGHT ON DEAL CARDS ═══ */
 .deal-card.has-premium{border:1px solid #fcd34d;box-shadow:0 4px 14px rgba(217,119,6,.08)}
 .deal-card.has-premium::before{content:'';position:absolute;top:0;inset-inline-start:0;width:3px;height:100%;background:linear-gradient(180deg,#fbbf24,#f59e0b);border-radius:2px 0 0 2px}
+
+/* CLICKABLE PARTY ITEMS */
+.iitem-clickable{transition:all .15s;border:1px solid transparent}
+.iitem-clickable:hover{background:var(--teal3);border-color:var(--teal-light);transform:translateY(-1px)}
+.iitem-clickable:active{transform:translateY(0)}
+
+/* ═══ PUBLIC PROFILE PAGE ═══ */
+.upub-page{min-height:calc(100vh - 100px);background:linear-gradient(180deg,var(--g50) 0%,#fff 50%);padding:20px 16px;animation:fadeIn .4s ease;position:relative;overflow:hidden}
+.upub-page::before{content:'';position:absolute;top:-100px;inset-inline-end:-120px;width:340px;height:340px;background:radial-gradient(circle,rgba(13,148,136,.12),transparent 70%);border-radius:50%;pointer-events:none}
+.upub-page::after{content:'';position:absolute;top:200px;inset-inline-start:-100px;width:280px;height:280px;background:radial-gradient(circle,rgba(94,234,212,.1),transparent 70%);border-radius:50%;pointer-events:none}
+
+.upub-wrap{max-width:560px;margin:0 auto;position:relative;z-index:1}
+
+.upub-card{background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 24px 60px -16px rgba(15,42,42,.18),0 0 0 1px var(--g100);margin-bottom:18px}
+
+.upub-cover{background:linear-gradient(135deg,#0f2a2a 0%,#0f766e 50%,#0d9488 100%);padding:34px 26px 70px;text-align:center;position:relative;overflow:hidden}
+.upub-cover::before{content:'';position:absolute;top:-50px;inset-inline-end:-50px;width:180px;height:180px;background:radial-gradient(circle,rgba(94,234,212,.25),transparent 70%);border-radius:50%}
+.upub-cover::after{content:'';position:absolute;bottom:-40px;inset-inline-start:-30px;width:130px;height:130px;background:radial-gradient(circle,rgba(255,255,255,.1),transparent 70%);border-radius:50%}
+.upub-watermark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:.06;pointer-events:none}
+.upub-watermark svg{width:280px;height:280px}
+
+.upub-cover-content{position:relative;z-index:1}
+.upub-cover-label{font-size:10.5px;color:rgba(94,234,212,.95);font-weight:800;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
+
+.upub-avatar-wrap{display:inline-block;position:relative;margin-bottom:10px}
+.upub-avatar{width:96px;height:96px;border-radius:50%;background:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;border:4px solid rgba(255,255,255,.4);box-shadow:0 12px 30px rgba(0,0,0,.25)}
+.upub-avatar.has-color{color:#fff;background:none}
+.upub-vbadge-float{position:absolute;bottom:-2px;inset-inline-end:-2px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;border:3px solid #fff;box-shadow:0 4px 12px rgba(245,158,11,.5)}
+
+.upub-name{color:#fff;font-size:22px;font-weight:900;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.upub-name .vbadge{margin-inline-start:0}
+.upub-email{color:rgba(255,255,255,.75);font-size:12px;margin-top:4px;font-family:Calibri,Arial,sans-serif}
+.upub-rating{margin-top:10px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.2)}
+
+.upub-stats{margin-top:-50px;padding:0 22px 22px;position:relative;z-index:2}
+.upub-stats-grid{background:#fff;border-radius:18px;padding:18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;box-shadow:0 8px 22px rgba(0,0,0,.08);border:1px solid var(--g100)}
+.upub-stat{text-align:center}
+.upub-stat-num{font-size:22px;font-weight:900;color:var(--teal2);line-height:1}
+.upub-stat-lbl{font-size:10.5px;color:var(--g500);font-weight:600;margin-top:4px;letter-spacing:.3px}
+
+.upub-body{padding:22px}
+.upub-section{margin-bottom:18px}
+.upub-section-title{font-size:13px;font-weight:800;color:var(--g700);margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--teal3);display:flex;align-items:center;gap:8px}
+.upub-section-title .icon{width:24px;height:24px;border-radius:8px;background:var(--teal3);color:var(--teal2);display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+
+.upub-info-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px dashed var(--g200);font-size:13px}
+.upub-info-row:last-child{border-bottom:none}
+.upub-info-lbl{color:var(--g600);font-weight:600}
+.upub-info-val{color:var(--g900);font-weight:700}
+.upub-info-val.unverif{color:var(--g400);font-style:italic;font-weight:500}
+
+.upub-trust{background:linear-gradient(135deg,#f0fdf4 0%,#fff 100%);border:1px solid #86efac;border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.upub-trust.unverif{background:linear-gradient(135deg,#fef3c7 0%,#fff 100%);border-color:#fcd34d}
+.upub-trust-ic{font-size:28px;line-height:1}
+.upub-trust-info{flex:1}
+.upub-trust-title{font-size:13px;font-weight:800;color:var(--g900);margin-bottom:2px}
+.upub-trust-desc{font-size:11px;color:var(--g600);line-height:1.4}
+
+.upub-rating-card{background:linear-gradient(135deg,#fffbeb 0%,#fff 100%);border:1px solid #fcd34d;border-radius:14px;padding:18px;text-align:center;margin-bottom:14px}
+.upub-rating-big{font-size:36px;font-weight:900;color:#d97706;line-height:1;margin-bottom:6px}
+.upub-rating-stars{margin-bottom:6px}
+.upub-rating-count{font-size:11px;color:var(--g600)}
+
+.upub-empty{text-align:center;padding:24px 16px;color:var(--g500);font-size:12px}
+
+.upub-foot-note{font-size:10.5px;color:var(--g500);text-align:center;line-height:1.5;padding:14px;background:var(--g50);border-radius:12px}
+
+@media(max-width:380px){
+  .upub-stats-grid{padding:14px;gap:8px}
+  .upub-stat-num{font-size:18px}
+  .upub-name{font-size:18px}
+  .upub-avatar{width:80px;height:80px;font-size:32px}
+}
 
 /* PAYMENT MODAL — Luxury login-style */
 .pmodal{background:#fff;border-radius:var(--r24);box-shadow:0 24px 60px rgba(0,0,0,.2);width:100%;max-width:420px;animation:pi .3s ease;overflow:hidden;max-height:92vh;display:flex;flex-direction:column}
@@ -834,6 +909,7 @@ function buildShell(){
       <div class="page hidden" id="pg-detail"><div class="pi" id="detc"></div></div>
       <div class="page hidden" id="pg-profile"><div class="pi" id="prfc"></div></div>
       <div class="page hidden" id="pg-prem"><div id="premc"></div></div>
+      <div class="page hidden" id="pg-upub"><div id="upubc"></div></div>
     </div>
 
     <!-- Nafath verification overlay -->
@@ -867,8 +943,8 @@ function buildShell(){
   loadSBStars().catch(e=>console.warn('loadSBStars failed:',e))
 }
 
-const PT={dash:{ar:'الرئيسية',en:'Dashboard'},create:{ar:'طلب جديد',en:'New Request'},inc:{ar:'الطلبات الواردة',en:'Incoming'},deals:{ar:'صفقاتي',en:'My Deals'},detail:{ar:'تفاصيل الصفقة',en:'Deal Details'},profile:{ar:'ملفي الشخصي',en:'My Profile'},prem:{ar:'الترقية لموثّق',en:'Upgrade to Verified'}}
-const PAGES=['dash','create','inc','deals','detail','profile','prem']
+const PT={dash:{ar:'الرئيسية',en:'Dashboard'},create:{ar:'طلب جديد',en:'New Request'},inc:{ar:'الطلبات الواردة',en:'Incoming'},deals:{ar:'صفقاتي',en:'My Deals'},detail:{ar:'تفاصيل الصفقة',en:'Deal Details'},profile:{ar:'ملفي الشخصي',en:'My Profile'},prem:{ar:'الترقية لموثَّق',en:'Upgrade to Verified'},upub:{ar:'الملف الشخصي',en:'Profile'}}
+const PAGES=['dash','create','inc','deals','detail','profile','prem','upub']
 let _pp={}
 
 // History stack for back button
@@ -914,10 +990,10 @@ window.nav=async(p,pp={},fromBack=false)=>{
               <div class="promo-icon">⭐</div>
               <div class="promo-content">
                 <div class="promo-title">
-                  ${isAr()?'كن موثّقاً':'Become Verified'}
+                  ${isAr()?'كن موثَّقاً':'Become Verified'}
                   <span class="promo-mini-badge">${isAr()?'150 ر.س/سنة':'150 SAR/yr'}</span>
                 </div>
-                <div class="promo-desc">${isAr()?'شارة موثّق · 5 صفقات نشطة · رفع سند بـ 20 ر.س فقط':'Verified badge · 5 active deals · 20 SAR sukuk filing'}</div>
+                <div class="promo-desc">${isAr()?'شارة موثَّق · 5 صفقات نشطة · رفع سند بـ 20 ر.س فقط':'Verified badge · 5 active deals · 20 SAR sukuk filing'}</div>
               </div>
               <div class="promo-arrow">›</div>
             </button>`
@@ -925,6 +1001,10 @@ window.nav=async(p,pp={},fromBack=false)=>{
       }
     }
     if(p==='prem')rPrem()
+    if(p==='upub'){
+      _upubData=pp
+      await rUpub()
+    }
   }catch(e){console.error('Render error:',e)}
   // scroll to top
   window.scrollTo({top:0,behavior:'smooth'})
@@ -945,6 +1025,7 @@ function rerender(){
     if(page==='deals')rDeals()
     if(page==='profile')rProfile()
     if(page==='prem')rPrem()
+    if(page==='upub')rUpub()
     if(page==='detail'&&_pp.id)rDetail(_pp.id)
   }catch(e){console.error('Rerender error:',e)}
 }
@@ -1172,8 +1253,15 @@ async function rDetail(id){
         <div class="chdr"><h2>${isAr()?'طرفا الصفقة والتفاصيل المالية':'Parties & Financial Details'}</h2></div>
         <div class="cbody">
           <div class="igrid mb16">
-            <div class="iitem"><div class="ilbl">${isAr()?'المشتري':'Buyer'}</div><div class="ival">${san(d.buyer_name)}</div><div class="isub">${san(d.buyer_email)}</div></div>
-            <div class="iitem"><div class="ilbl">${isAr()?'البائع':'Seller'}</div><div class="ival">${san(d.seller_email)}</div></div>
+            <div class="iitem iitem-clickable" onclick="viewUserProfile('${san(d.buyer_email)}','${san(d.buyer_name)}')" style="cursor:pointer">
+              <div class="ilbl">${isAr()?'المشتري':'Buyer'} <span style="color:var(--teal2);font-size:10px;font-weight:700">${isAr()?'· انقر للملف الشخصي':'· tap profile'}</span></div>
+              <div class="ival" style="color:var(--teal2)">${san(d.buyer_name)} ›</div>
+              <div class="isub">${san(d.buyer_email)}</div>
+            </div>
+            <div class="iitem iitem-clickable" onclick="viewUserProfile('${san(d.seller_email)}','')" style="cursor:pointer">
+              <div class="ilbl">${isAr()?'البائع':'Seller'} <span style="color:var(--teal2);font-size:10px;font-weight:700">${isAr()?'· انقر للملف الشخصي':'· tap profile'}</span></div>
+              <div class="ival" style="color:var(--teal2)">${san(d.seller_email)} ›</div>
+            </div>
           </div>
           <div class="igrid3">
             <div class="iitem"><div class="ilbl">${isAr()?'السعر':'Price'}</div><div class="ival teal">${fmtSAR(d.price)}</div></div>
@@ -1238,7 +1326,7 @@ async function rProfile(){
   
   const el=$('prfc');if(!el)return
   const isPrem=PRF?.is_premium===true
-  const profileBadge=isPrem?`<span class="vbadge vbadge-lg" style="margin-inline-start:8px"><span class="star">⭐</span>${isAr()?'موثّق':'Verified'}</span>`:''
+  const profileBadge=isPrem?`<span class="vbadge vbadge-lg" style="margin-inline-start:8px"><span class="star">⭐</span>${isAr()?'موثَّق':'Verified'}</span>`:''
 
   // CTA card to upgrade or show active state
   const subscriptionCard=isPrem?`
@@ -1247,7 +1335,7 @@ async function rProfile(){
         <div class="flex aic gap8" style="margin-bottom:8px">
           <div style="font-size:30px">⭐</div>
           <div style="flex:1">
-            <div style="font-size:15px;font-weight:800;color:var(--g900)">${isAr()?'حسابك موثّق':'Your account is Verified'}</div>
+            <div style="font-size:15px;font-weight:800;color:var(--g900)">${isAr()?'حسابك موثَّق':'Your account is Verified'}</div>
             <div style="font-size:12px;color:var(--g600)">${isAr()?'ينتهي في':'Expires on'}: ${fmtD(PRF.premium_expires_at)}</div>
           </div>
           <button class="btn bg bsm" onclick="nav('prem')" style="white-space:nowrap">${isAr()?'عرض المزايا':'View benefits'}</button>
@@ -1258,10 +1346,10 @@ async function rProfile(){
       <div class="promo-icon">⭐</div>
       <div class="promo-content">
         <div class="promo-title">
-          ${isAr()?'احصل على شارة موثّق':'Get the Verified badge'}
+          ${isAr()?'احصل على شارة موثَّق':'Get the Verified badge'}
           <span class="promo-mini-badge">${isAr()?'150 ر.س/سنة':'150 SAR/yr'}</span>
         </div>
-        <div class="promo-desc">${isAr()?'5 صفقات نشطة · رفع سند بـ 20 ر.س · أولوية في الظهور':'5 active deals · 20 SAR sukuk · priority listing'}</div>
+        <div class="promo-desc">${isAr()?'5 صفقات نشطة · رفع سند بـ 20 ر.س · تنبيهات WhatsApp':'5 active deals · 20 SAR sukuk · WhatsApp alerts'}</div>
       </div>
       <div class="promo-arrow">›</div>
     </button>`
@@ -1387,6 +1475,196 @@ window.deleteDeal=async(id,e)=>{
 let _PS={dealId:null,paymentId:null,amount:0,fee:0,sellerAmount:0,method:'apple',multi:false,paymentIds:[],isPremium:false}
 
 // ═══════════════════════════════════════════════
+// PUBLIC PROFILE PAGE (other users)
+// ═══════════════════════════════════════════════
+
+let _upubData={email:'',name:''}
+
+window.viewUserProfile=(email,name)=>{
+  // لا تفتح الملف العام الخاص بك — وجّه للملف الشخصي العادي
+  if(email&&email.toLowerCase()===CU.email.toLowerCase()){
+    nav('profile')
+    return
+  }
+  nav('upub',{email:email||'',name:name||''})
+}
+
+async function rUpub(){
+  const c=$('upubc');if(!c)return
+  const email=(_upubData?.email||'').trim().toLowerCase()
+  const fallbackName=(_upubData?.name||'').trim()
+
+  if(!email){
+    c.innerHTML=`<div class="upub-page"><div class="upub-wrap"><div class="upub-empty">${isAr()?'لا يوجد معلومات':'No data'}</div></div></div>`
+    return
+  }
+
+  // عرض حالة تحميل
+  c.innerHTML=`<div class="upub-page"><div class="upub-wrap" style="text-align:center;padding:40px"><span class="spinner" style="border-color:var(--g300);border-top-color:var(--teal2);width:32px;height:32px"></span></div></div>`
+
+  // محاولة جلب الملف الشخصي عبر بيانات صفقة سابقة
+  let profile=null
+  try{
+    // أولاً نشوف لو فيه عمود email في profiles
+    const{data}=await sb.from('profiles').select('full_name,avatar_color,is_premium,premium_expires_at,nafath_verified,created_at').eq('email',email).maybeSingle()
+    profile=data
+  }catch(e){
+    // عمود email غير متاح أو RLS يمنعه
+    console.warn('Direct profile lookup failed, falling back to deals data',e)
+  }
+
+  // Fallback: نجيب الاسم من بيانات الصفقات إذا الملف الشخصي غير متاح
+  if(!profile||!profile.full_name){
+    const dealMatch=DEALS.find(d=>(d.buyer_email===email&&d.buyer_name)||d.seller_email===email)
+    if(dealMatch&&dealMatch.buyer_email===email&&dealMatch.buyer_name){
+      profile=profile||{}
+      if(!profile.full_name)profile.full_name=dealMatch.buyer_name
+    }
+  }
+
+  // جلب التقييمات
+  let ratings=[]
+  try{
+    const{data}=await sb.from('ratings').select('stars,comment,created_at,from_email').eq('to_email',email).order('created_at',{ascending:false}).limit(20)
+    ratings=data||[]
+  }catch(e){console.warn('upub ratings:',e)}
+
+  const avgRating=ratings.length?Math.round(ratings.reduce((s,r)=>s+r.stars,0)/ratings.length*10)/10:null
+
+  // جلب إحصائيات الصفقات (الصفقات اللي ظاهرة لك بحكم RLS)
+  let dealsAsBuyer=0,dealsAsSeller=0,completedCount=0
+  try{
+    const{data:bd}=await sb.from('deals').select('id,status').eq('buyer_email',email)
+    const{data:sd}=await sb.from('deals').select('id,status').eq('seller_email',email)
+    dealsAsBuyer=(bd||[]).length
+    dealsAsSeller=(sd||[]).length
+    const allDeals=[...(bd||[]),...(sd||[])]
+    completedCount=allDeals.filter(d=>d.status==='completed').length
+  }catch(e){console.warn('upub deals:',e)}
+
+  const totalDeals=dealsAsBuyer+dealsAsSeller
+  const displayName=profile?.full_name||fallbackName||email.split('@')[0]
+  const color=profile?.avatar_color||avc(email)
+  const isPrem=profile?.is_premium===true
+  const isNafath=profile?.nafath_verified===true
+  const memberSince=profile?.created_at?fmtD(profile.created_at):'-'
+
+  const initials=ini(displayName)
+
+  const verifBadge=isPrem?`<span class="vbadge vbadge-lg"><span class="star">⭐</span>${isAr()?'موثَّق':'Verified'}</span>`:''
+  const floatBadge=isPrem?`<div class="upub-vbadge-float" title="${isAr()?'حساب موثَّق':'Verified account'}">⭐</div>`:''
+
+  // قسم Trust Status
+  const trustStatus=isPrem?`
+    <div class="upub-trust">
+      <div class="upub-trust-ic">⭐</div>
+      <div class="upub-trust-info">
+        <div class="upub-trust-title">${isAr()?'حساب موثَّق':'Verified Account'}</div>
+        <div class="upub-trust-desc">${isAr()?'هذا المستخدم مشترك في باقة موثَّق ويستفيد من حماية إضافية':'This user has the Verified plan with extra protections'}</div>
+      </div>
+    </div>`:`
+    <div class="upub-trust unverif">
+      <div class="upub-trust-ic">👤</div>
+      <div class="upub-trust-info">
+        <div class="upub-trust-title">${isAr()?'حساب عادي':'Regular Account'}</div>
+        <div class="upub-trust-desc">${isAr()?'لم يقم هذا المستخدم بالاشتراك في باقة موثَّق':'This user has not subscribed to the Verified plan'}</div>
+      </div>
+    </div>`
+
+  // قسم التقييم
+  const ratingCard=avgRating?`
+    <div class="upub-rating-card">
+      <div class="upub-rating-big">${avgRating}</div>
+      <div class="upub-rating-stars">${stars(avgRating,0,18)}</div>
+      <div class="upub-rating-count">${isAr()?`بناءً على ${ratings.length} تقييم`:`Based on ${ratings.length} rating${ratings.length!==1?'s':''}`}</div>
+    </div>`:`
+    <div class="upub-rating-card" style="background:var(--g50);border-color:var(--g200)">
+      <div style="font-size:38px;margin-bottom:6px">⭐</div>
+      <div style="font-size:13px;font-weight:700;color:var(--g700);margin-bottom:3px">${isAr()?'لا يوجد تقييمات بعد':'No ratings yet'}</div>
+      <div style="font-size:11px;color:var(--g500)">${isAr()?'سيظهر التقييم بعد إكمال أول صفقة':'Will appear after first completed deal'}</div>
+    </div>`
+
+  // SVG شعار قسطني للـ watermark
+  const logoWatermark=`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><g transform="translate(60,60)">${Array.from({length:12},(_,i)=>`<rect x="-6" y="-46" width="12" height="12" rx="3" fill="#fff" transform="rotate(${i*30})"/>`).join('')}</g></svg>`
+
+  c.innerHTML=`
+    <div class="upub-page">
+      <div class="upub-wrap">
+        <div class="upub-card">
+          <div class="upub-cover">
+            <div class="upub-watermark">${logoWatermark}</div>
+            <div class="upub-cover-content">
+              <div class="upub-cover-label">${isAr()?'مستخدم في قسطني':'QASTNI USER'}</div>
+              <div class="upub-avatar-wrap">
+                <div class="upub-avatar has-color" style="background:${color}">${initials}</div>
+                ${floatBadge}
+              </div>
+              <div class="upub-name">${san(displayName)} ${verifBadge}</div>
+              <div class="upub-email">${san(email)}</div>
+              ${avgRating?`
+                <div class="upub-rating">
+                  <span style="color:#fbbf24;font-size:14px">★</span>
+                  <span style="color:#fff;font-weight:800;font-size:13px">${avgRating}</span>
+                  <span style="color:rgba(255,255,255,.7);font-size:11px">(${ratings.length})</span>
+                </div>
+              `:''}
+            </div>
+          </div>
+
+          <div class="upub-stats">
+            <div class="upub-stats-grid">
+              <div class="upub-stat">
+                <div class="upub-stat-num">${totalDeals}</div>
+                <div class="upub-stat-lbl">${isAr()?'صفقات':'DEALS'}</div>
+              </div>
+              <div class="upub-stat">
+                <div class="upub-stat-num">${completedCount}</div>
+                <div class="upub-stat-lbl">${isAr()?'مكتملة':'COMPLETED'}</div>
+              </div>
+              <div class="upub-stat">
+                <div class="upub-stat-num">${ratings.length}</div>
+                <div class="upub-stat-lbl">${isAr()?'تقييم':'RATINGS'}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="upub-body">
+            ${trustStatus}
+
+            <div class="upub-section">
+              <div class="upub-section-title"><span class="icon">📊</span>${isAr()?'التقييم العام':'Overall Rating'}</div>
+              ${ratingCard}
+            </div>
+
+            <div class="upub-section">
+              <div class="upub-section-title"><span class="icon">🔍</span>${isAr()?'حالة التحقق':'Verification Status'}</div>
+              <div class="upub-info-row">
+                <span class="upub-info-lbl">${isAr()?'التحقق من الهوية (نافذ)':'Identity (Nafath)'}</span>
+                <span class="upub-info-val ${isNafath?'':'unverif'}">${isNafath?(isAr()?'✓ مفعّل':'✓ Verified'):(isAr()?'غير مفعّل':'Not yet')}</span>
+              </div>
+              <div class="upub-info-row">
+                <span class="upub-info-lbl">${isAr()?'باقة موثَّق':'Verified Plan'}</span>
+                <span class="upub-info-val ${isPrem?'':'unverif'}">${isPrem?(isAr()?'⭐ مشترك':'⭐ Subscribed'):(isAr()?'غير مشترك':'Not subscribed')}</span>
+              </div>
+              <div class="upub-info-row">
+                <span class="upub-info-lbl">${isAr()?'تاريخ الانضمام':'Member since'}</span>
+                <span class="upub-info-val">${memberSince}</span>
+              </div>
+            </div>
+
+            <div class="upub-foot-note">
+              ${isAr()
+                ?'🛡️ المعلومات أعلاه مأخوذة من سجل المستخدم في قسطني. لحماية الخصوصية، التفاصيل الشخصية مثل رقم الجوال والهوية لا تظهر للأطراف الأخرى.'
+                :"🛡️ Information above is from this user's Qastni record. For privacy, personal details like phone and ID are not shown to other parties."}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+}
+
+// ═══════════════════════════════════════════════
 // PREMIUM SUBSCRIPTION PAGE
 // ═══════════════════════════════════════════════
 
@@ -1396,12 +1674,11 @@ function rPrem(){
   const expDate=PRF?.premium_expires_at?fmtD(PRF.premium_expires_at):''
 
   const featuresAr=[
-    {ic:'⭐',t:'<strong>شارة "موثّق"</strong> بارزة في ملفك الشخصي وفي كل صفقاتك'},
+    {ic:'⭐',t:'<strong>شارة "موثَّق"</strong> بارزة في ملفك الشخصي وفي كل صفقاتك'},
     {ic:'🛡️',t:'<strong>تحقق نافذ مشمول</strong> بدون أي رسوم إضافية'},
     {ic:'📦',t:'<strong>5 صفقات نشطة</strong> في وقت واحد بدلاً من 3'},
     {ic:'⚖️',t:'<strong>رفع سند لأمر بـ 20 ر.س فقط</strong> بدلاً من 50 (توفير 60%)'},
     {ic:'💰',t:'<strong>رسوم استرداد 3% فقط</strong> بدلاً من 5% عند تنفيذ السند'},
-    {ic:'🔝',t:'<strong>ظهور صفقاتك في أعلى</strong> القوائم لزيادة فرص القبول'},
     {ic:'💬',t:'<strong>تنبيهات WhatsApp</strong> قبل موعد كل قسط بـ 3 أيام'},
     {ic:'⚡',t:'<strong>دعم بأولوية</strong> — استجابة خلال 6 ساعات'},
     {ic:'📊',t:'<strong>تقارير سنوية</strong> مفصّلة عن سجلك المالي'}
@@ -1412,7 +1689,6 @@ function rPrem(){
     {ic:'📦',t:'<strong>5 active deals</strong> at once instead of 3'},
     {ic:'⚖️',t:'<strong>Promissory note for 20 SAR</strong> instead of 50 (60% off)'},
     {ic:'💰',t:'<strong>Recovery fee 3% only</strong> instead of 5% on enforcement'},
-    {ic:'🔝',t:'<strong>Priority listing</strong> — your deals appear at the top'},
     {ic:'💬',t:'<strong>WhatsApp alerts</strong> 3 days before each installment'},
     {ic:'⚡',t:'<strong>Priority support</strong> — response within 6 hours'},
     {ic:'📊',t:'<strong>Annual reports</strong> with detailed financial history'}
@@ -1429,19 +1705,19 @@ function rPrem(){
     <div class="prem-active">
       <div class="prem-active-ic">⭐</div>
       <div class="prem-active-info">
-        <div class="prem-active-title">${isAr()?'حسابك الموثّق نشط ✨':'Your Verified account is active ✨'}</div>
+        <div class="prem-active-title">${isAr()?'حسابك الموثَّق نشط ✨':'Your Verified account is active ✨'}</div>
         <div class="prem-active-exp">${isAr()?'ينتهي في':'Expires on'}: ${expDate||'-'}</div>
       </div>
     </div>
     <div class="prem-hero">
-      <div class="prem-hero-badge">⭐ ${isAr()?'موثّق · فعّال':'VERIFIED · ACTIVE'}</div>
-      <h1 class="prem-hero-title">${isAr()?'أنت تستمتع بكل':"You're enjoying all"} <span class="accent">${isAr()?'مزايا الموثّق':'Verified benefits'}</span></h1>
+      <div class="prem-hero-badge">⭐ ${isAr()?'موثَّق · فعّال':'VERIFIED · ACTIVE'}</div>
+      <h1 class="prem-hero-title">${isAr()?'أنت تستمتع بكل':"You're enjoying all"} <span class="accent">${isAr()?'مزايا الموثَّق':'Verified benefits'}</span></h1>
       <p class="prem-hero-sub">${isAr()?'شكراً لثقتك في قسطني. تحت قائمة المزايا اللي تستفيد منها حالياً:':"Thank you for trusting Qastni. Below are the benefits you're enjoying:"}</p>
     </div>`:`
     <div class="prem-hero">
-      <div class="prem-hero-badge">⭐ ${isAr()?'الترقية لموثّق':'UPGRADE TO VERIFIED'}</div>
-      <h1 class="prem-hero-title">${isAr()?'كن':'Become a'} <span class="accent">${isAr()?'موثّق ⭐':'Verified ⭐'}</span> ${isAr()?'في قسطني':'on Qastni'}</h1>
-      <p class="prem-hero-sub">${isAr()?'احصل على شارة موثّقة، حماية مدمجة، وتجربة مميّزة في كل تعاملاتك':'Get a verified badge, built-in protection, and a premium experience for all your transactions'}</p>
+      <div class="prem-hero-badge">⭐ ${isAr()?'الترقية لموثَّق':'UPGRADE TO VERIFIED'}</div>
+      <h1 class="prem-hero-title">${isAr()?'كن':'Become a'} <span class="accent">${isAr()?'موثَّق ⭐':'Verified ⭐'}</span> ${isAr()?'في قسطني':'on Qastni'}</h1>
+      <p class="prem-hero-sub">${isAr()?'احصل على شارة موثَّقة، حماية مدمجة، وتجربة مميّزة في كل تعاملاتك':'Get a verified badge, built-in protection, and a premium experience for all your transactions'}</p>
     </div>`
 
   c.innerHTML=`
@@ -1452,8 +1728,8 @@ function rPrem(){
         <div class="prem-card">
           <div class="prem-card-glow"></div>
           <div class="prem-card-top">
-            <div class="prem-card-label">${isAr()?'باقة موثّق':'VERIFIED PLAN'}</div>
-            <div class="prem-card-name">${isAr()?'موثّق':'Verified'} <span class="star">⭐</span></div>
+            <div class="prem-card-label">${isAr()?'باقة موثَّق':'VERIFIED PLAN'}</div>
+            <div class="prem-card-name">${isAr()?'موثَّق':'Verified'} <span class="star">⭐</span></div>
             <div class="prem-card-price">
               <span class="num">150</span>
               <span class="cur">${isAr()?'ر.س':'SAR'}</span>
@@ -1487,7 +1763,7 @@ function rPrem(){
 // تفعيل اشتراك مميّز (Sandbox)
 window.upgradeToPremium=async()=>{
   if(!confirm(isAr()
-    ?'هل أنت متأكد من ترقية حسابك لموثّق ⭐؟\n\n(وضع تجريبي — لن يتم خصم مبلغ فعلي)'
+    ?'هل أنت متأكد من ترقية حسابك لموثَّق ⭐؟\n\n(وضع تجريبي — لن يتم خصم مبلغ فعلي)'
     :'Confirm upgrade to Verified ⭐?\n\n(Sandbox mode — no real charge)')) return
 
   // افتح payment modal بمبلغ 150
@@ -1514,7 +1790,7 @@ function openPMPremium(){
         <button class="pmod-close" onclick="closePM()" aria-label="إغلاق">✕</button>
         <div class="pmod-hdr-content">
           <div class="pmod-logo">${LOGO_W(48)}</div>
-          <div class="pmod-brand">${isAr()?'الترقية لموثّق ⭐':'Upgrade to Verified ⭐'}</div>
+          <div class="pmod-brand">${isAr()?'الترقية لموثَّق ⭐':'Upgrade to Verified ⭐'}</div>
           <div class="pmod-sub">${isAr()?'اشتراك سنوي · 150 ر.س':'Annual subscription · 150 SAR'}</div>
         </div>
       </div>
@@ -1528,7 +1804,7 @@ function openPMPremium(){
 
         <div class="pbreakdown">
           <div class="row" style="font-weight:700;color:var(--g800);padding-bottom:6px;border-bottom:1px solid var(--g200);margin-bottom:6px">
-            <span>${isAr()?'باقة موثّق ⭐ — سنة كاملة':'Verified Plan ⭐ — Full year'}</span>
+            <span>${isAr()?'باقة موثَّق ⭐ — سنة كاملة':'Verified Plan ⭐ — Full year'}</span>
           </div>
           <div class="row"><span>${isAr()?'مدة الاشتراك':'Duration'}</span><span>${isAr()?'12 شهراً':'12 months'}</span></div>
           <div class="row"><span>${isAr()?'القيمة الشهرية':'Monthly value'}</span><span>${isAr()?'12.5 ر.س':'12.5 SAR'}</span></div>
@@ -1623,7 +1899,7 @@ window.processPMPremium=async()=>{
     PRF.premium_expires_at=expDate.toISOString()
 
     closePM()
-    toast(isAr()?'⭐ مبروك! حسابك الآن موثّق 🎉':'⭐ Congrats! You\'re now Verified 🎉','s')
+    toast(isAr()?'⭐ مبروك! حسابك الآن موثَّق 🎉':'⭐ Congrats! You\'re now Verified 🎉','s')
 
     // إعادة عرض الصفحة
     rerender()
@@ -1681,7 +1957,7 @@ window.openNafath=(dealData,callback)=>{
 
         <div class="nafath-cost">
           ${isPrem
-            ?(isAr()?'⭐ <strong>الموثّقون: التحقق مجاني تماماً</strong>':'⭐ <strong>Verified members: free verification</strong>')
+            ?(isAr()?'⭐ <strong>الموثَّقون: التحقق مجاني تماماً</strong>':'⭐ <strong>Verified members: free verification</strong>')
             :(isAr()?'🧪 وضع تجريبي — التكلفة الفعلية <strong>~10 ر.س</strong> تتحمّلها قسطني':'🧪 Sandbox — actual cost <strong>~10 SAR</strong> covered by Qastni')}
         </div>
 
@@ -1949,7 +2225,7 @@ window.openMenu=()=>{
   const nm=PRF?.full_name||CU.email.split('@')[0]
   const color=PRF?.avatar_color||avc(CU.email)
   const isPrem=PRF?.is_premium===true
-  const premBadge=isPrem?`<span class="vbadge" style="margin-inline-start:6px"><span class="star">⭐</span>${isAr()?'موثّق':'Verified'}</span>`:''
+  const premBadge=isPrem?`<span class="vbadge" style="margin-inline-start:6px"><span class="star">⭐</span>${isAr()?'موثَّق':'Verified'}</span>`:''
 
   // بطاقة ترويجية للحسابات المجانية
   const promoCard=isPrem?'':`
@@ -1957,7 +2233,7 @@ window.openMenu=()=>{
       <div class="promo-icon">⭐</div>
       <div class="promo-content">
         <div class="promo-title">
-          ${isAr()?'الترقية لموثّق':'Upgrade to Verified'}
+          ${isAr()?'الترقية لموثَّق':'Upgrade to Verified'}
           <span class="promo-mini-badge">${isAr()?'150 ر.س/سنة':'150 SAR/yr'}</span>
         </div>
         <div class="promo-desc">${isAr()?'احصل على شارة ⭐ ومميزات حصرية':'Get the ⭐ badge & exclusive perks'}</div>
@@ -1986,7 +2262,7 @@ window.openMenu=()=>{
         <button class="menu-item" onclick="closeMenu();nav('prem')">
           <div class="micon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e">⭐</div>
           <div class="mtxt">
-            <div class="mlbl ar-t">حسابك الموثّق</div><div class="mlbl en-t hidden">Your Verified Plan</div>
+            <div class="mlbl ar-t">حسابك الموثَّق</div><div class="mlbl en-t hidden">Your Verified Plan</div>
             <div class="msub ar-t">عرض المزايا والتفاصيل</div><div class="msub en-t hidden">View benefits & details</div>
           </div>
         </button>
@@ -2176,7 +2452,7 @@ window.openAbout=()=>{
           <div class="fico">🛡️</div>
           <div class="ftxt">
             <div class="ftit">${isAr()?'حقوق محفوظة':'Rights Protected'}</div>
-            <div class="fdesc">${isAr()?'كل صفقة موثّقة بعقد رقمي مفصّل، وكل دفعة مسجّلة بتاريخها':'Every deal documented with digital contract, every payment timestamped'}</div>
+            <div class="fdesc">${isAr()?'كل صفقة موثَّقة بعقد رقمي مفصّل، وكل دفعة مسجّلة بتاريخها':'Every deal documented with digital contract, every payment timestamped'}</div>
           </div>
         </div>
         
