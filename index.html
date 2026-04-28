@@ -283,10 +283,10 @@ textarea.fc{resize:vertical;min-height:70px}
 .promo-banner:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(13,148,136,.35)}
 .promo-banner:active{transform:translateY(0)}
 .promo-icon{flex-shrink:0;width:42px;height:42px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;backdrop-filter:blur(10px);position:relative;z-index:1}
-.promo-content{flex:1;min-width:0;position:relative;z-index:1}
-.promo-title{font-size:13.5px;font-weight:800;line-height:1.3;margin-bottom:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.promo-content{flex:1;min-width:0;position:relative;z-index:1;text-align:start}
+.promo-title{font-size:13.5px;font-weight:800;line-height:1.3;margin-bottom:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;text-align:start;justify-content:flex-start}
 .promo-mini-badge{display:inline-flex;align-items:center;gap:3px;background:rgba(255,255,255,.25);padding:1px 7px;border-radius:8px;font-size:10px;font-weight:700;letter-spacing:.3px}
-.promo-desc{font-size:11.5px;color:rgba(255,255,255,.9);line-height:1.4}
+.promo-desc{font-size:11.5px;color:rgba(255,255,255,.9);line-height:1.4;text-align:start}
 .promo-arrow{flex-shrink:0;font-size:18px;font-weight:300;opacity:.85;position:relative;z-index:1}
 [dir="rtl"] .promo-arrow{transform:scaleX(-1)}
 
@@ -394,6 +394,18 @@ textarea.fc{resize:vertical;min-height:70px}
   .upub-name{font-size:18px}
   .upub-avatar{width:80px;height:80px;font-size:32px}
 }
+
+/* MULTI-PAY FLOATING BAR */
+.mp-bar{position:fixed;bottom:75px;left:50%;transform:translateX(-50%);background:#fff;border-radius:18px;padding:12px 16px;box-shadow:0 12px 32px rgba(15,42,42,.18),0 0 0 1px var(--g200);display:flex;align-items:center;gap:14px;z-index:90;animation:slideUp .25s ease;max-width:calc(100vw - 32px);min-width:280px}
+@media(min-width:768px){.mp-bar{bottom:30px}}
+.mp-bar-info{flex:1;min-width:0}
+.mp-bar-count{font-size:11px;color:var(--g500);font-weight:600;margin-bottom:2px}
+.mp-bar-total{font-size:18px;font-weight:900;color:var(--teal2)}
+.mp-bar.hidden{display:none}
+
+/* MULTI-PAY checkboxes */
+.ptbl input[type="checkbox"].mp-check{margin:0;display:block}
+.ptbl tr td:first-child{text-align:center;padding:8px 4px}
 
 /* PAYMENT MODAL — Luxury login-style */
 .pmodal{background:#fff;border-radius:var(--r24);box-shadow:0 24px 60px rgba(0,0,0,.2);width:100%;max-width:420px;animation:pi .3s ease;overflow:hidden;max-height:92vh;display:flex;flex-direction:column}
@@ -682,7 +694,7 @@ function toast(msg,type='i'){
 function stars(avg,cnt,sz=13){
   if(!avg)return`<span style="font-size:${sz-1}px;color:var(--g400)">${isAr()?'لا تقييمات':'No ratings'}</span>`
   const f=Math.round(avg)
-  return`<span style="display:inline-flex;align-items:center;gap:2px">${Array.from({length:5},(_,i)=>`<span style="font-size:${sz}px;color:${i<f?'#f59e0b':'#e2e8f0'}">${i<f?'★':'☆'}</span>`).join('')}<span style="font-size:${sz-1}px;font-weight:700;color:var(--g700);margin-inline-start:3px">${avg}</span><span style="font-size:${sz-2}px;color:var(--g400)">(${cnt})</span></span>`
+  return`<span style="display:inline-flex;align-items:center;gap:2px"><span dir="ltr" style="display:inline-flex;gap:1px">${Array.from({length:5},(_,i)=>`<span style="font-size:${sz}px;color:${i<f?'#f59e0b':'#e2e8f0'}">${i<f?'★':'☆'}</span>`).join('')}</span><span style="font-size:${sz-1}px;font-weight:700;color:var(--g700);margin-inline-start:3px">${avg}</span><span style="font-size:${sz-2}px;color:var(--g400)" dir="ltr">(${cnt})</span></span>`
 }
 
 const LOGO_S=(sz,cls='')=>`<svg ${cls?`class="${cls}"`:''} viewBox="0 0 120 120" width="${sz}" height="${sz}" style="flex-shrink:0"><g transform="translate(60,60)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(30)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(60)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(90)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(120)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(150)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(180)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(210)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(240)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(270)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(300)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(330)"/></g></svg>`
@@ -1144,7 +1156,7 @@ function showLimitReachedModal(currentCount,limit,isPrem,isPremExpired,wasPrem){
     // الحالة "أ" — اشتراكه انتهى وعنده صفقات أكثر من الحد المجاني
     title=isAr()?'مرحباً بعودتك 👋':'Welcome back 👋'
     desc=isAr()
-      ?`صفقاتك السابقة محفوظة لك (${currentCount} نشطة)، ولكن لإنشاء صفقات جديدة تحتاج لتجديد <strong>اشتراك موثَّق</strong>.`
+      ?`صفقاتك السابقة محفوظة لك <span dir="ltr">(${currentCount} نشطة)</span>، ولكن لإنشاء صفقات جديدة تحتاج لتجديد <strong>اشتراك موثَّق</strong>.`
       :`Your existing deals are safe (${currentCount} active), but to create new ones you need to renew your <strong>Verified subscription</strong>.`
     perks=[
       {ic:'📦',t:isAr()?'5 صفقات نشطة في وقت واحد':'5 active deals at once'},
@@ -1338,7 +1350,7 @@ function rInc(){
   const el=$('incl');if(!el)return
   if(!pend.length){el.innerHTML=empt('📥',isAr()?'لا توجد طلبات واردة':'No incoming requests');return}
   el.innerHTML=pend.map(d=>`<div class="card mb16">
-    <div class="chdr"><div><h3>${ico(d.item)} ${san(d.item)}${d.description?' — '+san(d.description):''}</h3><div class="text-sm text-m mt8">${isAr()?'من:':'From:'} <strong>${san(d.buyer_name)}</strong> (${san(d.buyer_email)})</div></div>${sbdg(d.status)}</div>
+    <div class="chdr"><div><h3>${ico(d.item)} ${san(d.item)}${d.description?' — '+san(d.description):''}</h3><div class="text-sm text-m mt8">${isAr()?'من:':'From:'} <strong>${san(d.buyer_name)}</strong> <span dir="ltr">(${san(d.buyer_email)})</span></div></div>${sbdg(d.status)}</div>
     <div class="cbody"><div class="igrid">
       <div class="iitem"><div class="ilbl">${isAr()?'السعر':'Price'}</div><div class="ival teal">${fmtSAR(d.price)}</div></div>
       <div class="iitem"><div class="ilbl">${isAr()?'القسط':'Monthly'}</div><div class="ival teal">${fmtSAR(d.installment)}</div></div>
@@ -1381,12 +1393,13 @@ async function rDetail(id){
       const cm=d.status==='active'&&iB&&!p.is_paid
       const payFee=p.platform_fee||(d.platform_fee_per_payment||0)
       const payTotal=p.amount+payFee
-      return`<tr class="${p.is_paid?'rpaid':ov?'rov':''}">
+      return`<tr class="${p.is_paid?'rpaid':ov?'rov':''}" data-pid="${p.id}" data-amt="${payTotal}">
+        <td>${cm?`<input type="checkbox" class="mp-check" data-pid="${p.id}" data-amt="${payTotal}" onchange="updMPBar()" style="width:18px;height:18px;cursor:pointer;accent-color:var(--teal2)"/>`:''}</td>
         <td>${isAr()?'الشهر':'Month'} ${p.month_num}</td>
         <td style="color:${ov?'var(--am600)':'inherit'}">${fmtD(p.due_date)}${ov&&!p.is_paid?' ⚠️':''}</td>
         <td><strong>${fmtSAR(payTotal)}</strong>${payFee>0?`<div style="font-size:10px;color:var(--g500);font-weight:500">${fmtSAR(p.amount)} + ${fmtSAR(payFee)} ${isAr()?'سعي':'fee'}</div>`:''}</td>
         <td>${p.is_paid?`<span class="badge b-green">✓ ${isAr()?'مدفوع':'Paid'}</span>`:ov?`<span class="badge b-amber">${isAr()?'متأخر':'Overdue'}</span>`:`<span class="badge b-gray">${isAr()?'غير مدفوع':'Unpaid'}</span>`}</td>
-        <td>${cm?`<button class="btn bp bsm" onclick="markP('${d.id}','${p.id}')">💳 ${isAr()?'دفع الآن':'Pay Now'}</button>`:'—'}</td>
+        <td>${cm?`<button class="btn bp bsm" onclick="markP('${d.id}','${p.id}')">💳 ${isAr()?'دفع':'Pay'}</button>`:'—'}</td>
       </tr>`}).join('')
     const rats=d.ratings||[]
     const rHTML=rats.length?rats.map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--g100)"><div class="flex aic jsb mb8"><strong class="text-sm">${san(r.from_name)}</strong>${stars(r.stars,1)}</div>${r.comment?`<p class="text-sm text-m">"${san(r.comment)}"</p>`:''}<div class="text-xs text-m mt8">${fmtD(r.created_at)}</div></div>`).join(''):`<div class="text-sm text-m">${isAr()?'لا توجد تقييمات':'No ratings'}</div>`
@@ -1432,7 +1445,21 @@ async function rDetail(id){
       </div></div>`:''}
       <div class="card mb16">
         <div class="chdr"><h2>${isAr()?'جدول الأقساط':'Payment Schedule'}</h2><span class="text-sm text-m">${paid}/${tot} ${isAr()?'مدفوع':'paid'}</span></div>
-        <div class="tscroll"><table class="ptbl"><thead><tr><th>${isAr()?'الشهر':'Month'}</th><th>${isAr()?'الاستحقاق':'Due'}</th><th>${isAr()?'المبلغ':'Amount'}</th><th>${isAr()?'الحالة':'Status'}</th><th>${isAr()?'إجراء':'Action'}</th></tr></thead><tbody>${rows}</tbody></table></div>
+        ${d.status==='active'&&iB&&pay.some(p=>!p.is_paid)?`
+          <div style="padding:10px 16px;background:var(--teal-bg,#f0fdfa);border-bottom:1px solid var(--teal-pale,#ccfbf1);font-size:12px;color:var(--teal-dk,#115e59);font-weight:600">
+            💡 ${isAr()?'يمكنك تحديد عدة أقساط ودفعها دفعة واحدة':'Select multiple installments to pay at once'}
+          </div>
+        `:''}
+        <div class="tscroll"><table class="ptbl"><thead><tr><th style="width:34px"></th><th>${isAr()?'الشهر':'Month'}</th><th>${isAr()?'الاستحقاق':'Due'}</th><th>${isAr()?'المبلغ':'Amount'}</th><th>${isAr()?'الحالة':'Status'}</th><th>${isAr()?'إجراء':'Action'}</th></tr></thead><tbody>${rows}</tbody></table></div>
+      </div>
+
+      <!-- Multi-Pay floating bar -->
+      <div id="mp-bar" class="mp-bar hidden">
+        <div class="mp-bar-info">
+          <div class="mp-bar-count" id="mp-count">0 ${isAr()?'مختار':'selected'}</div>
+          <div class="mp-bar-total" id="mp-total">${fmtSAR(0)}</div>
+        </div>
+        <button class="btn bp" onclick="markPMulti('${d.id}')" style="white-space:nowrap">💳 ${isAr()?'دفع المحدد':'Pay Selected'}</button>
       </div>
       <div class="mb16">
         <div class="shdr"><h2>${isAr()?'عقد الاتفاقية':'Contract'}</h2><button class="btn bsec bsm" onclick="printC('${d.id}')">🖨️ ${isAr()?'طباعة':'Print'}</button></div>
@@ -1493,7 +1520,7 @@ async function rProfile(){
           <div style="font-size:30px">⭐</div>
           <div style="flex:1">
             <div style="font-size:15px;font-weight:800;color:var(--g900)">${isAr()?'حسابك موثَّق':'Your account is Verified'}</div>
-            <div style="font-size:12px;color:var(--g600)">${isAr()?'ينتهي في':'Expires on'}: ${fmtD(PRF.premium_expires_at)} ${isEnding?(isAr()?` <strong style="color:#d97706">(${daysLeft} ${daysLeft===1?'يوم':'أيام'})</strong>`:` <strong style="color:#d97706">(${daysLeft}d left)</strong>`):''}</div>
+            <div style="font-size:12px;color:var(--g600)">${isAr()?'ينتهي في':'Expires on'}: ${fmtD(PRF.premium_expires_at)} ${isEnding?(isAr()?` <strong style="color:#d97706" dir="ltr">(${daysLeft} ${daysLeft===1?'يوم':'أيام'})</strong>`:` <strong style="color:#d97706">(${daysLeft}d left)</strong>`):''}</div>
           </div>
           <button class="btn ${isEnding?'bp':'bg'} bsm" onclick="nav('prem')" style="white-space:nowrap">${isEnding?(isAr()?'جدّد':'Renew'):(isAr()?'عرض المزايا':'View benefits')}</button>
         </div>
@@ -1753,7 +1780,7 @@ async function rUpub(){
     <div class="upub-rating-card">
       <div class="upub-rating-big">${avgRating}</div>
       <div class="upub-rating-stars">${stars(avgRating,0,18)}</div>
-      <div class="upub-rating-count">${isAr()?`بناءً على ${ratings.length} تقييم`:`Based on ${ratings.length} rating${ratings.length!==1?'s':''}`}</div>
+      <div class="upub-rating-count">${isAr()?`بناءً على <span dir="ltr">${ratings.length}</span> تقييم`:`Based on ${ratings.length} rating${ratings.length!==1?'s':''}`}</div>
     </div>`:`
     <div class="upub-rating-card" style="background:var(--g50);border-color:var(--g200)">
       <div style="font-size:38px;margin-bottom:6px">⭐</div>
@@ -1782,7 +1809,7 @@ async function rUpub(){
                 <div class="upub-rating">
                   <span style="color:#fbbf24;font-size:14px">★</span>
                   <span style="color:#fff;font-weight:800;font-size:13px">${avgRating}</span>
-                  <span style="color:rgba(255,255,255,.7);font-size:11px">(${ratings.length})</span>
+                  <span style="color:rgba(255,255,255,.7);font-size:11px" dir="ltr">(${ratings.length})</span>
                 </div>
               `:''}
             </div>
@@ -2195,10 +2222,11 @@ window.confirmNafath=async()=>{
 
   // تحديث nafath_verified
   try{
-    await sb.from('profiles').update({
+    await sb.from('profiles').upsert({
+      id:CU.id,
       nafath_verified:true,
       nafath_verified_at:new Date().toISOString()
-    }).eq('id',CU.id)
+    },{onConflict:'id'})
 
     PRF.nafath_verified=true
     PRF.nafath_verified_at=new Date().toISOString()
@@ -2221,6 +2249,206 @@ window.confirmNafath=async()=>{
 }
 
 
+
+// ═══════════════════════════════════════════════
+// MULTI-PAY (دفع عدة أقساط دفعة واحدة)
+// ═══════════════════════════════════════════════
+
+window.updMPBar=()=>{
+  const checks=document.querySelectorAll('.mp-check:checked')
+  const bar=$('mp-bar')
+  if(!bar)return
+  if(checks.length===0){
+    bar.classList.add('hidden')
+    return
+  }
+  let total=0
+  checks.forEach(c=>total+=parseFloat(c.dataset.amt||0))
+  $('mp-count').textContent=`${checks.length} ${isAr()?(checks.length===1?'قسط مختار':'أقساط مختارة'):(checks.length===1?'selected':'selected')}`
+  $('mp-total').textContent=fmtSAR(total)
+  bar.classList.remove('hidden')
+}
+
+window.markPMulti=(did)=>{
+  const checks=document.querySelectorAll('.mp-check:checked')
+  if(checks.length===0)return
+  if(checks.length===1){
+    // واحد فقط، نستخدم الدفع العادي
+    return markP(did,checks[0].dataset.pid)
+  }
+
+  const deal=DEALS.find(d=>d.id===did)
+  if(!deal){toast(isAr()?'⚠️ خطأ':'⚠️ Error','e');return}
+
+  const paymentIds=[],paymentList=[]
+  let total=0,totalFee=0,totalSellerAmt=0
+  checks.forEach(c=>{
+    const pid=c.dataset.pid
+    const pay=(deal.payments||[]).find(p=>p.id===pid)
+    if(pay){
+      const fee=pay.platform_fee||(deal.platform_fee_per_payment||Math.round(deal.installment*0.035*100)/100)
+      paymentIds.push(pid)
+      paymentList.push({...pay,fee,total:pay.amount+fee})
+      total+=pay.amount+fee
+      totalFee+=fee
+      totalSellerAmt+=pay.amount
+    }
+  })
+
+  _PS={dealId:did,paymentId:null,amount:total,fee:totalFee,sellerAmount:totalSellerAmt,method:'apple',multi:true,paymentIds,paymentList}
+  openPMMulti(deal,paymentList,total)
+}
+
+function openPMMulti(deal,paymentList,total){
+  // نفتح payment modal بنفس الواجهة لكن نوضّح إنها أقساط متعددة
+  const LOGO_APPLE=`<img src="https://cdn.simpleicons.org/applepay/000000?viewbox=auto" alt="Apple Pay" style="height:22px;width:auto;display:block" loading="lazy"/>`
+  const LOGO_PAYPAL=`<img src="https://cdn.simpleicons.org/paypal?viewbox=auto" alt="PayPal" style="height:18px;width:auto;display:block" loading="lazy"/>`
+  const LOGO_VISA=`<img src="https://cdn.simpleicons.org/visa/1A1F71?viewbox=auto" alt="Visa" style="height:14px;width:auto;display:block" loading="lazy"/>`
+  const LOGO_MC=`<img src="https://cdn.simpleicons.org/mastercard?viewbox=auto" alt="Mastercard" style="height:20px;width:auto;display:block" loading="lazy"/>`
+  const LOGO_MADA=`<div style="direction:ltr;display:flex;align-items:center;justify-content:center;gap:5px;line-height:1"><div style="display:flex;flex-direction:column;gap:2px"><div style="width:14px;height:5px;background:#27A2DB;border-radius:1px"></div><div style="width:14px;height:5px;background:#84B740;border-radius:1px"></div></div><div style="display:flex;flex-direction:column;font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#231F20;line-height:1;gap:1px"><span style="font-size:11px;letter-spacing:-0.3px">مدى</span><span style="font-size:11px;letter-spacing:-0.5px">mada</span></div></div>`
+  const LOGO_STC=`<div style="direction:ltr;display:flex;align-items:center;justify-content:center;font-family:Helvetica,Arial,sans-serif;line-height:1;gap:3px"><span style="color:#4F008C;font-weight:900;font-size:18px;letter-spacing:-1px">stc</span><span style="color:#84B740;font-weight:600;font-size:15px;letter-spacing:-0.5px">pay</span></div>`
+
+  const monthsList=paymentList.map(p=>p.month_num).sort((a,b)=>a-b)
+  const monthsRange=monthsList.length<=3
+    ?monthsList.join(', ')
+    :`${monthsList[0]} - ${monthsList[monthsList.length-1]}`
+
+  const breakdownRows=paymentList.map(p=>`
+    <div class="row">
+      <span>${isAr()?'الشهر':'Month'} ${p.month_num} <span style="color:var(--g500);font-size:11px">${fmtD(p.due_date)}</span></span>
+      <span><strong>${fmtSAR(p.total)}</strong></span>
+    </div>`).join('')
+
+  $('pm-overlay').innerHTML=`
+    <div class="pmodal">
+      <div class="pmod-hdr">
+        <button class="pmod-close" onclick="closePM()" aria-label="إغلاق">✕</button>
+        <div class="pmod-hdr-content">
+          <div class="pmod-logo">${LOGO_W(48)}</div>
+          <div class="pmod-brand">${isAr()?'دفع متعدد':'Multi-Payment'}</div>
+          <div class="pmod-sub">${isAr()?`${paymentList.length} أقساط · الأشهر ${monthsRange}`:`${paymentList.length} installments · Months ${monthsRange}`}</div>
+        </div>
+      </div>
+      <div class="pmod-bd">
+        <div class="psandbox">🧪 ${isAr()?'وضع تجريبي — لن يتم خصم مبلغ فعلي':'Sandbox mode — no real charge'}</div>
+
+        <div class="pamt-box">
+          <div class="pamt-lbl">${isAr()?'إجمالي المبلغ المطلوب':'Total amount due'}</div>
+          <div class="pamt-val">${total.toFixed(2).replace(/\.00$/,'')}<span class="cur">${isAr()?'ر.س':'SAR'}</span></div>
+        </div>
+
+        <div class="pbreakdown">
+          <div class="row" style="font-weight:700;color:var(--g800);padding-bottom:6px;border-bottom:1px solid var(--g200);margin-bottom:6px">
+            <span>${isAr()?'تفاصيل الأقساط':'Installments'}</span>
+          </div>
+          ${breakdownRows}
+          <div class="row tot" style="padding-top:8px;margin-top:6px;border-top:1px solid var(--g200)"><span>${isAr()?'الإجمالي':'Total'}</span><span>${fmtSAR(total)}</span></div>
+        </div>
+
+        <div class="pm-section-title">${isAr()?'اختر طريقة الدفع':'Select payment method'}</div>
+
+        <div class="pm-list">
+          <button class="pm-row active" data-m="apple" onclick="selPM('apple')">
+            <div class="pm-logo" style="width:60px;height:34px">${LOGO_APPLE}</div>
+            <div class="pm-info"><div class="pm-name">Apple Pay</div><div class="pm-desc">${isAr()?'دفع سريع وآمن':'Quick and secure'}</div></div>
+            <div class="pm-radio"></div>
+          </button>
+          <button class="pm-row" data-m="mada" onclick="selPM('mada')">
+            <div class="pm-logo" style="width:70px;height:34px;padding:0;overflow:visible">${LOGO_MADA}</div>
+            <div class="pm-info"><div class="pm-name">${isAr()?'بطاقة مدى':'mada'}</div><div class="pm-desc">${isAr()?'البطاقة البنكية السعودية':'Saudi debit card'}</div></div>
+            <div class="pm-radio"></div>
+          </button>
+          <button class="pm-row" data-m="stcpay" onclick="selPM('stcpay')">
+            <div class="pm-logo" style="width:78px;height:34px;padding:0;overflow:visible">${LOGO_STC}</div>
+            <div class="pm-info"><div class="pm-name">stc pay</div><div class="pm-desc">${isAr()?'محفظة إس تي سي باي':'STC pay wallet'}</div></div>
+            <div class="pm-radio"></div>
+          </button>
+          <button class="pm-row" data-m="visa" onclick="selPM('visa')">
+            <div class="pm-logo" style="display:flex;flex-direction:row;gap:5px;padding:4px 6px;width:auto;min-width:62px">${LOGO_VISA}${LOGO_MC}</div>
+            <div class="pm-info"><div class="pm-name">Visa / Mastercard</div><div class="pm-desc">${isAr()?'بطاقة ائتمانية':'Credit card'}</div></div>
+            <div class="pm-radio"></div>
+          </button>
+          <button class="pm-row" data-m="paypal" onclick="selPM('paypal')">
+            <div class="pm-logo" style="width:60px;height:30px">${LOGO_PAYPAL}</div>
+            <div class="pm-info"><div class="pm-name">PayPal</div><div class="pm-desc">${isAr()?'الدفع عبر باي بال':'Pay with PayPal'}</div></div>
+            <div class="pm-radio"></div>
+          </button>
+        </div>
+
+        <div id="pm-card-fields" class="pm-card-fields">
+          <div class="text-xs text-m mb8" style="font-weight:700">${isAr()?'بيانات البطاقة':'Card details'}</div>
+          <input type="text" class="pcard-input" placeholder="0000 0000 0000 0000" maxlength="19" id="pm-cardno" autocomplete="off"/>
+          <div class="pcard-row">
+            <input type="text" class="pcard-input" placeholder="MM/YY" maxlength="5" id="pm-exp" autocomplete="off"/>
+            <input type="text" class="pcard-input" placeholder="CVV" maxlength="3" id="pm-cvv" autocomplete="off"/>
+          </div>
+        </div>
+
+        <div class="pm-security">
+          <div class="sec-item"><span class="sec-icon">🔒</span><span>${isAr()?'تشفير 256-bit':'256-bit encryption'}</span></div>
+          <div class="sec-item"><span class="sec-icon">🛡️</span><span>${isAr()?'PCI DSS':'PCI DSS'}</span></div>
+          <div class="sec-item"><span class="sec-icon">✓</span><span>${isAr()?'محمي':'Protected'}</span></div>
+        </div>
+      </div>
+      <div class="pmod-foot">
+        <button class="btn bg" onclick="closePM()" style="flex:1">${isAr()?'إلغاء':'Cancel'}</button>
+        <button class="btn bp" id="pm-pay-btn" onclick="processPMMulti()" style="flex:2.2">💳 ${isAr()?'ادفع':'Pay'} ${fmtSAR(total)}</button>
+      </div>
+    </div>`
+  $('pm-overlay').classList.remove('hidden')
+}
+
+window.processPMMulti=async()=>{
+  const btn=$('pm-pay-btn')
+  if(!btn)return
+  btn.innerHTML='<span class="spinner" style="border-color:#fff;border-top-color:transparent"></span>'
+  btn.disabled=true
+
+  try{
+    await new Promise(r=>setTimeout(r,1500))
+
+    // تحديث كل الأقساط المختارة
+    for(const pid of _PS.paymentIds){
+      await sb.from('payments').update({
+        is_paid:true,
+        paid_at:new Date().toISOString()
+      }).eq('id',pid)
+
+      // تسجيل العملية
+      try{
+        const pay=_PS.paymentList.find(p=>p.id===pid)
+        await sb.from('payment_transactions').insert({
+          payment_id:pid,
+          deal_id:_PS.dealId,
+          user_id:CU.id,user_email:CU.email,
+          amount:pay.total,
+          method:_PS.method,
+          status:'completed',
+          sandbox:true
+        })
+      }catch(e){}
+    }
+
+    // تحديث حالة الصفقة
+    const{data:remaining}=await sb.from('payments').select('id,is_paid').eq('deal_id',_PS.dealId)
+    const allPaid=(remaining||[]).every(p=>p.is_paid)
+    if(allPaid){
+      await sb.from('deals').update({status:'completed',completed_at:new Date().toISOString()}).eq('id',_PS.dealId)
+    }
+
+    closePM()
+    toast(isAr()
+      ?`✓ تم دفع ${_PS.paymentIds.length} أقساط بنجاح`
+      :`✓ ${_PS.paymentIds.length} installments paid`,'s')
+    await loadDeals()
+    if(_pp.id)await rDetail(_pp.id)
+  }catch(e){
+    btn.innerHTML='💳 '+(isAr()?'ادفع':'Pay')+' '+fmtSAR(_PS.amount)
+    btn.disabled=false
+    toast(isAr()?'⚠️ فشل الدفع':'⚠️ Payment failed','e')
+    console.error(e)
+  }
+}
 
 window.markP=(did,pid)=>{
   // نجيب بيانات القسط من الذاكرة
