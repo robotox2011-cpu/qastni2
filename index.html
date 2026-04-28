@@ -841,6 +841,7 @@ function buildShell(){
 
       <div class="page hidden" id="pg-dash"><div class="pi">
         <div class="disc">⚠️ <span class="ar-t">قسطني — قيد الترخيص من البنك المركزي السعودي. الرسوم سعي وتيسير وليست فوائد ربوية. النظام التجريبي حالياً</span><span class="en-t hidden">Qastni — Pending SAMA license. Service fees, not interest. Currently in test mode</span></div>
+        <div id="dash-prem-reminder"></div>
         <h1 class="ptit" id="dwelcome">مرحباً 👋</h1>
         <p class="psub ar-t">إليك ملخص نشاطك في منصة قسطني</p><p class="psub en-t hidden">Your Qastni activity summary</p>
         <div class="sgrid">
@@ -1099,6 +1100,24 @@ window.submitDeal=async()=>{
   if(dn>=pr){toast(isAr()?'⚠️ الدفعة الأولى يجب أن تكون أقل من السعر':'⚠️ Down < total','e');return}
   if(se===CU.email){toast(isAr()?'⚠️ لا يمكنك إرسال طلب لنفسك':'⚠️ Cannot send to yourself','e');return}
 
+  // ═══ فحص الحد الأقصى للصفقات النشطة ═══
+  const activeStatuses=['pending','approved','active']
+  const myActiveCount=DEALS.filter(d=>
+    activeStatuses.includes(d.status)&&
+    (d.buyer_email===CU.email||d.seller_email===CU.email)
+  ).length
+
+  const isPrem=PRF?.is_premium===true
+  const premExp=PRF?.premium_expires_at?new Date(PRF.premium_expires_at):null
+  const isPremExpired=premExp&&premExp<new Date()
+  const wasPrem=PRF?.premium_expires_at!=null  // كان موثَّق سابقاً
+  const limit=(isPrem&&!isPremExpired)?5:3
+
+  if(myActiveCount>=limit){
+    showLimitReachedModal(myActiveCount,limit,isPrem,isPremExpired,wasPrem)
+    return
+  }
+
   // ═══ Nafath check ═══ — لو ما تحقّق من نافذ، نعرض شاشة نافذ أولاً
   if(!PRF?.nafath_verified){
     openNafath({se,it,de,pr,dn,mo,no,sd},()=>{
@@ -1109,6 +1128,85 @@ window.submitDeal=async()=>{
   }
 
   await _submitDealAfterNafath(se,it,de,pr,dn,mo,no,sd)
+}
+
+// ═══════════════════════════════════════════════
+// LIMIT REACHED MODAL (smart upgrade messaging)
+// ═══════════════════════════════════════════════
+function showLimitReachedModal(currentCount,limit,isPrem,isPremExpired,wasPrem){
+  const isExpiredCase=wasPrem&&isPremExpired
+  const o=$('nafath-overlay')
+  if(!o)return
+
+  let title,desc,perks,ctaText,ctaIcon
+
+  if(isExpiredCase){
+    // الحالة "أ" — اشتراكه انتهى وعنده صفقات أكثر من الحد المجاني
+    title=isAr()?'مرحباً بعودتك 👋':'Welcome back 👋'
+    desc=isAr()
+      ?`صفقاتك السابقة محفوظة لك (${currentCount} نشطة)، ولكن لإنشاء صفقات جديدة تحتاج لتجديد <strong>اشتراك موثَّق</strong>.`
+      :`Your existing deals are safe (${currentCount} active), but to create new ones you need to renew your <strong>Verified subscription</strong>.`
+    perks=[
+      {ic:'📦',t:isAr()?'5 صفقات نشطة في وقت واحد':'5 active deals at once'},
+      {ic:'⭐',t:isAr()?'استرجاع شارة الموثَّق':'Restore your Verified badge'},
+      {ic:'⚖️',t:isAr()?'رفع سند لأمر بـ 20 ر.س فقط':'Sukuk filing for only 20 SAR'},
+      {ic:'💬',t:isAr()?'تنبيهات WhatsApp قبل كل قسط':'WhatsApp alerts before each payment'}
+    ]
+    ctaText=isAr()?'جدّد الاشتراك — 150 ر.س':'Renew Now — 150 SAR'
+    ctaIcon='⭐'
+  }else{
+    // الحالة "ب" — حساب مجاني، ما اشترك أصلاً
+    title=isAr()?'وصلت للحد الأقصى 🎯':'You\'ve reached the limit 🎯'
+    desc=isAr()
+      ?`عندك <strong>${currentCount} صفقات نشطة</strong> وهذا الحد الأقصى للحساب المجاني. ارفع حدّك لـ <strong>5 صفقات</strong> مع باقة موثَّق.`
+      :`You have <strong>${currentCount} active deals</strong> — the free plan limit. Upgrade to <strong>5 deals</strong> with the Verified plan.`
+    perks=[
+      {ic:'📦',t:isAr()?'5 صفقات نشطة بدلاً من 3':'5 active deals instead of 3'},
+      {ic:'⭐',t:isAr()?'شارة موثَّق على ملفك وكل صفقاتك':'Verified ⭐ badge on your profile'},
+      {ic:'🛡️',t:isAr()?'تحقق نافذ مشمول في الاشتراك':'Free Nafath verification'},
+      {ic:'💬',t:isAr()?'تنبيهات WhatsApp + دعم أولوية':'WhatsApp alerts + priority support'}
+    ]
+    ctaText=isAr()?'الترقية الآن — 150 ر.س/سنة':'Upgrade Now — 150 SAR/year'
+    ctaIcon='⭐'
+  }
+
+  const perksHtml=perks.map(p=>`
+    <div class="nafath-step" style="padding:8px 0">
+      <div class="nafath-num" style="background:#fef3c7;color:#92400e">${p.ic}</div>
+      <div class="nafath-step-txt">${p.t}</div>
+    </div>`).join('')
+
+  o.innerHTML=`
+    <div class="nafath-card">
+      <div class="nafath-hdr" style="background:linear-gradient(135deg,#0f766e,#0d9488)">
+        <div class="nafath-icon" style="background:#fff">
+          <div style="font-size:30px;line-height:1">${ctaIcon}</div>
+        </div>
+        <div class="nafath-title">${title}</div>
+        <div class="nafath-sub">${isAr()?'تجربة أفضل بانتظارك':'A better experience awaits'}</div>
+      </div>
+      <div class="nafath-bd">
+        <div style="font-size:13px;color:var(--g700);line-height:1.6;margin-bottom:14px;text-align:center">
+          ${desc}
+        </div>
+
+        <div style="background:linear-gradient(135deg,#fffbeb,#fff);border:1px solid #fcd34d;border-radius:14px;padding:12px 14px;margin-bottom:14px">
+          <div style="font-size:11.5px;font-weight:800;color:#92400e;margin-bottom:8px;letter-spacing:.5px">${isAr()?'⭐ ما يميّز الموثَّق:':'⭐ Verified perks:'}</div>
+          ${perksHtml}
+        </div>
+
+        <div style="text-align:center;font-size:11px;color:var(--g500);margin-bottom:14px;line-height:1.5">
+          ${isAr()?'فقط <strong style="color:var(--teal2)">12.5 ر.س شهرياً</strong> · أرخص من Netflix':'Only <strong style="color:var(--teal2)">12.5 SAR/month</strong> · Cheaper than Netflix'}
+        </div>
+
+        <div class="nafath-actions">
+          <button class="btn bg" onclick="closeNafath()">${isAr()?'لاحقاً':'Later'}</button>
+          <button class="btn bp" onclick="closeNafath();nav('prem')" style="flex:1.8">${ctaIcon} ${ctaText}</button>
+        </div>
+      </div>
+    </div>
+  `
+  o.classList.remove('hidden')
 }
 
 async function _submitDealAfterNafath(se,it,de,pr,dn,mo,no,sd){
@@ -1183,6 +1281,56 @@ function rDash(){
   const tv=DEALS.filter(d=>['active','completed'].includes(d.status)).reduce((s,d)=>s+d.price,0)
   const sv=$('sv');if(sv)sv.textContent=tv>=1000?(tv/1000).toFixed(1)+'K':tv
   const dl=$('dl');if(dl)dl.innerHTML=[...DEALS].slice(0,5).map(bCard).join('')||empt('📄',isAr()?'لا توجد صفقات بعد':'No deals yet')
+
+  // ═══ Premium expiry reminder ═══
+  const remSlot=$('dash-prem-reminder')
+  if(remSlot){
+    remSlot.innerHTML=buildPremReminder()
+  }
+}
+
+function buildPremReminder(){
+  const isPrem=PRF?.is_premium===true
+  const expDate=PRF?.premium_expires_at?new Date(PRF.premium_expires_at):null
+  if(!isPrem||!expDate)return ''
+
+  const now=new Date()
+  const daysLeft=Math.floor((expDate-now)/(1000*60*60*24))
+
+  // الاشتراك منتهي
+  if(daysLeft<0){
+    const daysAgo=Math.abs(daysLeft)
+    return `
+      <button class="promo-banner" style="background:linear-gradient(135deg,#dc2626,#b91c1c);margin-bottom:14px" onclick="nav('prem')">
+        <div class="promo-icon" style="background:rgba(255,255,255,.25)">⏰</div>
+        <div class="promo-content">
+          <div class="promo-title">
+            ${isAr()?'انتهى اشتراكك في موثَّق':'Your Verified subscription expired'}
+            <span class="promo-mini-badge" style="background:rgba(255,255,255,.3)">${isAr()?`قبل ${daysAgo} ${daysAgo===1?'يوم':'أيام'}`:`${daysAgo}d ago`}</span>
+          </div>
+          <div class="promo-desc">${isAr()?'صفقاتك الحالية محفوظة. جدّد لإنشاء صفقات جديدة':'Your deals are safe. Renew to create new ones'}</div>
+        </div>
+        <div class="promo-arrow">›</div>
+      </button>`
+  }
+
+  // أقل من 7 أيام
+  if(daysLeft<=7){
+    return `
+      <button class="promo-banner" style="background:linear-gradient(135deg,#f59e0b,#d97706);margin-bottom:14px" onclick="nav('prem')">
+        <div class="promo-icon" style="background:rgba(255,255,255,.25)">⏰</div>
+        <div class="promo-content">
+          <div class="promo-title">
+            ${isAr()?'اشتراكك يقارب على الانتهاء':'Subscription ending soon'}
+            <span class="promo-mini-badge" style="background:rgba(255,255,255,.3)">${isAr()?`${daysLeft} ${daysLeft===1?'يوم':'أيام'}`:`${daysLeft}d left`}</span>
+          </div>
+          <div class="promo-desc">${isAr()?'جدّد الآن للحفاظ على شارة موثَّق ومميزاتها':'Renew now to keep your Verified ⭐ badge'}</div>
+        </div>
+        <div class="promo-arrow">›</div>
+      </button>`
+  }
+
+  return ''
 }
 
 function rInc(){
@@ -1326,22 +1474,50 @@ async function rProfile(){
   
   const el=$('prfc');if(!el)return
   const isPrem=PRF?.is_premium===true
-  const profileBadge=isPrem?`<span class="vbadge vbadge-lg" style="margin-inline-start:8px"><span class="star">⭐</span>${isAr()?'موثَّق':'Verified'}</span>`:''
+  const expDate=PRF?.premium_expires_at?new Date(PRF.premium_expires_at):null
+  const isPremExpired=expDate&&expDate<new Date()
+  const wasPrem=PRF?.premium_expires_at!=null
+  const isPremActive=isPrem&&!isPremExpired
+
+  const profileBadge=isPremActive?`<span class="vbadge vbadge-lg" style="margin-inline-start:8px"><span class="star">⭐</span>${isAr()?'موثَّق':'Verified'}</span>`:''
 
   // CTA card to upgrade or show active state
-  const subscriptionCard=isPrem?`
-    <div class="card mb20" style="border:1px solid #fcd34d;background:linear-gradient(135deg,#fffbeb 0%,#fff 60%)">
+  let subscriptionCard
+  if(isPremActive){
+    const daysLeft=Math.floor((expDate-new Date())/(1000*60*60*24))
+    const isEnding=daysLeft<=7
+    subscriptionCard=`
+    <div class="card mb20" style="border:1px solid ${isEnding?'#fbbf24':'#fcd34d'};background:linear-gradient(135deg,#fffbeb 0%,#fff 60%)">
       <div class="cbody">
         <div class="flex aic gap8" style="margin-bottom:8px">
           <div style="font-size:30px">⭐</div>
           <div style="flex:1">
             <div style="font-size:15px;font-weight:800;color:var(--g900)">${isAr()?'حسابك موثَّق':'Your account is Verified'}</div>
-            <div style="font-size:12px;color:var(--g600)">${isAr()?'ينتهي في':'Expires on'}: ${fmtD(PRF.premium_expires_at)}</div>
+            <div style="font-size:12px;color:var(--g600)">${isAr()?'ينتهي في':'Expires on'}: ${fmtD(PRF.premium_expires_at)} ${isEnding?(isAr()?` <strong style="color:#d97706">(${daysLeft} ${daysLeft===1?'يوم':'أيام'})</strong>`:` <strong style="color:#d97706">(${daysLeft}d left)</strong>`):''}</div>
           </div>
-          <button class="btn bg bsm" onclick="nav('prem')" style="white-space:nowrap">${isAr()?'عرض المزايا':'View benefits'}</button>
+          <button class="btn ${isEnding?'bp':'bg'} bsm" onclick="nav('prem')" style="white-space:nowrap">${isEnding?(isAr()?'جدّد':'Renew'):(isAr()?'عرض المزايا':'View benefits')}</button>
         </div>
       </div>
-    </div>`:`
+    </div>`
+  }else if(wasPrem&&isPremExpired){
+    // كان موثَّق وانتهى
+    const daysAgo=Math.floor((new Date()-expDate)/(1000*60*60*24))
+    subscriptionCard=`
+    <div class="card mb20" style="border:1px solid #fca5a5;background:linear-gradient(135deg,#fef2f2 0%,#fff 60%)">
+      <div class="cbody">
+        <div class="flex aic gap8" style="margin-bottom:8px">
+          <div style="font-size:30px">⏰</div>
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:800;color:var(--g900)">${isAr()?'انتهى اشتراك موثَّق':'Verified expired'}</div>
+            <div style="font-size:12px;color:var(--g600)">${isAr()?`انتهى قبل ${daysAgo} ${daysAgo===1?'يوم':'أيام'} · صفقاتك الحالية محفوظة`:`Expired ${daysAgo}d ago · Your deals are safe`}</div>
+          </div>
+          <button class="btn bp bsm" onclick="nav('prem')" style="white-space:nowrap">${isAr()?'جدّد':'Renew'}</button>
+        </div>
+      </div>
+    </div>`
+  }else{
+    // ما اشترك أصلاً
+    subscriptionCard=`
     <button class="promo-banner" style="margin-bottom:20px;width:100%" onclick="nav('prem')">
       <div class="promo-icon">⭐</div>
       <div class="promo-content">
@@ -1353,6 +1529,7 @@ async function rProfile(){
       </div>
       <div class="promo-arrow">›</div>
     </button>`
+  }
 
   el.innerHTML=`
     ${subscriptionCard}
@@ -1671,6 +1848,10 @@ async function rUpub(){
 function rPrem(){
   const c=$('premc');if(!c)return
   const isPrem=PRF?.is_premium===true
+  const rawExp=PRF?.premium_expires_at?new Date(PRF.premium_expires_at):null
+  const isPremExpired=rawExp&&rawExp<new Date()
+  const wasPrem=PRF?.premium_expires_at!=null
+  const isPremActive=isPrem&&!isPremExpired
   const expDate=PRF?.premium_expires_at?fmtD(PRF.premium_expires_at):''
 
   const featuresAr=[
@@ -1701,7 +1882,9 @@ function rPrem(){
       <div class="prem-feat-txt">${f.t}</div>
     </div>`).join('')
 
-  const heroSection=isPrem?`
+  let heroSection=''
+  if(isPremActive){
+    heroSection=`
     <div class="prem-active">
       <div class="prem-active-ic">⭐</div>
       <div class="prem-active-info">
@@ -1713,12 +1896,55 @@ function rPrem(){
       <div class="prem-hero-badge">⭐ ${isAr()?'موثَّق · فعّال':'VERIFIED · ACTIVE'}</div>
       <h1 class="prem-hero-title">${isAr()?'أنت تستمتع بكل':"You're enjoying all"} <span class="accent">${isAr()?'مزايا الموثَّق':'Verified benefits'}</span></h1>
       <p class="prem-hero-sub">${isAr()?'شكراً لثقتك في قسطني. تحت قائمة المزايا اللي تستفيد منها حالياً:':"Thank you for trusting Qastni. Below are the benefits you're enjoying:"}</p>
-    </div>`:`
+    </div>`
+  }else if(wasPrem&&isPremExpired){
+    heroSection=`
+    <div class="prem-active" style="background:linear-gradient(135deg,#dc2626,#b91c1c);box-shadow:0 12px 30px rgba(220,38,38,.25)">
+      <div class="prem-active-ic">⏰</div>
+      <div class="prem-active-info">
+        <div class="prem-active-title">${isAr()?'انتهى اشتراكك السابق':'Your previous subscription expired'}</div>
+        <div class="prem-active-exp">${isAr()?'انتهى في':'Expired on'}: ${expDate||'-'} · ${isAr()?'صفقاتك الحالية محفوظة':'Your deals are safe'}</div>
+      </div>
+    </div>
+    <div class="prem-hero">
+      <div class="prem-hero-badge">⭐ ${isAr()?'مرحباً بعودتك':'WELCOME BACK'}</div>
+      <h1 class="prem-hero-title">${isAr()?'جدّد':'Renew your'} <span class="accent">${isAr()?'شارة موثَّق ⭐':'Verified ⭐ badge'}</span></h1>
+      <p class="prem-hero-sub">${isAr()?'استرجع كل المميّزات اللي كنت تستمتع فيها — وكمّل صفقاتك بدون قيود':"Restore every benefit you used to enjoy — and continue your deals without limits"}</p>
+    </div>`
+  }else{
+    heroSection=`
     <div class="prem-hero">
       <div class="prem-hero-badge">⭐ ${isAr()?'الترقية لموثَّق':'UPGRADE TO VERIFIED'}</div>
       <h1 class="prem-hero-title">${isAr()?'كن':'Become a'} <span class="accent">${isAr()?'موثَّق ⭐':'Verified ⭐'}</span> ${isAr()?'في قسطني':'on Qastni'}</h1>
       <p class="prem-hero-sub">${isAr()?'احصل على شارة موثَّقة، حماية مدمجة، وتجربة مميّزة في كل تعاملاتك':'Get a verified badge, built-in protection, and a premium experience for all your transactions'}</p>
     </div>`
+  }
+
+  // CTA button
+  let ctaButton
+  if(isPremActive){
+    ctaButton=`<button class="prem-cta" disabled style="background:var(--g300);color:var(--g600);box-shadow:none;cursor:default">
+      ✓ ${isAr()?'اشتراكك نشط':'Subscription active'}
+    </button>`
+  }else if(wasPrem&&isPremExpired){
+    ctaButton=`<button class="prem-cta" onclick="upgradeToPremium()">
+      <span>⭐ ${isAr()?'جدّد الاشتراك — 150 ر.س':'Renew Now — 150 SAR'}</span>
+    </button>
+    <div class="prem-foot-note">
+      ${isAr()
+        ?'🧪 وضع تجريبي — لن يتم خصم مبلغ فعلي. الفعلي يبدأ بعد ترخيص ساما.'
+        :'🧪 Sandbox mode — no real charge. Real billing starts after SAMA license.'}
+    </div>`
+  }else{
+    ctaButton=`<button class="prem-cta" onclick="upgradeToPremium()">
+      <span>⭐ ${isAr()?'الترقية الآن — 150 ر.س':'Upgrade Now — 150 SAR'}</span>
+    </button>
+    <div class="prem-foot-note">
+      ${isAr()
+        ?'🧪 وضع تجريبي — لن يتم خصم مبلغ فعلي. الفعلي يبدأ بعد ترخيص ساما.'
+        :'🧪 Sandbox mode — no real charge. Real billing starts after SAMA license.'}
+    </div>`
+  }
 
   c.innerHTML=`
     <div class="prem-page">
@@ -1739,20 +1965,7 @@ function rPrem(){
           </div>
           <div class="prem-card-body">
             ${featRows}
-            ${isPrem?`
-              <button class="prem-cta" disabled style="background:var(--g300);color:var(--g600);box-shadow:none;cursor:default">
-                ✓ ${isAr()?'اشتراكك نشط':'Subscription active'}
-              </button>
-            `:`
-              <button class="prem-cta" onclick="upgradeToPremium()">
-                <span>⭐ ${isAr()?'الترقية الآن — 150 ر.س':'Upgrade Now — 150 SAR'}</span>
-              </button>
-              <div class="prem-foot-note">
-                ${isAr()
-                  ?'🧪 وضع تجريبي — لن يتم خصم مبلغ فعلي. الفعلي يبدأ بعد ترخيص ساما.'
-                  :'🧪 Sandbox mode — no real charge. Real billing starts after SAMA license.'}
-              </div>
-            `}
+            ${ctaButton}
           </div>
         </div>
       </div>
