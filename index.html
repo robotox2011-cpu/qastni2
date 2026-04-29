@@ -223,7 +223,37 @@ textarea.fc{resize:vertical;min-height:70px}
 .shdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:12px}
 .stit{font-size:14px;font-weight:700;color:var(--g900)}
 .tscroll{overflow-x:auto}
+/* QASTNI BRANDED LOADER (spinner) */
 .spinner{width:17px;height:17px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spinDots .7s linear infinite;display:inline-block}
+
+/* Qastni Logo Loader — 12 dots circular */
+.qloader{display:inline-block;position:relative;width:24px;height:24px;vertical-align:middle;will-change:contents;contain:layout style paint}
+.qloader .qp{position:absolute;top:50%;left:50%;width:3px;height:3px;background:currentColor;border-radius:1px;transform-origin:1.5px 10px;animation:qLoad 1.2s linear infinite;opacity:.15}
+.qloader .qp:nth-child(1){transform:rotate(0deg) translate(-50%,-50%);animation-delay:0s}
+.qloader .qp:nth-child(2){transform:rotate(30deg) translate(-50%,-50%);animation-delay:-1.1s}
+.qloader .qp:nth-child(3){transform:rotate(60deg) translate(-50%,-50%);animation-delay:-1s}
+.qloader .qp:nth-child(4){transform:rotate(90deg) translate(-50%,-50%);animation-delay:-.9s}
+.qloader .qp:nth-child(5){transform:rotate(120deg) translate(-50%,-50%);animation-delay:-.8s}
+.qloader .qp:nth-child(6){transform:rotate(150deg) translate(-50%,-50%);animation-delay:-.7s}
+.qloader .qp:nth-child(7){transform:rotate(180deg) translate(-50%,-50%);animation-delay:-.6s}
+.qloader .qp:nth-child(8){transform:rotate(210deg) translate(-50%,-50%);animation-delay:-.5s}
+.qloader .qp:nth-child(9){transform:rotate(240deg) translate(-50%,-50%);animation-delay:-.4s}
+.qloader .qp:nth-child(10){transform:rotate(270deg) translate(-50%,-50%);animation-delay:-.3s}
+.qloader .qp:nth-child(11){transform:rotate(300deg) translate(-50%,-50%);animation-delay:-.2s}
+.qloader .qp:nth-child(12){transform:rotate(330deg) translate(-50%,-50%);animation-delay:-.1s}
+
+/* Larger variant */
+.qloader-lg{width:48px;height:48px}
+.qloader-lg .qp{width:5px;height:5px;border-radius:1.5px;transform-origin:2.5px 20px}
+
+@keyframes qLoad{
+  0%,80%,100%{opacity:.15}
+  40%{opacity:1}
+}
+
+/* Color variants */
+.qloader-w{color:#fff}
+.qloader-t{color:var(--teal2)}
 
 /* ═══ PREMIUM UPGRADE PAGE ═══ */
 .prem-page{min-height:calc(100vh - 100px);background:linear-gradient(180deg,#fff 0%,var(--teal3) 100%);padding:30px 20px;animation:fadeIn .4s ease;position:relative}
@@ -278,11 +308,11 @@ textarea.fc{resize:vertical;min-height:70px}
 .vbadge-lg .star{font-size:13px}
 
 /* ═══ PROMO BANNER (in-app marketing) ═══ */
-.promo-banner{background:linear-gradient(135deg,#0f766e,#0d9488);color:#fff;padding:14px 16px;border-radius:14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;box-shadow:0 6px 18px rgba(13,148,136,.25);position:relative;overflow:hidden;border:none;width:100%;text-align:start;font-family:inherit}
+.promo-banner{background:linear-gradient(135deg,#0f766e,#0d9488);color:#fff;padding:14px 16px;border-radius:14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;box-shadow:0 6px 18px rgba(13,148,136,.25);position:relative;overflow:hidden;border:none;width:100%;text-align:start;font-family:inherit;box-sizing:border-box}
 .promo-banner::before{content:'';position:absolute;top:-30px;inset-inline-end:-30px;width:90px;height:90px;background:radial-gradient(circle,rgba(255,255,255,.15),transparent 70%);border-radius:50%}
 .promo-banner:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(13,148,136,.35)}
 .promo-banner:active{transform:translateY(0)}
-.promo-icon{flex-shrink:0;width:42px;height:42px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;backdrop-filter:blur(10px);position:relative;z-index:1}
+.promo-icon{flex-shrink:0;width:42px;height:42px;background:rgba(255,255,255,.22);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;position:relative;z-index:1}
 .promo-content{flex:1;min-width:0;position:relative;z-index:1;text-align:start}
 .promo-title{font-size:13.5px;font-weight:800;line-height:1.3;margin-bottom:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;text-align:start;justify-content:flex-start}
 .promo-mini-badge{display:inline-flex;align-items:center;gap:3px;background:rgba(255,255,255,.25);padding:1px 7px;border-radius:8px;font-size:10px;font-weight:700;letter-spacing:.3px}
@@ -655,6 +685,26 @@ let RS={dealId:null,email:null,stars:0},_started=false,_rtChannel=null,_splashHi
 
 const isAr=()=>lang==='ar'
 const $=id=>document.getElementById(id)
+
+// Qastni branded loader (12 dots)
+const qLoader=(size='',color='w')=>`<span class="qloader ${size==='lg'?'qloader-lg':''} qloader-${color}">${'<span class="qp"></span>'.repeat(12)}</span>`
+
+// ═══════════════════════════════════════════════
+// PAYMENT LOGOS (inline SVG — no network requests)
+// ═══════════════════════════════════════════════
+const PAY_LOGOS={
+  apple:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 165 70" style="height:22px;width:auto;display:block"><path fill="#000" d="M30.7 16.5c1.9-2.3 3.2-5.5 2.8-8.7-2.7.1-6.1 1.8-8 4.1-1.7 2-3.3 5.3-2.9 8.4 3.1.2 6.2-1.5 8.1-3.8M33.5 21c-4.5-.3-8.3 2.5-10.4 2.5-2.2 0-5.4-2.4-9-2.4-4.6.1-8.9 2.7-11.3 6.8-4.8 8.4-1.3 20.7 3.4 27.5 2.3 3.3 5 7 8.6 6.9 3.4-.1 4.7-2.2 8.8-2.2 4.1 0 5.3 2.2 8.9 2.2 3.7-.1 6-3.4 8.3-6.7 2.6-3.8 3.7-7.5 3.7-7.7-.1 0-7.1-2.7-7.2-10.7-.1-6.7 5.5-9.9 5.7-10.1-3.1-4.6-7.9-5.1-9.6-5.2M62.7 11.5h13c11.2 0 19 7.7 19 18.9 0 11.2-8 18.9-19.3 18.9H67v18.5h-4.3V11.5zm4.3 4.1v29.7h7.6c8.1 0 14-5.4 14-14.8 0-9.4-5.9-14.9-14-14.9H67zM98.5 56c0-7.4 5.7-12 16.7-12.6l11.3-.7v-3.2c0-4.7-3.1-7.5-8.5-7.5-4.4 0-7.7 2.4-8.5 6h-4c.5-6.1 6-9.7 12.7-9.7 7.4 0 12.4 4 12.4 11.6v25.7h-3.8v-6.4h-.1c-2.1 4.3-7.2 7.1-12.6 7.1-7 0-11.6-4-11.6-9.6V56zm28-3.5v-3.4l-10.3.6c-7.4.4-11.6 3.1-11.6 7.7 0 4.1 3.6 6.6 8.7 6.6 6.7 0 13.2-4.4 13.2-11.5zM135.8 71V67c.5.1 1.4.1 1.8.1 3 0 4.7-1.4 5.8-4.7l.7-2L132.4 29h4.4l8.7 26.7h.1L154.3 29h4.3l-12 33.5C144 70 141.2 71 137.6 71c-.4 0-1.4 0-1.8-.1z"/></svg>`,
+
+  paypal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 124 33" style="height:18px;width:auto;display:block"><path fill="#003087" d="M46.211 6.749h-6.839a.95.95 0 0 0-.939.802l-2.766 17.537a.57.57 0 0 0 .564.658h3.265a.95.95 0 0 0 .939-.803l.746-4.73a.95.95 0 0 1 .938-.803h2.165c4.505 0 7.105-2.18 7.784-6.5.306-1.89.013-3.375-.872-4.415-.972-1.142-2.696-1.746-4.985-1.746zM47 13.154c-.374 2.454-2.249 2.454-4.062 2.454h-1.032l.724-4.583a.57.57 0 0 1 .563-.481h.473c1.235 0 2.4 0 3.002.704.359.42.469 1.044.332 1.906zM66.654 13.075h-3.275a.57.57 0 0 0-.563.481l-.145.916-.229-.332c-.709-1.029-2.29-1.373-3.868-1.373-3.619 0-6.71 2.741-7.312 6.586-.313 1.918.132 3.752 1.22 5.031.998 1.176 2.426 1.666 4.125 1.666 2.916 0 4.533-1.875 4.533-1.875l-.146.91a.57.57 0 0 0 .562.66h2.95a.95.95 0 0 0 .939-.803l1.77-11.209a.568.568 0 0 0-.561-.658zm-4.565 6.374c-.316 1.871-1.801 3.127-3.695 3.127-.951 0-1.711-.305-2.199-.883-.484-.574-.668-1.391-.514-2.301.295-1.855 1.805-3.152 3.67-3.152.93 0 1.686.309 2.184.892.499.589.697 1.411.554 2.317zM84.096 13.075h-3.291a.954.954 0 0 0-.787.417l-4.539 6.686-1.924-6.425a.953.953 0 0 0-.912-.678h-3.234a.57.57 0 0 0-.541.754l3.625 10.638-3.408 4.811a.57.57 0 0 0 .465.9h3.287a.949.949 0 0 0 .781-.408l10.946-15.8a.57.57 0 0 0-.468-.895z"/><path fill="#009cde" d="M94.992 6.749h-6.84a.95.95 0 0 0-.938.802l-2.766 17.537a.569.569 0 0 0 .562.658h3.51a.665.665 0 0 0 .656-.562l.785-4.971a.95.95 0 0 1 .938-.803h2.164c4.506 0 7.105-2.18 7.785-6.5.307-1.89.012-3.375-.873-4.415-.971-1.142-2.694-1.746-4.983-1.746zm.789 6.405c-.373 2.454-2.248 2.454-4.062 2.454h-1.031l.725-4.583a.568.568 0 0 1 .562-.481h.473c1.234 0 2.4 0 3.002.704.359.42.468 1.044.331 1.906zM115.434 13.075h-3.273a.567.567 0 0 0-.562.481l-.145.916-.23-.332c-.709-1.029-2.289-1.373-3.867-1.373-3.619 0-6.709 2.741-7.311 6.586-.312 1.918.131 3.752 1.219 5.031 1 1.176 2.426 1.666 4.125 1.666 2.916 0 4.533-1.875 4.533-1.875l-.146.91a.57.57 0 0 0 .564.66h2.949a.95.95 0 0 0 .938-.803l1.771-11.209a.571.571 0 0 0-.565-.658zm-4.565 6.374c-.314 1.871-1.801 3.127-3.695 3.127-.949 0-1.711-.305-2.199-.883-.484-.574-.666-1.391-.514-2.301.297-1.855 1.805-3.152 3.67-3.152.93 0 1.686.309 2.184.892.501.589.699 1.411.554 2.317zM119.295 7.23l-2.807 17.858a.569.569 0 0 0 .562.658h2.822c.469 0 .867-.34.939-.803l2.768-17.536a.57.57 0 0 0-.562-.659h-3.16a.571.571 0 0 0-.562.482z"/><path fill="#003087" d="M7.266 29.154l.523-3.322-1.165-.027H1.061L4.927 1.292a.316.316 0 0 1 .314-.268h9.38c3.114 0 5.263.648 6.385 1.927.526.6.861 1.227 1.023 1.917.17.724.173 1.589.007 2.644l-.012.077v.676l.526.298a3.69 3.69 0 0 1 1.065.812c.45.513.741 1.165.864 1.938.127.795.085 1.741-.123 2.812-.24 1.232-.628 2.305-1.152 3.183a6.547 6.547 0 0 1-1.825 2c-.696.494-1.523.869-2.458 1.109-.906.236-1.939.355-3.072.355h-.73c-.522 0-1.029.188-1.427.525a2.21 2.21 0 0 0-.744 1.328l-.055.299-.924 5.855-.042.215c-.011.068-.03.102-.058.125a.155.155 0 0 1-.096.035H7.266z"/><path fill="#009cde" d="M23.048 7.667c-.028.179-.06.362-.096.55-1.237 6.351-5.469 8.545-10.874 8.545H9.326c-.661 0-1.218.48-1.321 1.132L6.596 26.83l-.399 2.533a.704.704 0 0 0 .695.814h4.881c.578 0 1.069-.42 1.16-.99l.048-.248.919-5.832.059-.32c.09-.572.582-.992 1.16-.992h.73c4.729 0 8.431-1.92 9.513-7.476.452-2.321.218-4.259-.978-5.622a4.667 4.667 0 0 0-1.336-1.03z"/><path fill="#012169" d="M21.754 7.151a9.757 9.757 0 0 0-1.203-.267 15.284 15.284 0 0 0-2.426-.177h-7.352a1.172 1.172 0 0 0-1.159.992L8.05 17.605l-.045.289a1.336 1.336 0 0 1 1.321-1.132h2.752c5.405 0 9.637-2.195 10.874-8.545.037-.188.068-.371.096-.55a6.594 6.594 0 0 0-1.017-.429 9.045 9.045 0 0 0-.277-.087z"/><path fill="#003087" d="M9.614 7.699a1.169 1.169 0 0 1 1.159-.991h7.352c.871 0 1.684.057 2.426.177a9.757 9.757 0 0 1 1.481.353c.365.121.704.264 1.017.429.368-2.347-.003-3.945-1.272-5.392C20.378.682 17.853 0 14.622 0h-9.38c-.66 0-1.223.48-1.325 1.133L.01 25.898a.806.806 0 0 0 .795.932h5.791l1.454-9.225 1.564-9.906z"/></svg>`,
+
+  visa:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 324.7" style="height:14px;width:auto;display:block"><path fill="#1a1f71" d="M651.2 0c-71 0-134.5 36.8-134.5 104.8 0 78 112.5 83.4 112.5 122.6 0 16.5-18.9 31.2-51.2 31.2-45.8 0-80-20.6-80-20.6l-14.6 68.6s39.4 17.4 91.8 17.4c77.6 0 138.7-38.6 138.7-107.7 0-82.4-113-87.6-113-124 0-12.9 15.5-27.1 47.7-27.1 36.3 0 65.9 15 65.9 15L728 14.5S695.7 0 651.2 0zM1.7 5L0 14.8s29.9 5.5 56.8 16.4c34.7 12.5 37.2 19.9 43 42.6L163.1 320h84.7L378.2 5.1h-84.5L209.8 219.2 175.6 38.6c-3.1-20.6-19-32.6-38.5-32.6L1.7 5zm410.6 0L346 320h80.5L492.7 5h-80.4zm449 0c-19.4 0-29.7 10.4-37.3 28.6L706 320h84.6l16.4-47.3h103l9.6 47.3H995L929.7 5h-68.5zm11 85.1l25 117h-67.1l42.1-117z"/></svg>`,
+
+  mc:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152 116" style="height:20px;width:auto;display:block"><path fill="#ff5f00" d="M55.2 12.4h41.6v90.4H55.2z"/><path fill="#eb001b" d="M58 57.6c0-18.4 8.6-34.7 22-45.2A57.4 57.4 0 0 0 0 57.6c0 31.8 25.8 57.6 57.6 57.6 13.6 0 26.1-4.7 35.9-12.6A57.4 57.4 0 0 1 58 57.6z"/><path fill="#f79e1b" d="M152 57.6a57.4 57.4 0 0 1-93.5 45 57.4 57.4 0 0 0 22-45 57.4 57.4 0 0 0-22-45.1A57.4 57.4 0 0 1 152 57.6z"/></svg>`,
+
+  mada:`<div style="direction:ltr;display:flex;align-items:center;justify-content:center;gap:5px;line-height:1"><div style="display:flex;flex-direction:column;gap:2px"><div style="width:14px;height:5px;background:#27A2DB;border-radius:1px"></div><div style="width:14px;height:5px;background:#84B740;border-radius:1px"></div></div><div style="display:flex;flex-direction:column;font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#231F20;line-height:1;gap:1px"><span style="font-size:11px;letter-spacing:-0.3px">مدى</span><span style="font-size:11px;letter-spacing:-0.5px">mada</span></div></div>`,
+
+  stc:`<div style="direction:ltr;display:flex;align-items:center;justify-content:center;font-family:Helvetica,Arial,sans-serif;line-height:1;gap:3px"><span style="color:#4F008C;font-weight:900;font-size:18px;letter-spacing:-1px">stc</span><span style="color:#84B740;font-weight:600;font-size:15px;letter-spacing:-0.5px">pay</span></div>`
+}
 const fmtN=n=>(Math.round((n||0)*100)/100).toLocaleString('en',{minimumFractionDigits:0,maximumFractionDigits:2})
 const fmtSAR=n=>fmtN(n)+(isAr()?' ر.س':' SAR')
 const fmtD=s=>s?new Date(s).toLocaleDateString(isAr()?'ar-SA':'en-GB',{year:'numeric',month:'short',day:'numeric'}):'—'
@@ -775,7 +825,7 @@ window.doLogin=async()=>{
   $('lerr')?.classList.add('hidden')
   if(!em||!pw){showErr('lerr',isAr()?'يرجى ملء الحقول':'Fill fields');return}
   if(!valEmail(em)){showErr('lerr',isAr()?'البريد غير صالح':'Invalid email');return}
-  const btn=$('lbtn');btn.innerHTML='<span class="spinner"></span>';btn.disabled=true
+  const btn=$('lbtn');btn.innerHTML=qLoader();btn.disabled=true
   const{error}=await sb.auth.signInWithPassword({email:em,password:pw})
   if(error){showErr('lerr',isAr()?'البريد أو كلمة المرور غير صحيحة':'Wrong email or password');btn.innerHTML=isAr()?'تسجيل الدخول':'Sign In';btn.disabled=false}
 }
@@ -791,7 +841,7 @@ window.doRegister=async()=>{
   if(pw.length<8){showErr('rerr',isAr()?'كلمة المرور 8 أحرف على الأقل':'Min 8 chars');return}
   if(pw!==pw2){showErr('rerr',isAr()?'كلمتا المرور غير متطابقتان':'Passwords do not match');return}
   if(nm.length<2||nm.length>100){showErr('rerr',isAr()?'الاسم غير صالح':'Invalid name');return}
-  const btn=$('rbtn');btn.innerHTML='<span class="spinner"></span>';btn.disabled=true
+  const btn=$('rbtn');btn.innerHTML=qLoader();btn.disabled=true
   const{error}=await sb.auth.signUp({email:em,password:pw,options:{data:{full_name:san(nm),phone:san(ph),national_id:san(ni)}}})
   if(error){showErr('rerr',error.message);btn.innerHTML=isAr()?'إنشاء الحساب':'Create Account';btn.disabled=false;return}
   await sb.auth.signInWithPassword({email:em,password:pw})
@@ -820,7 +870,7 @@ function buildShell(){
       <nav class="sb-nav" role="navigation">
         <div class="sb-section ar-t">القائمة</div>
         <button class="ni active" id="ni-dash" onclick="nav('dash')" aria-label="الرئيسية"><span class="nic">🏠</span><span class="ar-t">الرئيسية</span><span class="en-t hidden">Dashboard</span></button>
-        <button class="ni" id="ni-create" onclick="nav('create')" aria-label="طلب جديد"><span class="nic">➕</span><span class="ar-t">طلب جديد</span><span class="en-t hidden">New Request</span></button>
+        <button class="ni" id="ni-create" onclick="nav('create')" aria-label="بيع بالتقسيط"><span class="nic">➕</span><span class="ar-t">بيع بالتقسيط</span><span class="en-t hidden">Sell</span></button>
         <button class="ni" id="ni-inc" onclick="nav('inc')" aria-label="الطلبات الواردة"><span class="nic">📥</span><span class="ar-t">الطلبات الواردة</span><span class="en-t hidden">Incoming</span><span class="nbadge hidden" id="ibadge">0</span></button>
         <button class="ni" id="ni-deals" onclick="nav('deals')" aria-label="صفقاتي"><span class="nic">📋</span><span class="ar-t">صفقاتي</span><span class="en-t hidden">My Deals</span></button>
         <button class="ni" id="ni-profile" onclick="nav('profile')" aria-label="ملفي الشخصي"><span class="nic">👤</span><span class="ar-t">ملفي الشخصي</span><span class="en-t hidden">My Profile</span></button>
@@ -859,22 +909,22 @@ function buildShell(){
         <div class="sgrid">
           <div class="scard"><div class="sico" style="background:var(--teal3)">📊</div><div class="sval" id="sa">0</div><div class="slbl ar-t">صفقات نشطة</div><div class="slbl en-t hidden">Active</div></div>
           <div class="scard"><div class="sico" style="background:var(--gr100)">✅</div><div class="sval" id="sd">0</div><div class="slbl ar-t">مكتملة</div><div class="slbl en-t hidden">Completed</div></div>
-          <div class="scard"><div class="sico" style="background:var(--am100)">⏳</div><div class="sval" id="sp">0</div><div class="slbl ar-t">معلقة</div><div class="slbl en-t hidden">Pending</div></div>
-          <div class="scard"><div class="sico" style="background:#ede9fe">💰</div><div class="sval" id="sv">0</div><div class="slbl ar-t">إجمالي القيمة</div><div class="slbl en-t hidden">Total Value</div></div>
+          <div class="scard"><div class="sico" style="background:#dcfce7">💰</div><div class="sval" id="srecv" style="color:#16a34a">0</div><div class="slbl ar-t">مستحق لي</div><div class="slbl en-t hidden">Owed to me</div></div>
+          <div class="scard"><div class="sico" style="background:#fee2e2">💸</div><div class="sval" id="sowe" style="color:#dc2626">0</div><div class="slbl ar-t">عليّ</div><div class="slbl en-t hidden">I owe</div></div>
         </div>
         <div class="shdr"><h2 class="stit ar-t">آخر الصفقات</h2><h2 class="stit en-t hidden">Recent Deals</h2><button class="btn bsec bsm" onclick="nav('deals')"><span class="ar-t">عرض الكل</span><span class="en-t hidden">View All</span></button></div>
         <div id="dl"></div>
-        <div class="mt20"><button class="btn bp blg" onclick="nav('create')">➕ <span class="ar-t">إنشاء طلب تقسيط جديد</span><span class="en-t hidden">New Installment Request</span></button></div>
+        <div class="mt20"><button class="btn bp blg" onclick="nav('create')">➕ <span class="ar-t">بيع بالتقسيط</span><span class="en-t hidden">Sell on Installment</span></button></div>
       </div></div>
 
       <div class="page hidden" id="pg-create"><div class="pi" style="max-width:680px">
-        <h1 class="ptit ar-t">إنشاء طلب تقسيط</h1><h1 class="ptit en-t hidden">New Installment Request</h1>
-        <p class="psub ar-t">سيتم إرسال الطلب للبائع للموافقة عليه</p><p class="psub en-t hidden">Request will be sent to seller for approval</p>
+        <h1 class="ptit ar-t">بيع بالتقسيط</h1><h1 class="ptit en-t hidden">Sell on Installment</h1>
+        <p class="psub ar-t">أرسل عرض تقسيط للمشتري — يدفع عند الموافقة</p><p class="psub en-t hidden">Send an installment offer to the buyer — they pay upon approval</p>
         <div id="cr-promo-slot"></div>
         <div class="card">
           <div class="chdr"><h3 class="ar-t">تفاصيل الاتفاقية</h3><h3 class="en-t hidden">Agreement Details</h3></div>
           <div class="cbody">
-            <div class="fg"><label class="fl"><span class="ar-t">البريد الإلكتروني للبائع</span><span class="en-t hidden">Seller Email</span> <span class="req">*</span></label><input class="fc" type="email" id="c-sel" placeholder="seller@example.com"/><p class="fhint ar-t">يجب أن يكون البائع مسجلاً في المنصة</p><p class="fhint en-t hidden">Seller must be registered</p></div>
+            <div class="fg"><label class="fl"><span class="ar-t">البريد الإلكتروني للمشتري</span><span class="en-t hidden">Buyer Email</span> <span class="req">*</span></label><input class="fc" type="email" id="c-sel" placeholder="buyer@example.com"/><p class="fhint ar-t">يجب أن يكون المشتري مسجلاً في المنصة</p><p class="fhint en-t hidden">Buyer must be registered on the platform</p></div>
             <div class="frow">
               <div class="fg"><label class="fl"><span class="ar-t">نوع السلعة</span><span class="en-t hidden">Item Type</span> <span class="req">*</span></label><select class="fc" id="c-item"><option value="">${isAr()?'-- اختر --':'-- Select --'}</option>${IOPTS}</select></div>
               <div class="fg"><label class="fl"><span class="ar-t">وصف السلعة</span><span class="en-t hidden">Description</span></label><input class="fc" type="text" id="c-desc" placeholder="Toyota Camry 2021" maxlength="200"/></div>
@@ -896,7 +946,7 @@ function buildShell(){
           </div>
           <div class="cfoot flex jce gap10">
             <button class="btn bg bsm" onclick="nav('dash')"><span class="ar-t">إلغاء</span><span class="en-t hidden">Cancel</span></button>
-            <button class="btn bp blg" id="sbtn" onclick="submitDeal()">📤 <span class="ar-t">إرسال الطلب</span><span class="en-t hidden">Send Request</span></button>
+            <button class="btn bp blg" id="sbtn" onclick="submitDeal()">📤 <span class="ar-t">إرسال العرض للمشتري</span><span class="en-t hidden">Send Offer to Buyer</span></button>
           </div>
         </div>
       </div></div>
@@ -938,9 +988,9 @@ function buildShell(){
         <span class="bn-lbl ar-t">الواردة</span><span class="bn-lbl en-t hidden">Inbox</span>
         <span class="bn-badge hidden" id="bn-ibadge">0</span>
       </button>
-      <button class="bn-item fab-wrap" id="bn-create" onclick="nav('create')" aria-label="طلب جديد">
+      <button class="bn-item fab-wrap" id="bn-create" onclick="nav('create')" aria-label="بيع بالتقسيط">
         <span class="bn-fab">➕</span>
-        <span class="bn-lbl ar-t">جديد</span><span class="bn-lbl en-t hidden">New</span>
+        <span class="bn-lbl ar-t">بيع</span><span class="bn-lbl en-t hidden">Sell</span>
       </button>
       <button class="bn-item" id="bn-deals" onclick="nav('deals')" aria-label="صفقاتي">
         <span class="bn-ico">📋</span>
@@ -956,7 +1006,7 @@ function buildShell(){
   loadSBStars().catch(e=>console.warn('loadSBStars failed:',e))
 }
 
-const PT={dash:{ar:'الرئيسية',en:'Dashboard'},create:{ar:'طلب جديد',en:'New Request'},inc:{ar:'الطلبات الواردة',en:'Incoming'},deals:{ar:'صفقاتي',en:'My Deals'},detail:{ar:'تفاصيل الصفقة',en:'Deal Details'},profile:{ar:'ملفي الشخصي',en:'My Profile'},prem:{ar:'الترقية لموثَّق',en:'Upgrade to Verified'},upub:{ar:'الملف الشخصي',en:'Profile'}}
+const PT={dash:{ar:'الرئيسية',en:'Dashboard'},create:{ar:'بيع بالتقسيط',en:'Sell on Installment'},inc:{ar:'العروض الواردة',en:'Incoming Offers'},deals:{ar:'صفقاتي',en:'My Deals'},detail:{ar:'تفاصيل الصفقة',en:'Deal Details'},profile:{ar:'ملفي الشخصي',en:'My Profile'},prem:{ar:'الترقية لموثَّق',en:'Upgrade to Verified'},upub:{ar:'الملف الشخصي',en:'Profile'}}
 const PAGES=['dash','create','inc','deals','detail','profile','prem','upub']
 let _pp={}
 
@@ -968,6 +1018,10 @@ window.nav=async(p,pp={},fromBack=false)=>{
   if(!fromBack&&page&&page!==p){
     _navHistory.push({p:page,pp:_pp})
     if(_navHistory.length>20)_navHistory.shift()
+  }
+  // ═══ الرئيسية = نقطة الانطلاق — نمسح كل التاريخ ═══
+  if(p==='dash'){
+    _navHistory=[]
   }
   page=p;_pp=pp
   try{sessionStorage.setItem('q_page',p);sessionStorage.setItem('q_pp',JSON.stringify(pp))}catch(e){}
@@ -1044,7 +1098,8 @@ function rerender(){
 }
 
 function updBadge(){
-  const n=DEALS.filter(d=>d.seller_email===CU?.email&&d.status==='pending').length
+  // المشتري يرى عداد العروض الواردة من البائعين
+  const n=DEALS.filter(d=>d.buyer_email===CU?.email&&d.status==='pending').length
   const b=$('ibadge');if(b){b.textContent=n;b.classList.toggle('hidden',n===0)}
   const b2=$('bn-ibadge');if(b2){b2.textContent=n;b2.classList.toggle('hidden',n===0)}
 }
@@ -1061,7 +1116,8 @@ async function loadSBStars(){
 
 async function loadDeals(){
   try{
-    const{data,error}=await sb.from('deals').select('*,payments(*)').or(`buyer_id.eq.${CU.id},seller_email.eq.${CU.email}`).order('created_at',{ascending:false})
+    // نجيب الصفقات اللي أنا فيها سواء كبائع أو كمشتري (id أو email)
+    const{data,error}=await sb.from('deals').select('*,payments(*)').or(`buyer_id.eq.${CU.id},buyer_email.eq.${CU.email},seller_id.eq.${CU.id},seller_email.eq.${CU.email}`).order('created_at',{ascending:false})
     if(error){console.warn('loadDeals error:',error);DEALS=[];return}
     DEALS=data||[]
   }catch(e){console.warn('loadDeals exception:',e);DEALS=[]}
@@ -1100,17 +1156,17 @@ window.calcI=()=>{
 }
 
 window.submitDeal=async()=>{
-  const se=$('c-sel')?.value.trim().toLowerCase(),it=$('c-item')?.value
+  const be=$('c-sel')?.value.trim().toLowerCase(),it=$('c-item')?.value
   const de=$('c-desc')?.value.trim(),pr=parseFloat($('c-price')?.value)
   const dn=parseFloat($('c-down')?.value)||0,mo=parseInt($('c-mo')?.value)
   const no=$('c-notes')?.value.trim(),sd=$('c-date')?.value||today()
-  if(!se||!it||!pr||!mo){toast(isAr()?'⚠️ يرجى ملء الحقول المطلوبة':'⚠️ Fill required fields','e');return}
-  if(!valEmail(se)){toast(isAr()?'⚠️ البريد الإلكتروني للبائع غير صالح':'⚠️ Invalid seller email','e');return}
+  if(!be||!it||!pr||!mo){toast(isAr()?'⚠️ يرجى ملء الحقول المطلوبة':'⚠️ Fill required fields','e');return}
+  if(!valEmail(be)){toast(isAr()?'⚠️ البريد الإلكتروني للمشتري غير صالح':'⚠️ Invalid buyer email','e');return}
   if(mo<1||mo>24){toast(isAr()?'⚠️ الأشهر بين 1 و24':'⚠️ Months 1-24','e');return}
   if(pr>100000){toast(isAr()?'⚠️ الحد الأقصى للسعر 100,000 ر.س':'⚠️ Max price 100,000 SAR','e');return}
   if(!valSAR(pr)){toast(isAr()?'⚠️ السعر غير صالح':'⚠️ Invalid price','e');return}
   if(dn>=pr){toast(isAr()?'⚠️ الدفعة الأولى يجب أن تكون أقل من السعر':'⚠️ Down < total','e');return}
-  if(se===CU.email){toast(isAr()?'⚠️ لا يمكنك إرسال طلب لنفسك':'⚠️ Cannot send to yourself','e');return}
+  if(be===CU.email){toast(isAr()?'⚠️ لا يمكنك إرسال عرض لنفسك':'⚠️ Cannot send to yourself','e');return}
 
   // ═══ فحص الحد الأقصى للصفقات النشطة ═══
   const activeStatuses=['pending','approved','active']
@@ -1132,14 +1188,13 @@ window.submitDeal=async()=>{
 
   // ═══ Nafath check ═══ — لو ما تحقّق من نافذ، نعرض شاشة نافذ أولاً
   if(!PRF?.nafath_verified){
-    openNafath({se,it,de,pr,dn,mo,no,sd},()=>{
-      // بعد التحقق من نافذ، نكمل إنشاء الصفقة
-      _submitDealAfterNafath(se,it,de,pr,dn,mo,no,sd)
+    openNafath({be,it,de,pr,dn,mo,no,sd},()=>{
+      _submitDealAfterNafath(be,it,de,pr,dn,mo,no,sd)
     })
     return
   }
 
-  await _submitDealAfterNafath(se,it,de,pr,dn,mo,no,sd)
+  await _submitDealAfterNafath(be,it,de,pr,dn,mo,no,sd)
 }
 
 // ═══════════════════════════════════════════════
@@ -1221,18 +1276,23 @@ function showLimitReachedModal(currentCount,limit,isPrem,isPremExpired,wasPrem){
   o.classList.remove('hidden')
 }
 
-async function _submitDealAfterNafath(se,it,de,pr,dn,mo,no,sd){
-  const btn=$('sbtn');btn.innerHTML='<span class="spinner"></span>';btn.disabled=true
+async function _submitDealAfterNafath(be,it,de,pr,dn,mo,no,sd){
+  const btn=$('sbtn');btn.innerHTML=qLoader();btn.disabled=true
   const inst=Math.round(((pr-dn)/mo)*100)/100
+  // المستخدم الحالي هو البائع، be هو ايميل المشتري
+  // نحفظ buyer_id فاضي حتى يقبل المشتري ويتعبّى تلقائياً
   const{data:deal,error}=await sb.from('deals').insert({
-    contract_num:genCN(),buyer_id:CU.id,buyer_email:CU.email,
-    buyer_name:san(PRF?.full_name||CU.email.split('@')[0]),
-    seller_email:se,item:it,description:san(de),price:pr,down_payment:dn,
+    contract_num:genCN(),
+    buyer_email:be,
+    buyer_name:'',  // يتعبّى لما المشتري يقبل
+    seller_email:CU.email,
+    seller_id:CU.id,
+    seller_name:san(PRF?.full_name||CU.email.split('@')[0]),
+    item:it,description:san(de),price:pr,down_payment:dn,
     months:mo,installment:inst,notes:san(no),start_date:sd,status:'pending'
   }).select().single()
   if(error){
-    btn.innerHTML='📤 '+(isAr()?'إرسال الطلب':'Send');btn.disabled=false
-    // معالجة أخطاء الـ triggers بشكل ودي
+    btn.innerHTML='📤 '+(isAr()?'إرسال العرض':'Send');btn.disabled=false
     const m=error.message||''
     if(m.includes('EXCEEDED_MONTHLY_LIMIT')){
       const parts=m.split(':')
@@ -1243,10 +1303,10 @@ async function _submitDealAfterNafath(se,it,de,pr,dn,mo,no,sd){
         :`⚠️ Monthly limit exceeded! Current: ${fmtSAR(cur)} | Available: ${fmtSAR(remaining)}`,'e')
       return
     }
-    if(m.includes('ACTIVE_DEAL_EXISTS_WITH_SELLER')){
+    if(m.includes('ACTIVE_DEAL_EXISTS_WITH_SELLER')||m.includes('ACTIVE_DEAL_EXISTS')){
       toast(isAr()
-        ?'⚠️ لديك صفقة نشطة أو معلقة مع هذا البائع. أكمل الصفقة الحالية أولاً'
-        :'⚠️ You have an active/pending deal with this seller. Complete it first','e')
+        ?'⚠️ لديك صفقة نشطة أو معلقة مع هذا المشتري. أكمل الصفقة الحالية أولاً'
+        :'⚠️ You have an active/pending deal with this buyer. Complete it first','e')
       return
     }
     toast('⚠️ '+m,'e')
@@ -1257,11 +1317,11 @@ async function _submitDealAfterNafath(se,it,de,pr,dn,mo,no,sd){
   await sb.from('payments').insert(sch)
   // audit log
   try{
-    await sb.from('audit_log').insert({deal_id:deal.id,user_id:CU.id,user_email:CU.email,action:'deal_created',details:{price:pr,months:mo,seller:se}})
+    await sb.from('audit_log').insert({deal_id:deal.id,user_id:CU.id,user_email:CU.email,action:'offer_sent_to_buyer',details:{price:pr,months:mo,buyer:be}})
   }catch(e){}
   ;['c-sel','c-desc','c-price','c-notes'].forEach(id=>{const el=$(id);if(el)el.value=''})
   $('c-item').value='';$('c-down').value='0';$('c-mo').value='';$('c-date').value=today();$('cval').textContent='—'
-  toast(isAr()?'✅ تم إرسال الطلب بنجاح!':'✅ Request sent!','s')
+  toast(isAr()?'✅ تم إرسال العرض للمشتري بنجاح!':'✅ Offer sent to buyer!','s')
   await loadDeals();nav('dash')
 }
 
@@ -1269,9 +1329,13 @@ function empt(e,t){return`<div class="empty"><div class="eico">${e}</div><div cl
 
 function bCard(d){
   const iB=d.buyer_id===CU.id||d.buyer_email===CU.email
+  const iS=d.seller_id===CU.id||d.seller_email===CU.email
   const pay=d.payments||[],paid=pay.filter(p=>p.is_paid).length,tot=d.months||1,pct=Math.round((paid/tot)*100)
-  const ot=iB?d.seller_email:d.buyer_name,rl=iB?(isAr()?'إلى:':'To:'):(isAr()?'من:':'From:')
-  const canDelete=iB&&d.status==='pending'
+  // الجهة الأخرى من الصفقة
+  const ot=iB?(d.seller_name||d.seller_email):(d.buyer_name||d.buyer_email)
+  const rl=iB?(isAr()?'البائع:':'Seller:'):(isAr()?'المشتري:':'Buyer:')
+  // البائع يقدر يلغي العرض قبل القبول
+  const canDelete=iS&&d.status==='pending'
   return`<div class="dcard" onclick="nav('detail',{id:'${d.id}'})" role="button" tabindex="0" style="position:relative">
     ${canDelete?`<button onclick="deleteDeal('${d.id}',event)" aria-label="${isAr()?'حذف':'Delete'}" style="position:absolute;top:8px;inset-inline-end:8px;width:28px;height:28px;border-radius:50%;background:var(--r50);border:1.5px solid #fca5a5;color:var(--r600);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .15s;z-index:2" onmouseover="this.style.background='var(--r100)'" onmouseout="this.style.background='var(--r50)'">🗑️</button>`:''}
     <div class="dico">${ico(d.item)}</div>
@@ -1289,9 +1353,38 @@ function rDash(){
   const dw=$('dwelcome');if(dw)dw.textContent=isAr()?`مرحباً، ${nm} 👋`:`Welcome, ${nm} 👋`
   const sa=$('sa');if(sa)sa.textContent=DEALS.filter(d=>d.status==='active').length
   const sd=$('sd');if(sd)sd.textContent=DEALS.filter(d=>d.status==='completed').length
-  const sp=$('sp');if(sp)sp.textContent=DEALS.filter(d=>d.status==='pending').length
-  const tv=DEALS.filter(d=>['active','completed'].includes(d.status)).reduce((s,d)=>s+d.price,0)
-  const sv=$('sv');if(sv)sv.textContent=tv>=1000?(tv/1000).toFixed(1)+'K':tv
+
+  // حساب المستحق لي (كبائع) و عليّ (كمشتري) — يستثني الصفقات المكتملة والأقساط المدفوعة
+  let owedToMe=0,iOwe=0
+  DEALS.forEach(d=>{
+    // نحسب فقط الصفقات النشطة (مو المكتملة ولا الملغاة)
+    if(d.status!=='active'&&d.status!=='approved')return
+
+    const iAmBuyer=d.buyer_id===CU.id||d.buyer_email===CU.email
+    const iAmSeller=d.seller_email===CU.email
+
+    // الأقساط المتبقية فقط (غير المدفوعة)
+    const unpaidPays=(d.payments||[]).filter(p=>!p.is_paid)
+    const unpaidTotal=unpaidPays.reduce((s,p)=>{
+      const fee=p.platform_fee||(d.platform_fee_per_payment||0)
+      return s+p.amount+fee
+    },0)
+
+    if(iAmSeller){
+      // أنا بائع — المستحق لي هو ما لم يُدفع بعد (بدون رسوم المشتري)
+      const unpaidSellerAmt=unpaidPays.reduce((s,p)=>s+p.amount,0)
+      owedToMe+=unpaidSellerAmt
+    }
+    if(iAmBuyer){
+      // أنا مشتري — اللي عليّ هو ما لم يُدفع بعد (مع رسوم المشتري)
+      iOwe+=unpaidTotal
+    }
+  })
+
+  const fmt=n=>n>=1000?(n/1000).toFixed(1)+'K':Math.round(n).toString()
+  const srecv=$('srecv');if(srecv)srecv.textContent=fmt(owedToMe)
+  const sowe=$('sowe');if(sowe)sowe.textContent=fmt(iOwe)
+
   const dl=$('dl');if(dl)dl.innerHTML=[...DEALS].slice(0,5).map(bCard).join('')||empt('📄',isAr()?'لا توجد صفقات بعد':'No deals yet')
 
   // ═══ Premium expiry reminder ═══
@@ -1346,20 +1439,21 @@ function buildPremReminder(){
 }
 
 function rInc(){
-  const pend=DEALS.filter(d=>d.seller_email===CU.email&&d.status==='pending')
+  // المشتري يستقبل العروض الواردة من البائعين
+  const pend=DEALS.filter(d=>d.buyer_email===CU.email&&d.status==='pending')
   const el=$('incl');if(!el)return
-  if(!pend.length){el.innerHTML=empt('📥',isAr()?'لا توجد طلبات واردة':'No incoming requests');return}
+  if(!pend.length){el.innerHTML=empt('📥',isAr()?'لا توجد عروض واردة':'No incoming offers');return}
   el.innerHTML=pend.map(d=>`<div class="card mb16">
-    <div class="chdr"><div><h3>${ico(d.item)} ${san(d.item)}${d.description?' — '+san(d.description):''}</h3><div class="text-sm text-m mt8">${isAr()?'من:':'From:'} <strong>${san(d.buyer_name)}</strong> <span dir="ltr">(${san(d.buyer_email)})</span></div></div>${sbdg(d.status)}</div>
+    <div class="chdr"><div><h3>${ico(d.item)} ${san(d.item)}${d.description?' — '+san(d.description):''}</h3><div class="text-sm text-m mt8">${isAr()?'من البائع:':'From seller:'} <strong>${san(d.seller_name||d.seller_email)}</strong> <span dir="ltr">(${san(d.seller_email)})</span></div></div>${sbdg(d.status)}</div>
     <div class="cbody"><div class="igrid">
       <div class="iitem"><div class="ilbl">${isAr()?'السعر':'Price'}</div><div class="ival teal">${fmtSAR(d.price)}</div></div>
       <div class="iitem"><div class="ilbl">${isAr()?'القسط':'Monthly'}</div><div class="ival teal">${fmtSAR(d.installment)}</div></div>
       <div class="iitem"><div class="ilbl">${isAr()?'الدفعة الأولى':'Down'}</div><div class="ival">${fmtSAR(d.down_payment)}</div></div>
       <div class="iitem"><div class="ilbl">${isAr()?'الأشهر':'Months'}</div><div class="ival">${d.months}</div></div>
-    </div>${d.notes?`<div class="mt12 text-sm text-m"><strong>${isAr()?'ملاحظات:':'Notes:'}</strong> ${san(d.notes)}</div>`:''}</div>
+    </div>${d.notes?`<div class="mt12 text-sm text-m"><strong>${isAr()?'ملاحظات البائع:':'Seller notes:'}</strong> ${san(d.notes)}</div>`:''}</div>
     <div class="cfoot flex jce gap10">
       <button class="btn bd bsm" onclick="respond('${d.id}','rejected')">✗ ${isAr()?'رفض':'Reject'}</button>
-      <button class="btn bs bsm" onclick="respond('${d.id}','active')">✓ ${isAr()?'قبول':'Accept'}</button>
+      <button class="btn bs bsm" onclick="respond('${d.id}','active')">✓ ${isAr()?'قبول العرض':'Accept Offer'}</button>
       <button class="btn bsec bsm" onclick="nav('detail',{id:'${d.id}'})">👁 ${isAr()?'عرض':'View'}</button>
     </div>
   </div>`).join('')
@@ -1403,12 +1497,12 @@ async function rDetail(id){
       </tr>`}).join('')
     const rats=d.ratings||[]
     const rHTML=rats.length?rats.map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--g100)"><div class="flex aic jsb mb8"><strong class="text-sm">${san(r.from_name)}</strong>${stars(r.stars,1)}</div>${r.comment?`<p class="text-sm text-m">"${san(r.comment)}"</p>`:''}<div class="text-xs text-m mt8">${fmtD(r.created_at)}</div></div>`).join(''):`<div class="text-sm text-m">${isAr()?'لا توجد تقييمات':'No ratings'}</div>`
-    const canDel=iB&&d.status==='pending'
+    const canDel=(d.seller_id===CU.id||d.seller_email===CU.email)&&d.status==='pending'
     el.innerHTML=`
       <button class="btn bg bsm mb16" onclick="goBack()">← ${isAr()?'رجوع':'Back'}</button>
       <div class="flex aic jsb mb20" style="flex-wrap:wrap;gap:12px">
         <div><h1 style="font-size:18px;font-weight:800">${ico(d.item)} ${san(d.item)}${d.description?' — '+san(d.description):''}</h1><div class="text-sm text-m mt8">${isAr()?'رقم العقد':'Contract #'}: <strong>${d.contract_num}</strong></div></div>
-        <div class="flex aic gap10" style="flex-wrap:wrap">${sbdg(d.status)}${canR?`<button class="btn bsec bsm" onclick="openRM('${d.id}','${rte}')">⭐ ${isAr()?'تقييم':'Rate'}</button>`:''}${canDel?`<button class="btn bd bsm" onclick="deleteDeal('${d.id}')">🗑️ ${isAr()?'حذف الطلب':'Delete'}</button>`:''}</div>
+        <div class="flex aic gap10" style="flex-wrap:wrap">${sbdg(d.status)}${canR?`<button class="btn bsec bsm" onclick="openRM('${d.id}','${rte}')">⭐ ${isAr()?'تقييم':'Rate'}</button>`:''}${canDel?`<button class="btn bd bsm" onclick="deleteDeal('${d.id}')">🗑️ ${isAr()?'إلغاء العرض':'Cancel Offer'}</button>`:''}</div>
       </div>
       <div class="card mb16">
         <div class="chdr"><h2>${isAr()?'طرفا الصفقة والتفاصيل المالية':'Parties & Financial Details'}</h2></div>
@@ -1641,25 +1735,31 @@ window.updateSalary=async()=>{
 
 window.respond=async(id,status)=>{
   const up={status}
-  if(status==='active'){up.accepted_at=new Date().toISOString();up.seller_id=CU.id}
+  if(status==='active'){
+    up.accepted_at=new Date().toISOString()
+    // المشتري يقبل العرض — نحفظ بياناته
+    up.buyer_id=CU.id
+    up.buyer_name=san(PRF?.full_name||CU.email.split('@')[0])
+  }
   else up.rejected_at=new Date().toISOString()
   const{error}=await sb.from('deals').update(up).eq('id',id)
   if(error){toast('⚠️ '+error.message,'e');return}
   await loadDeals()
-  toast(status==='active'?(isAr()?'✅ تمت الموافقة على الصفقة':'✅ Deal accepted'):(isAr()?'❌ تم رفض الطلب':'❌ Request rejected'),status==='active'?'s':'e')
+  toast(status==='active'?(isAr()?'✅ تم قبول العرض، سيتم تفعيل الصفقة':'✅ Offer accepted, deal activated'):(isAr()?'❌ تم رفض العرض':'❌ Offer rejected'),status==='active'?'s':'e')
   updBadge();rInc()
 }
 
-// ═══ DELETE PENDING DEAL (buyer only, only when pending) ═══
+// ═══ DELETE PENDING DEAL (seller only, only when pending) ═══
 window.deleteDeal=async(id,e)=>{
   if(e){e.stopPropagation();e.preventDefault()}
   const deal=DEALS.find(d=>d.id===id)
   if(!deal){toast(isAr()?'⚠️ الصفقة غير موجودة':'⚠️ Deal not found','e');return}
   if(deal.status!=='pending'){toast(isAr()?'⚠️ لا يمكن حذف الصفقة بعد قبولها':'⚠️ Cannot delete after acceptance','e');return}
-  if(deal.buyer_id!==CU.id&&deal.buyer_email!==CU.email){toast(isAr()?'⚠️ لا تملك صلاحية الحذف':'⚠️ Not allowed','e');return}
+  // البائع هو اللي يقدر يلغي العرض
+  if(deal.seller_id!==CU.id&&deal.seller_email!==CU.email){toast(isAr()?'⚠️ لا تملك صلاحية الحذف':'⚠️ Not allowed','e');return}
   const ok=confirm(isAr()
-    ?`هل أنت متأكد من حذف طلب التقسيط؟\n\nالسلعة: ${deal.item}${deal.description?' — '+deal.description:''}\nالبائع: ${deal.seller_email}\n\nلا يمكن التراجع عن هذا الإجراء.`
-    :`Delete this installment request?\n\nItem: ${deal.item}\nSeller: ${deal.seller_email}\n\nThis cannot be undone.`)
+    ?`هل أنت متأكد من إلغاء العرض؟\n\nالسلعة: ${deal.item}${deal.description?' — '+deal.description:''}\nالمشتري: ${deal.buyer_email}\n\nلا يمكن التراجع عن هذا الإجراء.`
+    :`Cancel this offer?\n\nItem: ${deal.item}\nBuyer: ${deal.buyer_email}\n\nThis cannot be undone.`)
   if(!ok)return
   // الأقساط بتنحذف تلقائياً بسبب CASCADE
   const{error}=await sb.from('deals').delete().eq('id',id)
@@ -1704,7 +1804,7 @@ async function rUpub(){
   }
 
   // عرض حالة تحميل
-  c.innerHTML=`<div class="upub-page"><div class="upub-wrap" style="text-align:center;padding:40px"><span class="spinner" style="border-color:var(--g300);border-top-color:var(--teal2);width:32px;height:32px"></span></div></div>`
+  c.innerHTML=`<div class="upub-page"><div class="upub-wrap" style="text-align:center;padding:40px"><span class="qloader qloader-lg qloader-t"><span class="qp"></span><span class="qp"></span><span class="qp"></span><span class="qp"></span><span class="qp"></span><span class="qp"></span><span class="qp"></span><span class="qp"></span><span class="qp"></span><span class="qp"></span><span class="qp"></span><span class="qp"></span></span></div></div>`
 
   // محاولة جلب الملف الشخصي عبر بيانات صفقة سابقة
   let profile=null
@@ -2017,12 +2117,12 @@ window.upgradeToPremium=async()=>{
 }
 
 function openPMPremium(){
-  const LOGO_APPLE=`<img src="https://cdn.simpleicons.org/applepay/000000?viewbox=auto" alt="Apple Pay" style="height:22px;width:auto;display:block" loading="lazy"/>`
-  const LOGO_PAYPAL=`<img src="https://cdn.simpleicons.org/paypal?viewbox=auto" alt="PayPal" style="height:18px;width:auto;display:block" loading="lazy"/>`
-  const LOGO_VISA=`<img src="https://cdn.simpleicons.org/visa/1A1F71?viewbox=auto" alt="Visa" style="height:14px;width:auto;display:block" loading="lazy"/>`
-  const LOGO_MC=`<img src="https://cdn.simpleicons.org/mastercard?viewbox=auto" alt="Mastercard" style="height:20px;width:auto;display:block" loading="lazy"/>`
-  const LOGO_MADA=`<div style="direction:ltr;display:flex;align-items:center;justify-content:center;gap:5px;line-height:1"><div style="display:flex;flex-direction:column;gap:2px"><div style="width:14px;height:5px;background:#27A2DB;border-radius:1px"></div><div style="width:14px;height:5px;background:#84B740;border-radius:1px"></div></div><div style="display:flex;flex-direction:column;font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#231F20;line-height:1;gap:1px"><span style="font-size:11px;letter-spacing:-0.3px">مدى</span><span style="font-size:11px;letter-spacing:-0.5px">mada</span></div></div>`
-  const LOGO_STC=`<div style="direction:ltr;display:flex;align-items:center;justify-content:center;font-family:Helvetica,Arial,sans-serif;line-height:1;gap:3px"><span style="color:#4F008C;font-weight:900;font-size:18px;letter-spacing:-1px">stc</span><span style="color:#84B740;font-weight:600;font-size:15px;letter-spacing:-0.5px">pay</span></div>`
+  const LOGO_APPLE=PAY_LOGOS.apple
+  const LOGO_PAYPAL=PAY_LOGOS.paypal
+  const LOGO_VISA=PAY_LOGOS.visa
+  const LOGO_MC=PAY_LOGOS.mc
+  const LOGO_MADA=PAY_LOGOS.mada
+  const LOGO_STC=PAY_LOGOS.stc
 
   $('pm-overlay').innerHTML=`
     <div class="pmodal">
@@ -2107,7 +2207,7 @@ function openPMPremium(){
 window.processPMPremium=async()=>{
   const btn=$('pm-pay-btn')
   if(!btn)return
-  btn.innerHTML='<span class="spinner" style="border-color:#fff;border-top-color:transparent"></span>'
+  btn.innerHTML=qLoader()
   btn.disabled=true
 
   try{
@@ -2301,12 +2401,12 @@ window.markPMulti=(did)=>{
 
 function openPMMulti(deal,paymentList,total){
   // نفتح payment modal بنفس الواجهة لكن نوضّح إنها أقساط متعددة
-  const LOGO_APPLE=`<img src="https://cdn.simpleicons.org/applepay/000000?viewbox=auto" alt="Apple Pay" style="height:22px;width:auto;display:block" loading="lazy"/>`
-  const LOGO_PAYPAL=`<img src="https://cdn.simpleicons.org/paypal?viewbox=auto" alt="PayPal" style="height:18px;width:auto;display:block" loading="lazy"/>`
-  const LOGO_VISA=`<img src="https://cdn.simpleicons.org/visa/1A1F71?viewbox=auto" alt="Visa" style="height:14px;width:auto;display:block" loading="lazy"/>`
-  const LOGO_MC=`<img src="https://cdn.simpleicons.org/mastercard?viewbox=auto" alt="Mastercard" style="height:20px;width:auto;display:block" loading="lazy"/>`
-  const LOGO_MADA=`<div style="direction:ltr;display:flex;align-items:center;justify-content:center;gap:5px;line-height:1"><div style="display:flex;flex-direction:column;gap:2px"><div style="width:14px;height:5px;background:#27A2DB;border-radius:1px"></div><div style="width:14px;height:5px;background:#84B740;border-radius:1px"></div></div><div style="display:flex;flex-direction:column;font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#231F20;line-height:1;gap:1px"><span style="font-size:11px;letter-spacing:-0.3px">مدى</span><span style="font-size:11px;letter-spacing:-0.5px">mada</span></div></div>`
-  const LOGO_STC=`<div style="direction:ltr;display:flex;align-items:center;justify-content:center;font-family:Helvetica,Arial,sans-serif;line-height:1;gap:3px"><span style="color:#4F008C;font-weight:900;font-size:18px;letter-spacing:-1px">stc</span><span style="color:#84B740;font-weight:600;font-size:15px;letter-spacing:-0.5px">pay</span></div>`
+  const LOGO_APPLE=PAY_LOGOS.apple
+  const LOGO_PAYPAL=PAY_LOGOS.paypal
+  const LOGO_VISA=PAY_LOGOS.visa
+  const LOGO_MC=PAY_LOGOS.mc
+  const LOGO_MADA=PAY_LOGOS.mada
+  const LOGO_STC=PAY_LOGOS.stc
 
   const monthsList=paymentList.map(p=>p.month_num).sort((a,b)=>a-b)
   const monthsRange=monthsList.length<=3
@@ -2401,7 +2501,7 @@ function openPMMulti(deal,paymentList,total){
 window.processPMMulti=async()=>{
   const btn=$('pm-pay-btn')
   if(!btn)return
-  btn.innerHTML='<span class="spinner" style="border-color:#fff;border-top-color:transparent"></span>'
+  btn.innerHTML=qLoader()
   btn.disabled=true
 
   try{
@@ -2468,22 +2568,22 @@ function openPM(deal,pay){
   
   // الشعارات الرسمية من CDN موثوق (cdn.simpleicons.org)
   // Apple Pay — الشعار الرسمي بأسود
-  const LOGO_APPLE=`<img src="https://cdn.simpleicons.org/applepay/000000?viewbox=auto" alt="Apple Pay" style="height:22px;width:auto;display:block" loading="lazy"/>`
+  const LOGO_APPLE=PAY_LOGOS.apple
   
   // PayPal — الشعار الرسمي بألوانه
-  const LOGO_PAYPAL=`<img src="https://cdn.simpleicons.org/paypal?viewbox=auto" alt="PayPal" style="height:18px;width:auto;display:block" loading="lazy"/>`
+  const LOGO_PAYPAL=PAY_LOGOS.paypal
   
   // Visa — الشعار الرسمي
-  const LOGO_VISA=`<img src="https://cdn.simpleicons.org/visa/1A1F71?viewbox=auto" alt="Visa" style="height:14px;width:auto;display:block" loading="lazy"/>`
+  const LOGO_VISA=PAY_LOGOS.visa
   
   // Mastercard — الشعار الرسمي بألوانه (دائرتين)
-  const LOGO_MC=`<img src="https://cdn.simpleicons.org/mastercard?viewbox=auto" alt="Mastercard" style="height:20px;width:auto;display:block" loading="lazy"/>`
+  const LOGO_MC=PAY_LOGOS.mc
   
   // mada — الشعار الرسمي: مستطيلين أزرق+أخضر + مدى + mada
-  const LOGO_MADA=`<div style="direction:ltr;display:flex;align-items:center;justify-content:center;gap:5px;line-height:1"><div style="display:flex;flex-direction:column;gap:2px"><div style="width:14px;height:5px;background:#27A2DB;border-radius:1px"></div><div style="width:14px;height:5px;background:#84B740;border-radius:1px"></div></div><div style="display:flex;flex-direction:column;font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#231F20;line-height:1;gap:1px"><span style="font-size:11px;letter-spacing:-0.3px">مدى</span><span style="font-size:11px;letter-spacing:-0.5px">mada</span></div></div>`
+  const LOGO_MADA=PAY_LOGOS.mada
   
   // stc pay — stc بنفسجي + pay أخضر (LTR force)
-  const LOGO_STC=`<div style="direction:ltr;display:flex;align-items:center;justify-content:center;font-family:Helvetica,Arial,sans-serif;line-height:1;gap:3px"><span style="color:#4F008C;font-weight:900;font-size:18px;letter-spacing:-1px">stc</span><span style="color:#84B740;font-weight:600;font-size:15px;letter-spacing:-0.5px">pay</span></div>`
+  const LOGO_STC=PAY_LOGOS.stc
   
   $('pm-overlay').innerHTML=`
     <div class="pmodal">
@@ -2670,17 +2770,19 @@ window.openMenu=()=>{
 
   // بطاقة ترويجية للحسابات المجانية
   const promoCard=isPrem?'':`
-    <button class="promo-banner" style="margin:0 16px 14px" onclick="closeMenu();nav('prem')">
-      <div class="promo-icon">⭐</div>
-      <div class="promo-content">
-        <div class="promo-title">
-          ${isAr()?'الترقية لموثَّق':'Upgrade to Verified'}
-          <span class="promo-mini-badge">${isAr()?'150 ر.س/سنة':'150 SAR/yr'}</span>
+    <div style="padding:0 16px 14px;direction:${isAr()?'rtl':'ltr'}">
+      <button class="promo-banner" style="margin:0;width:100%;box-sizing:border-box" onclick="closeMenu();nav('prem')">
+        <div class="promo-icon">⭐</div>
+        <div class="promo-content">
+          <div class="promo-title">
+            ${isAr()?'الترقية لموثَّق':'Upgrade to Verified'}
+            <span class="promo-mini-badge">${isAr()?'150 ر.س/سنة':'150 SAR/yr'}</span>
+          </div>
+          <div class="promo-desc">${isAr()?'احصل على شارة ⭐ ومميزات حصرية':'Get the ⭐ badge & exclusive perks'}</div>
         </div>
-        <div class="promo-desc">${isAr()?'احصل على شارة ⭐ ومميزات حصرية':'Get the ⭐ badge & exclusive perks'}</div>
-      </div>
-      <div class="promo-arrow">›</div>
-    </button>`
+        <div class="promo-arrow">›</div>
+      </button>
+    </div>`
 
   $('menu-overlay').innerHTML=`
     <div class="menu-modal" onclick="event.stopPropagation()">
@@ -2831,7 +2933,7 @@ window.submitSugg=async()=>{
     return
   }
   const btn=$('sugg-send')
-  btn.innerHTML='<span class="spinner"></span>';btn.disabled=true
+  btn.innerHTML=qLoader();btn.disabled=true
   const{error}=await sb.from('suggestions').insert({
     user_id:CU.id,
     user_email:CU.email,
