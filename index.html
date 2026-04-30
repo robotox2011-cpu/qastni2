@@ -98,6 +98,51 @@ html.dark .ihdr,html.dark .ptit,html.dark h1,html.dark h2,html.dark h3,html.dark
 html.dark .psub,html.dark .text-m,html.dark .msub{color:var(--text-secondary)}
 html.dark .mp-bar{background:var(--bg-elevated);box-shadow:0 12px 32px rgba(0,0,0,.5),0 0 0 1px var(--border)}
 
+/* Number input arrows — styled for both light and dark modes */
+.fc[type="number"]::-webkit-inner-spin-button,
+.fc[type="number"]::-webkit-outer-spin-button{
+  -webkit-appearance:none;
+  appearance:none;
+  margin:0
+}
+.fc[type="number"]{-moz-appearance:textfield}
+
+/* Custom number stepper wrapper — applied via JS or just hide native */
+.num-wrap{position:relative}
+.num-wrap input[type="number"]{padding-inline-end:36px!important}
+.num-wrap .num-steppers{
+  position:absolute;
+  top:50%;transform:translateY(-50%);
+  inset-inline-end:6px;
+  display:flex;flex-direction:column;
+  gap:2px;
+  pointer-events:none
+}
+.num-wrap .num-step{
+  width:24px;height:18px;
+  background:var(--g100);
+  color:var(--g600);
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:900;
+  line-height:1;
+  transition:all .12s;
+  pointer-events:auto;
+  font-family:inherit
+}
+.num-wrap .num-step:hover{background:var(--teal3);color:var(--teal2)}
+.num-wrap .num-step:active{transform:scale(.92)}
+html.dark .num-wrap .num-step{background:var(--bg-elevated);color:var(--text-secondary);border:1px solid var(--border)}
+html.dark .num-wrap .num-step:hover{background:rgba(20,184,166,.15);color:#5eead4;border-color:rgba(20,184,166,.3)}
+
+/* Calc box — adapt to dark, no harsh glow */
+html.dark .calcbox{background:linear-gradient(135deg,rgba(20,184,166,.12) 0%,rgba(13,148,136,.06) 100%)!important;border-color:rgba(20,184,166,.25)!important}
+html.dark .calclbl{color:#5eead4!important}
+html.dark .calcval{color:#5eead4!important}
+html.dark .calcbox div[style*="color:var(--teal)"]{color:#5eead4!important}
+
 /* Multi-pay tip banner */
 .multipay-tip{background:#f0fdfa;color:#115e59}
 html.dark .multipay-tip{background:rgba(20,184,166,.08);color:#5eead4;border-color:rgba(20,184,166,.2)!important}
@@ -947,6 +992,18 @@ window.toggleTheme=()=>{
   }
 }
 
+// ═══ NUMBER INPUT STEPPER (custom +/- buttons) ═══
+window.numStep=(id,delta,callback,min,max)=>{
+  const el=$(id);if(!el)return
+  let v=parseFloat(el.value)||0
+  v+=delta
+  if(min!==undefined&&v<min)v=min
+  if(max!==undefined&&v>max)v=max
+  if(min===undefined&&v<0)v=0
+  el.value=v
+  if(callback&&typeof window[callback]==='function')window[callback]()
+}
+
 // تطبيق الـ theme المحفوظ عند فتح الموقع
 function loadTheme(){
   try{
@@ -1125,11 +1182,37 @@ function buildShell(){
               <div class="fg"><label class="fl"><span class="ar-t">وصف السلعة</span><span class="en-t hidden">Description</span></label><input class="fc" type="text" id="c-desc" placeholder="Toyota Camry 2021" maxlength="200"/></div>
             </div>
             <div class="frow">
-              <div class="fg"><label class="fl"><span class="ar-t">السعر الإجمالي (ر.س)</span><span class="en-t hidden">Total Price (SAR)</span> <span class="req">*</span></label><input class="fc" type="number" id="c-price" placeholder="50000" min="1" max="100000" oninput="calcI()"/><p class="fhint ar-t">الحد الأقصى: 100,000 ر.س</p><p class="fhint en-t hidden">Max: 100,000 SAR</p></div>
-              <div class="fg"><label class="fl"><span class="ar-t">الدفعة الأولى (ر.س)</span><span class="en-t hidden">Down Payment</span></label><input class="fc" type="number" id="c-down" placeholder="0" min="0" value="0" oninput="calcI()"/></div>
+              <div class="fg"><label class="fl"><span class="ar-t">السعر الإجمالي (ر.س)</span><span class="en-t hidden">Total Price (SAR)</span> <span class="req">*</span></label>
+                <div class="num-wrap">
+                  <input class="fc" type="number" id="c-price" placeholder="50000" min="1" max="100000" oninput="calcI()"/>
+                  <div class="num-steppers">
+                    <button type="button" class="num-step" onclick="numStep('c-price',100,'calcI')" aria-label="زيادة">▲</button>
+                    <button type="button" class="num-step" onclick="numStep('c-price',-100,'calcI')" aria-label="نقصان">▼</button>
+                  </div>
+                </div>
+                <p class="fhint ar-t">الحد الأقصى: 100,000 ر.س</p><p class="fhint en-t hidden">Max: 100,000 SAR</p>
+              </div>
+              <div class="fg"><label class="fl"><span class="ar-t">الدفعة الأولى (ر.س)</span><span class="en-t hidden">Down Payment</span></label>
+                <div class="num-wrap">
+                  <input class="fc" type="number" id="c-down" placeholder="0" min="0" value="0" oninput="calcI()"/>
+                  <div class="num-steppers">
+                    <button type="button" class="num-step" onclick="numStep('c-down',100,'calcI')" aria-label="زيادة">▲</button>
+                    <button type="button" class="num-step" onclick="numStep('c-down',-100,'calcI')" aria-label="نقصان">▼</button>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="frow">
-              <div class="fg"><label class="fl"><span class="ar-t">عدد الأشهر</span><span class="en-t hidden">Months</span> <span class="req">*</span></label><input class="fc" type="number" id="c-mo" placeholder="12" min="1" max="24" oninput="calcI()"/><p class="fhint">1 – 24</p></div>
+              <div class="fg"><label class="fl"><span class="ar-t">عدد الأشهر</span><span class="en-t hidden">Months</span> <span class="req">*</span></label>
+                <div class="num-wrap">
+                  <input class="fc" type="number" id="c-mo" placeholder="12" min="1" max="24" oninput="calcI()"/>
+                  <div class="num-steppers">
+                    <button type="button" class="num-step" onclick="numStep('c-mo',1,'calcI',1,24)" aria-label="زيادة">▲</button>
+                    <button type="button" class="num-step" onclick="numStep('c-mo',-1,'calcI',1,24)" aria-label="نقصان">▼</button>
+                  </div>
+                </div>
+                <p class="fhint">1 – 24</p>
+              </div>
               <div class="fg"><label class="fl"><span class="ar-t">تاريخ البداية</span><span class="en-t hidden">Start Date</span></label><input class="fc" type="date" id="c-date" value="${today()}"/><p class="fhint ar-t">📅 تواريخ السداد ستكون يوم 27 من كل شهر (موعد الرواتب)</p><p class="fhint en-t hidden">📅 Payment dates align with salary day (27th of each month)</p></div>
             </div>
             <div class="calcbox"><div><div class="calclbl ar-t">القسط الشهري الإجمالي</div><div class="calclbl en-t hidden">Total Monthly Installment</div><div style="font-size:11px;color:var(--teal);margin-top:2px" id="cbrk"></div></div><div class="calcval" id="cval">—</div></div>
