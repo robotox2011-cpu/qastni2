@@ -147,6 +147,24 @@ html.dark .calcbox div[style*="color:var(--teal)"]{color:#5eead4!important}
 .multipay-tip{background:#f0fdfa;color:#115e59}
 html.dark .multipay-tip{background:rgba(20,184,166,.08);color:#5eead4;border-color:rgba(20,184,166,.2)!important}
 
+/* Contract — Financial details boxes (السلعة، السعر، الدفعة، القسط) */
+html.dark .cwfi{background:rgba(20,184,166,.08);border-color:rgba(20,184,166,.18)}
+html.dark .cwfl{color:#5eead4!important}
+html.dark .cwfv{color:#5eead4!important}
+
+/* Contract — Header & body backgrounds */
+html.dark .cw{background:var(--bg-card);border-color:var(--border)}
+html.dark .cwh{background:linear-gradient(135deg,#0a1f1f 0%,#0d2828 100%)}
+html.dark .cwb{background:var(--bg-card);color:var(--text-primary)}
+html.dark .cwst{color:#5eead4}
+html.dark .cwp{background:var(--bg-elevated);border-color:var(--border)}
+html.dark .cwpr{color:var(--text-muted)}
+html.dark .cwpn{color:var(--text-primary)}
+html.dark .cwterms{color:var(--text-secondary)}
+html.dark .cwsig{border-color:var(--border-soft)}
+html.dark .cwsg{color:var(--text-secondary)}
+html.dark .cwft{background:var(--bg-elevated);color:var(--text-muted);border-color:var(--border-soft)}
+
 /* Teal value text — readable in dark mode */
 html.dark .ival.teal{color:#5eead4!important}
 
@@ -193,6 +211,73 @@ html.dark .ptbl input[type="checkbox"].mp-check:checked{
 html.dark .ptbl input[type="checkbox"].mp-check:checked::after{
   border-color:#0a1414
 }
+
+/* ═══════ FAQ PAGE STYLES ═══════ */
+.faq-modal{background:#fff;border-radius:var(--r20);box-shadow:var(--shl);width:100%;max-width:480px;max-height:92vh;overflow-y:auto;animation:slideUp .3s ease;position:relative}
+html.dark .faq-modal{background:var(--bg-card);border:1px solid var(--border)}
+.faq-hero{background:linear-gradient(135deg,#0f2a2a,#0f766e);padding:30px 22px 32px;text-align:center;color:#fff;position:relative;overflow:hidden;border-radius:var(--r20) var(--r20) 0 0}
+.faq-hero::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:radial-gradient(circle,rgba(94,234,212,.18),transparent 70%);border-radius:50%}
+.faq-close{position:absolute;top:14px;inset-inline-end:14px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;z-index:5}
+.faq-close:hover{background:rgba(255,255,255,.25)}
+.faq-hero-ico{width:54px;height:54px;background:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;position:relative;z-index:2;box-shadow:0 6px 18px rgba(0,0,0,.15)}
+.faq-hero h2{font-size:22px;font-weight:900;margin:0;position:relative;z-index:2;color:#fff}
+html.dark .faq-hero h2{color:#5eead4}
+.faq-hero p{font-size:12px;color:rgba(255,255,255,.78);margin:5px 0 0;position:relative;z-index:2}
+
+.faq-search{margin:-22px 18px 14px;background:#fff;border-radius:14px;padding:11px 16px;box-shadow:0 8px 22px rgba(15,42,42,.12);display:flex;align-items:center;gap:10px;position:relative;z-index:5;color-scheme:light}
+html.dark .faq-search{background:var(--bg-elevated);border:1px solid var(--border);box-shadow:0 8px 22px rgba(0,0,0,.5);color-scheme:dark}
+.faq-search input{flex:1;border:none;background:transparent;font-size:13.5px;font-family:inherit;outline:none;color:#0f172a;-webkit-text-fill-color:#0f172a}
+html.dark .faq-search input{color:#f0fdfa;-webkit-text-fill-color:#f0fdfa}
+.faq-search input::placeholder{color:#94a3b8}
+html.dark .faq-search input::placeholder{color:#6b8888}
+.faq-search-ico{font-size:15px;color:#94a3b8}
+html.dark .faq-search-ico{color:#5eead4}
+
+.faq-cats{display:flex;gap:7px;padding:0 18px 14px;overflow-x:auto;flex-wrap:wrap}
+.faq-cat{padding:6px 13px;font-size:12px;font-weight:700;background:#fff;border:1px solid #e2e8f0;border-radius:99px;cursor:pointer;color:#475569;font-family:inherit;transition:all .15s;white-space:nowrap}
+html.dark .faq-cat{background:var(--bg-elevated);border-color:var(--border);color:#a7c4c2}
+.faq-cat:hover{border-color:#0d9488;color:#0d9488}
+html.dark .faq-cat:hover{border-color:#5eead4;color:#5eead4}
+.faq-cat.active{background:#0d9488;color:#fff;border-color:#0d9488}
+html.dark .faq-cat.active{background:rgba(94,234,212,.18);color:#5eead4;border-color:#5eead4}
+
+.faq-list{margin:0 18px;border-radius:14px;border:1px solid #e2e8f0;overflow:hidden;background:#fff}
+html.dark .faq-list{background:var(--bg-card);border-color:var(--border)}
+.faq-item{border-bottom:1px solid #f1f5f9}
+html.dark .faq-item{border-color:var(--border-soft)}
+.faq-item:last-child{border-bottom:none}
+.faq-q{padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;cursor:pointer;background:transparent;border:none;width:100%;font-family:inherit;text-align:start;transition:background .15s}
+.faq-q:hover{background:#fafbfc}
+html.dark .faq-q:hover{background:rgba(20,184,166,.06)}
+.faq-q-text{font-size:13px;font-weight:700;color:#0f172a;flex:1;line-height:1.55}
+html.dark .faq-q-text{color:#f0fdfa}
+.faq-q-ico{flex-shrink:0;width:24px;height:24px;border-radius:7px;background:#f0fdfa;color:#0d9488;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;transition:all .25s;margin-top:1px}
+html.dark .faq-q-ico{background:rgba(94,234,212,.15);color:#5eead4}
+.faq-item.open .faq-q-ico{background:#0d9488;color:#fff;transform:rotate(180deg)}
+html.dark .faq-item.open .faq-q-ico{background:#5eead4;color:#0a1414}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;padding:0 16px;font-size:12.5px;color:#475569;line-height:1.75}
+html.dark .faq-a{color:#a7c4c2}
+.faq-item.open .faq-a{max-height:1000px;padding:0 16px 14px}
+.faq-a b{color:#0f172a;font-weight:800}
+html.dark .faq-a b{color:#5eead4}
+.faq-a ul,.faq-a ol{margin:6px 0 0;padding-inline-start:18px}
+.faq-a li{margin-bottom:3px}
+
+.faq-tag{display:inline-block;padding:2px 8px;font-size:9.5px;font-weight:800;border-radius:5px;background:#ccfbf1;color:#0f766e;margin-inline-end:7px;letter-spacing:.3px}
+html.dark .faq-tag{background:rgba(94,234,212,.15);color:#5eead4;border:1px solid rgba(94,234,212,.25)}
+
+.faq-cta{margin:14px 18px 18px;background:linear-gradient(135deg,#0f766e,#0d9488);border-radius:14px;padding:18px;color:#fff;text-align:center}
+html.dark .faq-cta{background:linear-gradient(135deg,#0a2828,#0d3838);border:1px solid var(--border)}
+.faq-cta-title{font-size:14px;font-weight:800;margin-bottom:5px}
+html.dark .faq-cta-title{color:#5eead4}
+.faq-cta-desc{font-size:11.5px;color:rgba(255,255,255,.85);margin-bottom:11px}
+html.dark .faq-cta-desc{color:#a7c4c2}
+.faq-cta-btn{display:inline-block;background:#fff;color:#0f766e;padding:9px 20px;border-radius:10px;font-size:12px;font-weight:800;text-decoration:none;border:none;font-family:inherit;cursor:pointer;transition:all .15s}
+.faq-cta-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.15)}
+html.dark .faq-cta-btn{background:#5eead4;color:#0a1414}
+html.dark .faq-cta-btn:hover{background:#7af5e0}
+
+.faq-empty{padding:30px 20px;text-align:center;color:#94a3b8;font-size:13px}
 
 /* About Hero gradient — adapt to dark */
 html.dark .about-hero{background:linear-gradient(135deg,#0d2828 0%,#0a1f1f 100%)!important}
@@ -868,6 +953,7 @@ textarea.fc{resize:vertical;min-height:70px}
 <div class="menu-overlay hidden" id="menu-overlay" onclick="if(event.target===this)closeMenu()"></div>
 <div class="menu-overlay hidden" id="sugg-overlay" onclick="if(event.target===this)backToMenu('sugg-overlay')"></div>
 <div class="menu-overlay hidden" id="about-overlay" onclick="if(event.target===this)backToMenu('about-overlay')"></div>
+<div class="menu-overlay hidden" id="faq-overlay" onclick="if(event.target===this)closeFAQ()"></div>
 <div class="menu-overlay hidden" id="thanks-overlay" onclick="if(event.target===this)closeThanks()"></div>
 
 <script>
@@ -3112,6 +3198,14 @@ window.openMenu=()=>{
             <div class="msub ar-t">تعرّف على فكرة المنصة</div><div class="msub en-t hidden">Learn about us</div>
           </div>
         </button>
+
+        <button class="menu-item" onclick="closeMenu();openFAQ()">
+          <div class="micon">❓</div>
+          <div class="mtxt">
+            <div class="mlbl ar-t">الأسئلة الشائعة</div><div class="mlbl en-t hidden">FAQ</div>
+            <div class="msub ar-t">إجابات على أكثر الأسئلة</div><div class="msub en-t hidden">Common questions answered</div>
+          </div>
+        </button>
         
         <button class="menu-item" onclick="toggleLang();closeMenu()">
           <div class="micon">🌐</div>
@@ -3282,6 +3376,255 @@ window.closeThanks=()=>$('thanks-overlay').classList.add('hidden')
 // ═══════════════════════════════════════════════
 // ABOUT QASTNI
 // ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// FAQ — الأسئلة الشائعة
+// ═══════════════════════════════════════════════
+const FAQ_DATA=[
+  {
+    cat:'الرسوم',catEn:'Fees',
+    q:'كم نسبة العمولة في قسطني؟',qEn:'What is Qastni\'s fee?',
+    a:`<p>العمولة <b>7% فقط</b> من قيمة الصفقة، موزّعة بالتساوي:</p>
+       <ul><li><b>3.5% على البائع</b> — يُخصم من المبلغ الذي يستلمه</li>
+       <li><b>3.5% على المشتري</b> — تُضاف على الأقساط الشهرية</li></ul>
+       <p>مثال: صفقة بـ 5,000 ر.س على 5 أشهر → البائع يستلم <b>4,825 ر.س</b> والمشتري يدفع <b>5,175 ر.س</b> إجمالاً.</p>`,
+    aEn:`<p>Only <b>7% total fee</b> on the deal, split equally:</p>
+       <ul><li><b>3.5% on seller</b> — deducted from received amount</li>
+       <li><b>3.5% on buyer</b> — added to installments</li></ul>
+       <p>Example: 5,000 SAR deal over 5 months → Seller receives <b>4,825 SAR</b>, Buyer pays <b>5,175 SAR</b> total.</p>`
+  },
+  {
+    cat:'الترخيص',catEn:'License',
+    q:'هل قسطني مرخّصة من البنك المركزي السعودي (ساما)؟',qEn:'Is Qastni licensed by SAMA?',
+    a:`<p>قسطني <b>قيد الترخيص</b> من البنك المركزي السعودي (ساما) ضمن البيئة التجريبية التنظيمية (Sandbox).</p>
+       <p>هذا يعني إن المنصة تعمل تحت إشراف ساما خلال مرحلة التجريب، وستحصل على الترخيص الكامل قبل الإطلاق التجاري.</p>`,
+    aEn:`<p>Qastni is <b>pending license</b> from the Saudi Central Bank (SAMA) under the regulatory sandbox program.</p>
+       <p>The platform operates under SAMA supervision during the testing phase, and will obtain full licensing before commercial launch.</p>`
+  },
+  {
+    cat:'عام',catEn:'General',
+    q:'كيف يحمي قسطني حقوقي كبائع؟',qEn:'How does Qastni protect my rights as a seller?',
+    a:`<p>قسطني يحمي البائع بعدة طبقات:</p>
+       <ul><li><b>عقد رقمي موثَّق</b> بين الطرفين بتفاصيل واضحة</li>
+       <li><b>التحقق من هوية المشتري</b> عبر نافذ الحكومي</li>
+       <li><b>سند لأمر</b> قابل للتنفيذ عبر منصة ناجز عند التأخر</li>
+       <li><b>الحد الائتماني</b> 33% من راتب المشتري حماية للطرفين</li>
+       <li><b>سجل تدقيق كامل</b> لكل حركة في الصفقة</li></ul>`,
+    aEn:`<p>Qastni protects sellers through multiple layers:</p>
+       <ul><li><b>Verified digital contract</b> between parties</li>
+       <li><b>Buyer identity verified</b> via government Nafath</li>
+       <li><b>Promissory note</b> enforceable through Najiz</li>
+       <li><b>Credit limit</b> 33% of buyer's salary</li>
+       <li><b>Complete audit trail</b> for every transaction</li></ul>`
+  },
+  {
+    cat:'الدفع',catEn:'Payment',
+    q:'ما طرق الدفع المقبولة؟',qEn:'What payment methods are accepted?',
+    a:`<p>قسطني يدعم كل طرق الدفع الرسمية في السعودية:</p>
+       <ul><li><b>Apple Pay</b> — الأسرع والأكثر أماناً</li>
+       <li><b>مدى</b> — البطاقة البنكية السعودية</li>
+       <li><b>stc pay</b> — محفظة إس تي سي</li>
+       <li><b>Visa / Mastercard</b> — بطاقات ائتمانية</li>
+       <li><b>PayPal</b> — للمدفوعات الدولية</li></ul>`,
+    aEn:`<p>Qastni supports all major Saudi payment methods:</p>
+       <ul><li><b>Apple Pay</b>, <b>mada</b>, <b>stc pay</b>, <b>Visa/Mastercard</b>, <b>PayPal</b></li></ul>`
+  },
+  {
+    cat:'الاسترداد',catEn:'Recovery',
+    q:'ماذا يحدث إذا تأخّر المشتري عن السداد؟',qEn:'What if the buyer delays payment?',
+    a:`<p>الإجراءات تتم بشكل تدريجي:</p>
+       <ul><li><b>اليوم 1-3:</b> تذكير ودي عبر الإشعارات والإيميل</li>
+       <li><b>اليوم 4-7:</b> تنبيه أكثر جدية + تواصل من فريق الدعم</li>
+       <li><b>اليوم 8-14:</b> رسوم تأخير 5% + إنذار قانوني</li>
+       <li><b>بعد 14 يوم:</b> تنفيذ سند لأمر عبر منصة ناجز للحصول على المبلغ كاملاً</li></ul>
+       <p>قسطني تتولى المتابعة كاملة نيابة عن البائع.</p>`,
+    aEn:`<p>Process is gradual: friendly reminders → serious alerts → legal notice → enforcement via Najiz. Qastni handles all follow-up.</p>`
+  },
+  {
+    cat:'عام',catEn:'General',
+    q:'ما الفرق بين الحساب المجاني وموثَّق ⭐؟',qEn:'Free vs Verified account?',
+    a:`<p><b>الحساب المجاني:</b> 3 صفقات نشطة كحد أقصى، 100,000 ر.س، إشعارات أساسية، رسوم سند 50 ر.س.</p>
+       <p><b>حساب موثَّق ⭐ (150 ر.س/سنة):</b></p>
+       <ul><li>5 صفقات نشطة بدلاً من 3</li>
+       <li>شارة موثَّق ⭐ في ملفك العام</li>
+       <li>إشعارات واتساب فورية</li>
+       <li>رسوم سند 20 ر.س فقط (خصم 60%)</li>
+       <li>دعم أولوية خلال 6 ساعات</li>
+       <li>تقارير سنوية مفصّلة</li></ul>`,
+    aEn:`<p><b>Free:</b> 3 active deals, 100K SAR limit, basic notifications, 50 SAR sukuk filing.</p>
+       <p><b>Verified ⭐ (150 SAR/year):</b> 5 active deals, ⭐ badge, WhatsApp alerts, 20 SAR sukuk (60% off), priority 6hr support, annual reports.</p>`
+  },
+  {
+    cat:'الدفع',catEn:'Payment',
+    q:'هل أقدر أدفع أكثر من قسط دفعة واحدة؟',qEn:'Can I pay multiple installments at once?',
+    a:`<p>نعم! في صفحة تفاصيل الصفقة، تقدر تحدّد <b>عدة أقساط</b> عبر مربعات الاختيار، ويطلع لك شريط في الأسفل بالمجموع.</p>
+       <p>اضغط <b>"دفع المحدد"</b> ويتم خصم كل الأقساط المختارة دفعة واحدة. هذي الميزة مفيدة لو جاتك دفعة من شغل أو حبيت تخلّص الصفقة بسرعة.</p>`,
+    aEn:`<p>Yes! On deal details page, select multiple installments via checkboxes. A bottom bar shows the total. Click <b>"Pay Selected"</b> to pay all at once.</p>`
+  },
+  {
+    cat:'الترخيص',catEn:'License',
+    q:'هل قسطني متوافقة مع الشريعة الإسلامية؟',qEn:'Is Qastni Sharia-compliant?',
+    a:`<p>نعم، قسطني متوافقة مع الشريعة الإسلامية بالكامل:</p>
+       <ul><li>الرسوم <b>سعي وتيسير</b> — مقابل خدمة فعلية</li>
+       <li><b>لا فوائد ربوية</b> — السعر ثابت من البداية</li>
+       <li><b>لا غرر ولا جهالة</b> — كل شي واضح في العقد</li>
+       <li><b>لا فوائد مركّبة</b> عند التأخير</li></ul>
+       <p>الرسوم مقابل خدمات حقيقية: التحقق، التوثيق، الحماية القانونية، نظام الدفع.</p>`,
+    aEn:`<p>Fully Sharia-compliant: fees are <b>service fees</b> (not interest), no riba, no compound interest on delays, transparent pricing from the start.</p>`
+  },
+  {
+    cat:'الأمان',catEn:'Security',
+    q:'كيف أتأكد من هوية البائع/المشتري؟',qEn:'How do I verify the other party\'s identity?',
+    a:`<p>قسطني يضمن لك ذلك بطرق متعددة:</p>
+       <ul><li><b>التحقق عبر نافذ</b> — كل مستخدم متحقق من هويته الرسمية</li>
+       <li><b>الملف العام</b> — تشوف تقييماته السابقة وعدد صفقاته الناجحة</li>
+       <li><b>شارة موثَّق ⭐</b> — للحسابات المشتركة في الباقة المميزة</li>
+       <li><b>عداد الصفقات</b> — احذر الحسابات الجديدة جداً</li></ul>`,
+    aEn:`<p>Multiple safeguards: <b>Nafath verification</b>, <b>public profile</b> with ratings & deal count, <b>Verified ⭐ badge</b>, deal history counter to spot new accounts.</p>`
+  },
+  {
+    cat:'عام',catEn:'General',
+    q:'ما الحد الأقصى للتقسيط؟ كم شهر؟',qEn:'What is the maximum installment period?',
+    a:`<p><b>الحد الأقصى للمدة:</b> 24 شهر (سنتين).</p>
+       <p><b>الحد الأقصى للقيمة:</b></p>
+       <ul><li>الحساب المجاني: 100,000 ر.س للصفقة</li>
+       <li>الحساب موثَّق: 100,000 ر.س للصفقة</li></ul>
+       <p><b>الحد الشهري:</b> القسط الشهري لا يتجاوز 33% من راتب المشتري المسجّل (حماية للطرفين).</p>`,
+    aEn:`<p>Max <b>24 months</b> period. Max <b>100,000 SAR</b> per deal. Monthly installment cannot exceed <b>33%</b> of buyer's registered salary.</p>`
+  },
+  {
+    cat:'الأمان',catEn:'Security',
+    q:'هل بياناتي البنكية محمية؟',qEn:'Is my financial data secure?',
+    a:`<p>بياناتك في أمان تام:</p>
+       <ul><li><b>تشفير 256-bit</b> لكل المعاملات</li>
+       <li><b>متوافق مع معايير PCI DSS</b> الدولية لحماية بيانات البطاقات</li>
+       <li><b>Supabase</b> — منصة قواعد بيانات معتمدة عالمياً</li>
+       <li><b>قسطني لا تحتفظ بأرقام البطاقات</b> — تتم المعالجة عبر بوابات دفع رسمية</li>
+       <li><b>سجل تدقيق</b> لكل عملية في حسابك</li></ul>`,
+    aEn:`<p>Bank-grade security: <b>256-bit encryption</b>, <b>PCI DSS</b> compliant, <b>Supabase</b> infrastructure, <b>no card numbers stored</b> by Qastni.</p>`
+  },
+  {
+    cat:'الدفع',catEn:'Payment',
+    q:'هل أقدر ألغي الصفقة بعد قبولها؟',qEn:'Can I cancel a deal after acceptance?',
+    a:`<p>الإلغاء يعتمد على حالة الصفقة:</p>
+       <ul><li><b>قبل القبول (معلقة):</b> البائع يقدر يلغي العرض في أي وقت</li>
+       <li><b>بعد القبول (نشطة):</b> لا يمكن الإلغاء من طرف واحد — يحتاج اتفاق الطرفين</li>
+       <li><b>عند مشكلة:</b> تواصل مع الدعم وسنحلها وفق العقد</li></ul>
+       <p>هذا حماية للطرفين عشان ما يلغي أحدهم بعد ما الطرف الثاني التزم.</p>`,
+    aEn:`<p>Depends on status: <b>Pending</b> → seller can cancel anytime. <b>Active</b> → requires both parties' agreement. Contact support for disputes.</p>`
+  },
+  {
+    cat:'الأمان',catEn:'Security',
+    q:'ما هو نافذ؟ ولماذا أحتاجه؟',qEn:'What is Nafath? Why do I need it?',
+    a:`<p><b>نافذ</b> هو نظام تحقق هوية وطني سعودي رسمي معتمد من الحكومة. تستخدمه البنوك والجهات الرسمية للتأكد من هوية المستخدم.</p>
+       <p><b>لماذا تحتاجه في قسطني:</b></p>
+       <ul><li>يضمن إن الشخص اللي تتعامل معه هو فعلاً صاحب الهوية</li>
+       <li>يحميك من الاحتيال والتلاعب</li>
+       <li>متطلب أساسي للترخيص من ساما</li>
+       <li><b>مجاني للجميع في قسطني</b> — نتحمّل الرسوم نيابة عنك</li></ul>`,
+    aEn:`<p><b>Nafath</b> is Saudi's official national identity verification system. <b>Free for all users on Qastni</b> — we cover the cost.</p>`
+  },
+  {
+    cat:'الرسوم',catEn:'Fees',
+    q:'هل في رسوم خفية أو إضافية؟',qEn:'Are there hidden fees?',
+    a:`<p><b>لا. كل الرسوم شفافة من البداية:</b></p>
+       <ul><li><b>7% فقط</b> رسوم سعي وتيسير (3.5%+3.5%)</li>
+       <li><b>50 ر.س</b> رسوم رفع سند لأمر — اختياري وعند التأخر فقط</li>
+       <li><b>5%</b> رسوم استرداد — فقط لو احتجنا تنفيذ قضائي</li>
+       <li><b>150 ر.س/سنة</b> اشتراك موثَّق — اختياري</li></ul>
+       <p>كل شي مكتوب في العقد قبل ما تقبل الصفقة. لا مفاجآت.</p>`,
+    aEn:`<p>No hidden fees. Just <b>7%</b> service fee + optional sukuk filing (50 SAR) + optional Verified subscription (150 SAR/year). Everything disclosed upfront.</p>`
+  },
+  {
+    cat:'عام',catEn:'General',
+    q:'متى تنطلق قسطني رسمياً؟',qEn:'When does Qastni officially launch?',
+    a:`<p>قسطني حالياً في <b>المرحلة التجريبية</b> ضمن البيئة التنظيمية لساما (Sandbox).</p>
+       <p><b>الخارطة:</b></p>
+       <ul><li><b>الآن:</b> التقديم لساما والتجريب المغلق</li>
+       <li><b>الربع الأول:</b> الموافقة على Sandbox + ربط Moyasar</li>
+       <li><b>الربع الثاني:</b> ربط نافذ الكامل</li>
+       <li><b>الربع الثالث:</b> تجربة مغلقة 50-100 مستخدم</li>
+       <li><b>الربع الرابع:</b> تطبيقات iOS و Android</li>
+       <li><b>السنة الثانية:</b> ترخيص ساما الكامل + إطلاق عام</li></ul>`,
+    aEn:`<p>Currently in <b>Sandbox phase</b> with SAMA. Roadmap: SAMA application → Moyasar integration → Nafath → closed beta → mobile apps → full license & public launch.</p>`
+  }
+]
+
+let _faqFilter='all',_faqSearch=''
+
+window.openFAQ=()=>{
+  const ov=$('faq-overlay');if(!ov)return
+  ov.classList.remove('hidden')
+  document.body.style.overflow='hidden'
+  renderFAQ()
+}
+window.closeFAQ=()=>{
+  const ov=$('faq-overlay');if(!ov)return
+  ov.classList.add('hidden')
+  document.body.style.overflow=''
+  _faqFilter='all';_faqSearch=''
+}
+window.faqFilter=(c)=>{_faqFilter=c;renderFAQ()}
+window.faqSearch=(v)=>{_faqSearch=v.toLowerCase();renderFAQList()}
+window.faqToggle=(idx)=>{
+  const it=document.querySelectorAll('.faq-item')[idx]
+  if(it)it.classList.toggle('open')
+}
+
+function renderFAQ(){
+  const ov=$('faq-overlay');if(!ov)return
+  const cats=['all','عام','الرسوم','الترخيص','الدفع','الأمان','الاسترداد']
+  const catLabels={all:isAr()?'الكل':'All','عام':isAr()?'عام':'General','الرسوم':isAr()?'الرسوم':'Fees','الترخيص':isAr()?'الترخيص':'License','الدفع':isAr()?'الدفع':'Payment','الأمان':isAr()?'الأمان':'Security','الاسترداد':isAr()?'الاسترداد':'Recovery'}
+
+  ov.innerHTML=`<div class="faq-modal" onclick="event.stopPropagation()">
+    <div class="faq-hero">
+      <button class="faq-close" onclick="closeFAQ()" aria-label="إغلاق">✕</button>
+      <div class="faq-hero-ico">${LOGO_S(34)}</div>
+      <h2>${isAr()?'كيف نقدر نساعدك؟':'How can we help?'}</h2>
+      <p>${isAr()?'إجابات على أكثر الأسئلة الشائعة في قسطني':'Common questions answered'}</p>
+    </div>
+
+    <div class="faq-search">
+      <span class="faq-search-ico">🔍</span>
+      <input type="text" placeholder="${isAr()?'ابحث في الأسئلة...':'Search questions...'}" oninput="faqSearch(this.value)" value="${_faqSearch}"/>
+    </div>
+
+    <div class="faq-cats">
+      ${cats.map(c=>`<button class="faq-cat ${c===_faqFilter?'active':''}" onclick="faqFilter('${c}')">${catLabels[c]}</button>`).join('')}
+    </div>
+
+    <div id="faq-list-c"></div>
+
+    <div class="faq-cta">
+      <div class="faq-cta-title">${isAr()?'لم تجد إجابتك؟':'Didn\'t find your answer?'}</div>
+      <div class="faq-cta-desc">${isAr()?'تواصل معنا مباشرة وراح نرد عليك في أسرع وقت':'Contact us directly and we\'ll respond ASAP'}</div>
+      <a class="faq-cta-btn" href="https://wa.me/966567189993" target="_blank" rel="noopener">📱 ${isAr()?'واتساب الدعم':'WhatsApp Support'}</a>
+    </div>
+  </div>`
+  renderFAQList()
+}
+
+function renderFAQList(){
+  const c=$('faq-list-c');if(!c)return
+  let items=FAQ_DATA
+  if(_faqFilter!=='all')items=items.filter(x=>x.cat===_faqFilter)
+  if(_faqSearch){
+    const s=_faqSearch
+    items=items.filter(x=>(isAr()?x.q+x.a:x.qEn+x.aEn).toLowerCase().includes(s))
+  }
+  if(!items.length){
+    c.innerHTML=`<div class="faq-list"><div class="faq-empty">🔍 ${isAr()?'لا توجد نتائج':'No results found'}</div></div>`
+    return
+  }
+  c.innerHTML=`<div class="faq-list">${items.map((x,i)=>`
+    <div class="faq-item">
+      <button class="faq-q" onclick="faqToggle(${i})">
+        <span class="faq-q-text"><span class="faq-tag">${isAr()?x.cat:x.catEn}</span>${isAr()?x.q:x.qEn}</span>
+        <span class="faq-q-ico">▾</span>
+      </button>
+      <div class="faq-a">${isAr()?x.a:x.aEn}</div>
+    </div>`).join('')}</div>`
+}
+
 window.openAbout=()=>{
   $('about-overlay').innerHTML=`
     <div class="menu-modal" onclick="event.stopPropagation()" style="max-width:430px">
