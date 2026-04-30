@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover,maximum-scale=5"/>
 <title>قسطني | Qastni</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='5 5 110 110'><g transform='translate(60,60)'><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(30)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(60)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(90)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(120)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(150)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(180)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(210)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(240)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(270)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(300)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(330)'/></g></svg>"/>
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='5 5 110 110'><g transform='translate(60,60)'><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(30)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(60)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(90)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(120)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(150)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(180)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(210)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(240)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(270)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(300)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(330)'/></g></svg>"/>
@@ -897,6 +897,191 @@ textarea.fc{resize:vertical;min-height:70px}
 .about-feature .ftxt{flex:1}
 .about-feature .ftit{font-size:13px;font-weight:800;color:var(--g800);margin-bottom:2px}
 .about-feature .fdesc{font-size:11.5px;color:var(--g500);line-height:1.55}
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE RESPONSIVENESS ENHANCEMENTS — non-destructive
+   كل التحسينات هنا تنطبق فقط على الجوال (max-width:768px)
+   ولا تؤثر على شاشات الكمبيوتر
+   ═══════════════════════════════════════════════════════════ */
+@media(max-width:768px){
+  /* الصفحات بشكل عام */
+  .page{padding:12px 12px 100px}
+  .pi{padding:0!important}
+
+  /* العناوين الكبيرة — تصغير لتناسب الشاشة */
+  .ptit{font-size:22px!important;line-height:1.3}
+  .psub{font-size:13px!important;margin-bottom:14px}
+
+  /* البطاقات — هوامش وحشوات أقل */
+  .card{border-radius:14px;margin-bottom:12px}
+  .cbody{padding:14px 14px}
+  .chdr{padding:12px 14px}
+  .chdr h2,.chdr h3{font-size:14.5px!important}
+  .cfoot{padding:11px 14px}
+
+  /* الجداول — تمرير أفقي ناعم */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .ptbl{min-width:520px;font-size:12px}
+  .ptbl th,.ptbl td{padding:9px 8px}
+  .ptbl th{font-size:10.5px}
+
+  /* مربعات الإحصائيات — 2x2 على الجوال */
+  .sgrid{grid-template-columns:1fr 1fr;gap:9px}
+  .scard{padding:13px 11px}
+  .sval{font-size:18px!important}
+  .slbl{font-size:10.5px!important}
+  .sico{width:28px;height:28px;font-size:14px}
+
+  /* مربعات تفاصيل العقد المالية */
+  .cwfin{grid-template-columns:1fr 1fr;gap:8px}
+  .cwfi{padding:9px 10px}
+  .cwfl{font-size:9px}
+  .cwfv{font-size:13px}
+
+  /* أطراف الاتفاقية والتواقيع */
+  .cwpar{grid-template-columns:1fr;gap:8px}
+  .cwsig{grid-template-columns:1fr;gap:14px}
+
+  /* الحقول والنماذج */
+  .frow{grid-template-columns:1fr;gap:0}
+  .fg{margin-bottom:13px}
+  .fl{font-size:12px;margin-bottom:5px}
+  .fc{padding:10px 13px;font-size:14px}
+  .fhint{font-size:10.5px}
+
+  /* الأزرار */
+  .btn{padding:10px 16px;font-size:13px}
+  .btn.bsm{padding:7px 12px;font-size:11.5px}
+  .btn.blg{padding:13px 20px;font-size:14px}
+
+  /* الحوارية (modals) */
+  .menu-overlay{padding:0;align-items:flex-end}
+  .menu-modal,.faq-modal,.pmodal,.nafath-card{
+    max-width:100%!important;
+    border-radius:18px 18px 0 0!important;
+    max-height:88vh
+  }
+
+  /* صفحة بيع بالتقسيط — مربع القسط الإجمالي */
+  .calcbox{padding:11px 13px;flex-direction:column;align-items:flex-start;gap:6px}
+  .calclbl{font-size:11px}
+  .calcval{font-size:18px}
+
+  /* العروض الواردة (inbox) */
+  .igrid{grid-template-columns:1fr 1fr;gap:8px}
+  .iitem{padding:9px 11px}
+  .ilbl{font-size:9.5px}
+  .ival{font-size:12.5px}
+
+  /* الملف العام */
+  .upub-wrap{padding:14px 12px}
+  .upub-card{padding:18px 16px}
+  .upub-name{font-size:18px}
+  .upub-stats-grid{padding:14px;gap:8px}
+  .upub-stat-num{font-size:18px}
+  .upub-info-grid{grid-template-columns:1fr;gap:0}
+
+  /* صفحة الاشتراك المميز */
+  .prem-card{margin:14px 12px}
+  .prem-card-hdr{padding:18px 16px}
+  .prem-card-body{padding:14px 16px}
+
+  /* شريط الدفع المتعدد */
+  .mp-bar{
+    bottom:75px;
+    padding:10px 14px;
+    gap:10px;
+    max-width:calc(100vw - 20px);
+    min-width:0;
+    width:calc(100vw - 20px)
+  }
+  .mp-bar-total{font-size:16px}
+
+  /* القائمة الجانبية للهامبرغر */
+  .menu-modal{padding-bottom:env(safe-area-inset-bottom,0px)}
+  .menu-item{padding:12px 16px}
+  .micon{width:34px;height:34px;font-size:17px}
+  .mlbl{font-size:13.5px}
+  .msub{font-size:11px}
+
+  /* صفحة FAQ */
+  .faq-modal{padding-bottom:env(safe-area-inset-bottom,0px)}
+  .faq-hero{padding:24px 18px 28px}
+  .faq-hero h2{font-size:18px}
+  .faq-hero p{font-size:11.5px}
+  .faq-search{margin:-20px 14px 12px;padding:9px 14px}
+  .faq-cats{padding:0 14px 12px}
+  .faq-cat{padding:5px 11px;font-size:11px}
+  .faq-list{margin:0 14px}
+  .faq-q{padding:12px 14px}
+  .faq-q-text{font-size:12.5px}
+  .faq-cta{margin:14px}
+
+  /* الشريط العلوي */
+  .topbar{height:54px}
+  .tb-title{font-size:14px}
+  .topbar svg[width="28"]{width:24px!important;height:24px!important}
+
+  /* صفحة Nafath */
+  .nafath-card{padding:0!important}
+
+  /* Payment Modal محسّن */
+  .pmod-hdr{padding:24px 20px 20px}
+  .pmod-brand{font-size:19px}
+  .pmod-bd{padding:16px 18px}
+  .pamt-box{padding:14px;margin-bottom:14px}
+  .pamt-val{font-size:26px}
+  .pm-row{padding:11px 13px;gap:10px}
+  .pm-row .pm-name{font-size:12.5px}
+  .pm-row .pm-desc{font-size:10px}
+  .pmod-foot{padding:12px 16px}
+
+  /* تفاصيل الصفقة */
+  .deal-hero{padding:18px 16px}
+  .deal-num{font-size:11px}
+
+  /* العناوين والنصوص بشكل عام */
+  h1{font-size:22px!important}
+  h2{font-size:18px!important}
+  h3{font-size:15px!important}
+
+  /* تحسين منع الـ horizontal scroll للموقع كاملاً */
+  body{overflow-x:hidden}
+  .topbar,.bottom-nav{max-width:100vw}
+
+  /* تحسين الزر العائم في الـ bottom-nav */
+  .bn-fab{font-size:22px}
+  .bn-lbl{font-size:9.5px}
+  .bn-ico{font-size:18px}
+
+  /* دفع متعدد — رسالة التلميح */
+  .multipay-tip{font-size:11.5px;padding:9px 14px}
+
+  /* أزرار stepper الأرقام */
+  .num-wrap .num-step{width:22px;height:17px;font-size:10px}
+  .num-wrap input[type="number"]{padding-inline-end:32px!important}
+}
+
+/* شاشات صغيرة جداً — أقل من 380px */
+@media(max-width:380px){
+  .ptit{font-size:20px!important}
+  .scard{padding:11px 9px}
+  .sval{font-size:16px!important}
+  .slbl{font-size:9.5px!important}
+  .igrid{grid-template-columns:1fr}
+  .cwfin{grid-template-columns:1fr}
+  .pamt-val{font-size:22px}
+  .faq-hero h2{font-size:16px}
+  .faq-q-text{font-size:12px}
+  .pmod-brand{font-size:17px}
+  .btn{padding:9px 14px;font-size:12.5px}
+}
+
+/* Landscape mode على الجوال — تحسينات */
+@media(max-width:768px) and (orientation:landscape){
+  .menu-modal,.faq-modal,.pmodal{max-height:94vh}
+  .pmod-hdr,.faq-hero{padding-top:14px;padding-bottom:14px}
+}
 </style>
 </head>
 <body>
