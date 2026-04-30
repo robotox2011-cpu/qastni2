@@ -98,6 +98,27 @@ html.dark .ihdr,html.dark .ptit,html.dark h1,html.dark h2,html.dark h3,html.dark
 html.dark .psub,html.dark .text-m,html.dark .msub{color:var(--text-secondary)}
 html.dark .mp-bar{background:var(--bg-elevated);box-shadow:0 12px 32px rgba(0,0,0,.5),0 0 0 1px var(--border)}
 
+/* Warning/Disclaimer banner — adapt to dark */
+html.dark .disc{background:#3a2d12;border-color:#5c4520;color:#fde68a}
+
+/* Tip/info boxes (.feebox) */
+html.dark .feebox{background:var(--bg-elevated);border-color:var(--border)}
+html.dark .feebox .txt{color:var(--text-secondary)}
+
+/* Progress track */
+html.dark .ptrack{background:var(--bg-hover)}
+
+/* Card headers borders */
+html.dark .chdr{border-color:var(--border-soft);background:transparent}
+html.dark .cfoot{border-color:var(--border-soft);background:var(--bg-elevated)}
+
+/* Profile/credit-limit divider lines */
+html.dark .card div[style*="border-top:1px solid var(--g100)"]{border-color:var(--border-soft)!important}
+html.dark .card div[style*="border-bottom:1px solid var(--g100)"]{border-color:var(--border-soft)!important}
+
+/* Star/rating empty colors */
+html.dark .ival,html.dark .ilbl{color:inherit}
+
 /* Logo color adapts to theme — teal in light mode, lighter teal/mint in dark mode */
 html.dark .qlogo-wrap{color:#5eead4!important}
 html.dark svg[viewbox="0 0 120 120"][color],
@@ -1004,7 +1025,7 @@ function buildShell(){
           <div class="scard"><div class="sico" style="background:#dcfce7">💰</div><div class="sval" id="srecv" style="color:#16a34a">0</div><div class="slbl ar-t">مستحق لي</div><div class="slbl en-t hidden">Owed to me</div></div>
           <div class="scard"><div class="sico" style="background:#fee2e2">💸</div><div class="sval" id="sowe" style="color:#dc2626">0</div><div class="slbl ar-t">عليّ</div><div class="slbl en-t hidden">I owe</div></div>
         </div>
-        <div class="shdr"><h2 class="stit ar-t">آخر الصفقات</h2><h2 class="stit en-t hidden">Recent Deals</h2><button class="btn bsec bsm" onclick="nav('deals')"><span class="ar-t">عرض الكل</span><span class="en-t hidden">View All</span></button></div>
+        <div class="shdr"><h2 class="stit ar-t">صفقاتك النشطة</h2><h2 class="stit en-t hidden">Active Deals</h2><button class="btn bsec bsm" onclick="nav('deals')"><span class="ar-t">عرض الكل</span><span class="en-t hidden">View All</span></button></div>
         <div id="dl"></div>
         <div class="mt20"><button class="btn bp blg" onclick="nav('create')">➕ <span class="ar-t">بيع بالتقسيط</span><span class="en-t hidden">Sell on Installment</span></button></div>
       </div></div>
@@ -1477,7 +1498,9 @@ function rDash(){
   const srecv=$('srecv');if(srecv)srecv.textContent=fmt(owedToMe)
   const sowe=$('sowe');if(sowe)sowe.textContent=fmt(iOwe)
 
-  const dl=$('dl');if(dl)dl.innerHTML=[...DEALS].slice(0,5).map(bCard).join('')||empt('📄',isAr()?'لا توجد صفقات بعد':'No deals yet')
+  // عرض الصفقات النشطة والمعلقة فقط (مو المكتملة أو الملغاة)
+  const activeDeals=DEALS.filter(d=>['active','approved','pending'].includes(d.status))
+  const dl=$('dl');if(dl)dl.innerHTML=activeDeals.slice(0,5).map(bCard).join('')||empt('📄',isAr()?'لا توجد صفقات نشطة':'No active deals')
 
   // ═══ Premium expiry reminder ═══
   const remSlot=$('dash-prem-reminder')
@@ -1552,7 +1575,13 @@ function rInc(){
 }
 
 window.filtD=f=>{
-  filt=f;['all','active','pending','completed'].forEach(x=>{const id='t'+x.slice(0,2);document.getElementById(id)?.classList.toggle('active',x===f)});rDeals()
+  filt=f
+  // مصفوفة الـ tabs الصحيحة (id الحقيقي لكل تاب)
+  const tabMap={'all':'ta','active':'tac','pending':'tpe','completed':'tco'}
+  Object.entries(tabMap).forEach(([key,id])=>{
+    document.getElementById(id)?.classList.toggle('active',key===f)
+  })
+  rDeals()
 }
 
 function rDeals(){
