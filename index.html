@@ -98,6 +98,57 @@ html.dark .ihdr,html.dark .ptit,html.dark h1,html.dark h2,html.dark h3,html.dark
 html.dark .psub,html.dark .text-m,html.dark .msub{color:var(--text-secondary)}
 html.dark .mp-bar{background:var(--bg-elevated);box-shadow:0 12px 32px rgba(0,0,0,.5),0 0 0 1px var(--border)}
 
+/* Multi-pay tip banner */
+.multipay-tip{background:#f0fdfa;color:#115e59}
+html.dark .multipay-tip{background:rgba(20,184,166,.08);color:#5eead4;border-color:rgba(20,184,166,.2)!important}
+
+/* Teal value text — readable in dark mode */
+html.dark .ival.teal{color:#5eead4!important}
+
+/* iitem cards — soft teal background in dark mode */
+html.dark .iitem{background:rgba(20,184,166,.06);border-color:rgba(20,184,166,.18)}
+
+/* Multi-pay checkboxes — round, soft, larger */
+.ptbl input[type="checkbox"].mp-check{
+  -webkit-appearance:none;appearance:none;
+  width:22px!important;height:22px!important;
+  border-radius:7px!important;
+  border:2px solid var(--g300)!important;
+  background:#fff!important;
+  cursor:pointer;
+  display:inline-block;vertical-align:middle;
+  position:relative;
+  transition:all .15s;
+  margin:0;
+  flex-shrink:0
+}
+.ptbl input[type="checkbox"].mp-check:hover{border-color:var(--teal)!important}
+.ptbl input[type="checkbox"].mp-check:checked{
+  background:var(--teal)!important;
+  border-color:var(--teal)!important
+}
+.ptbl input[type="checkbox"].mp-check:checked::after{
+  content:'';
+  position:absolute;
+  top:3px;left:7px;
+  width:5px;height:10px;
+  border:solid #fff;
+  border-width:0 2.5px 2.5px 0;
+  transform:rotate(45deg)
+}
+html.dark .ptbl input[type="checkbox"].mp-check{
+  background:var(--bg-elevated)!important;
+  border-color:var(--border)!important
+}
+html.dark .ptbl input[type="checkbox"].mp-check:hover{border-color:#5eead4!important}
+html.dark .ptbl input[type="checkbox"].mp-check:checked{
+  background:#5eead4!important;
+  border-color:#5eead4!important
+}
+html.dark .ptbl input[type="checkbox"].mp-check:checked::after{
+  border-color:#0a1414
+}
+
 /* About Hero gradient — adapt to dark */
 html.dark .about-hero{background:linear-gradient(135deg,#0d2828 0%,#0a1f1f 100%)!important}
 html.dark .about-hero h2{color:#5eead4!important}
@@ -1692,7 +1743,7 @@ async function rDetail(id){
       <div class="card mb16">
         <div class="chdr"><h2>${isAr()?'جدول الأقساط':'Payment Schedule'}</h2><span class="text-sm text-m">${paid}/${tot} ${isAr()?'مدفوع':'paid'}</span></div>
         ${d.status==='active'&&iB&&pay.some(p=>!p.is_paid)?`
-          <div style="padding:10px 16px;background:var(--teal-bg,#f0fdfa);border-bottom:1px solid var(--teal-pale,#ccfbf1);font-size:12px;color:var(--teal-dk,#115e59);font-weight:600">
+          <div class="multipay-tip" style="padding:10px 16px;font-size:12px;font-weight:600;border-bottom:1px solid var(--border-soft,#ccfbf1)">
             💡 ${isAr()?'يمكنك تحديد عدة أقساط ودفعها دفعة واحدة':'Select multiple installments to pay at once'}
           </div>
         `:''}
