@@ -19,9 +19,101 @@
   --r50:#fef2f2;--r100:#fee2e2;--r500:#ef4444;--r600:#dc2626;
   --am50:#fffbeb;--am100:#fef3c7;--am500:#f59e0b;--am600:#d97706;
   --white:#fff;
+  /* Surfaces — adapt for dark mode */
+  --bg-page:#f8fafc;
+  --bg-card:#fff;
+  --bg-elevated:#fff;
+  --bg-input:#fff;
+  --bg-hover:#f1f5f9;
+  --border:#e2e8f0;
+  --border-soft:#f1f5f9;
+  --text-primary:#0f172a;
+  --text-secondary:#475569;
+  --text-muted:#94a3b8;
   --sh:0 1px 3px rgba(0,0,0,.07);--shm:0 4px 16px rgba(0,0,0,.09);--shl:0 12px 32px rgba(0,0,0,.11);
   --r8:8px;--r10:10px;--r12:12px;--r16:16px;--r20:20px;--r24:24px;
 }
+html.dark{
+  --teal3:#134e4a;
+  --bg-page:#0a1414;
+  --bg-card:#0f1f1f;
+  --bg-elevated:#162a2a;
+  --bg-input:#0f1f1f;
+  --bg-hover:#1a3030;
+  --border:#1f3838;
+  --border-soft:#16282a;
+  --text-primary:#f0fdfa;
+  --text-secondary:#a7c4c2;
+  --text-muted:#6b8888;
+  --g50:#0a1414;
+  --g100:#162a2a;
+  --g200:#1f3838;
+  --g300:#2d4848;
+  --g400:#5d7878;
+  --g500:#7a9595;
+  --g600:#a0bdbd;
+  --g700:#c0d8d8;
+  --g800:#dceaea;
+  --g900:#f0fdfa;
+  --white:#0f1f1f;
+  --sh:0 1px 3px rgba(0,0,0,.4);--shm:0 4px 16px rgba(0,0,0,.5);--shl:0 12px 32px rgba(0,0,0,.6);
+}
+html.dark body{background:var(--bg-page);color:var(--text-primary)}
+html.dark .card,html.dark .menu-modal,html.dark .pmodal,html.dark .nafath-card,html.dark .scard{background:var(--bg-card);border-color:var(--border)}
+html.dark .fc,html.dark .pcard-input,html.dark .iitem,html.dark .pm-row{background:var(--bg-input);border-color:var(--border);color:var(--text-primary)}
+html.dark .fc:focus,html.dark .pcard-input:focus{background:var(--bg-elevated)}
+html.dark .menu-item:hover,html.dark .pm-row:hover{background:var(--bg-hover)}
+html.dark .menu-divider{background:var(--border-soft)}
+html.dark .badge,html.dark .b-gray{background:var(--bg-hover);color:var(--text-secondary)}
+html.dark .ptbl thead{background:var(--bg-hover)}
+html.dark .ptbl td,html.dark .ptbl th{border-color:var(--border-soft)}
+html.dark .ptbl tr.rpaid{background:rgba(22,163,74,.08)}
+html.dark .ptbl tr.rov{background:rgba(220,38,38,.08)}
+html.dark .upub-page{background:linear-gradient(180deg,var(--bg-page) 0%,var(--bg-card) 50%)}
+html.dark .upub-stats-grid,html.dark .upub-card{background:var(--bg-card);border-color:var(--border)}
+html.dark .upub-info-row{border-color:var(--border-soft)}
+html.dark .prem-page{background:linear-gradient(180deg,var(--bg-page) 0%,#0d2424 100%)}
+html.dark .prem-card,html.dark .prem-card-body{background:var(--bg-card)}
+html.dark .prem-card-body .prem-feat{border-color:var(--border-soft)}
+html.dark .promo-mini{background:linear-gradient(135deg,#3a2d12,#2a2010);color:#fde68a;border-color:#5c4520}
+html.dark .vbadge{background:linear-gradient(135deg,#3a2d12,#2a2010);color:#fde68a;border-color:#5c4520}
+html.dark .pm-section-title,html.dark .pamt-lbl{color:var(--text-secondary)}
+html.dark .pamt-box{background:var(--bg-elevated);border-color:var(--border)}
+html.dark .pbreakdown{background:var(--bg-elevated);border-color:var(--border)}
+html.dark .psandbox{background:#3a2d12;color:#fde68a;border-color:#5c4520}
+html.dark .pm-security{background:var(--bg-elevated);border-color:var(--border-soft)}
+html.dark .sec-item{color:var(--text-muted)}
+html.dark .nafath-cost{background:#0d2828;color:#a7c4c2;border-color:var(--border)}
+html.dark .nafath-step{border-color:var(--border-soft)}
+html.dark .upub-foot-note{background:var(--bg-elevated);color:var(--text-muted)}
+html.dark .upub-rating-card{background:var(--bg-elevated);border-color:var(--border)}
+html.dark .upub-rating-card[style*="background:var(--g50)"]{background:var(--bg-elevated)!important}
+html.dark .upub-trust{background:linear-gradient(135deg,#0a2818 0%,var(--bg-card) 100%);border-color:#1a4a30}
+html.dark .upub-trust.unverif{background:linear-gradient(135deg,#2a2010 0%,var(--bg-card) 100%);border-color:#5c4520}
+html.dark .deal-card.has-premium{background:linear-gradient(135deg,#2a2010 0%,var(--bg-card) 100%);border-color:#5c4520}
+html.dark input[type="checkbox"].mp-check{accent-color:var(--teal)}
+html.dark .qshine{background:radial-gradient(circle,rgba(94,234,212,.85) 0%,rgba(13,148,136,.4) 40%,transparent 70%)}
+html.dark .splash-screen{background:var(--bg-page)}
+html.dark .ihdr,html.dark .ptit,html.dark h1,html.dark h2,html.dark h3,html.dark .mlbl{color:var(--text-primary)}
+html.dark .psub,html.dark .text-m,html.dark .msub{color:var(--text-secondary)}
+html.dark .mp-bar{background:var(--bg-elevated);box-shadow:0 12px 32px rgba(0,0,0,.5),0 0 0 1px var(--border)}
+
+/* Logo color adapts to theme — teal in light mode, lighter teal/mint in dark mode */
+html.dark .qlogo-wrap{color:#5eead4!important}
+html.dark svg[viewbox="0 0 120 120"][color],
+html.dark svg[viewBox="0 0 120 120"][style*="#0d9488"]{color:#5eead4!important}
+/* Override inline color style on logo SVGs in dark mode */
+html.dark .sb-top svg,
+html.dark .pmod-logo svg,
+html.dark .menu-hdr svg{color:#5eead4!important}
+/* Universal: any SVG using currentColor with our 12-rect signature */
+html.dark svg g[fill="currentColor"]{color:#5eead4}
+
+/* Theme toggle switch */
+.theme-toggle{width:42px;height:24px;background:var(--g300);border-radius:12px;position:relative;flex-shrink:0;transition:background .2s;margin-inline-start:auto}
+.theme-knob{width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:3px;inset-inline-start:3px;transition:all .25s cubic-bezier(.4,0,.2,1);box-shadow:0 2px 6px rgba(0,0,0,.15)}
+html.dark .theme-toggle{background:var(--teal2)}
+html.dark .theme-knob{inset-inline-start:21px}
 html{font-size:16px;scroll-behavior:smooth}
 body{font-family:'Tajawal',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;direction:rtl;-webkit-font-smoothing:antialiased}
 body.en{direction:ltr}
@@ -725,9 +817,10 @@ function stars(avg,cnt,sz=13){
   return`<span style="display:inline-flex;align-items:center;gap:2px"><span dir="ltr" style="display:inline-flex;gap:1px">${Array.from({length:5},(_,i)=>`<span style="font-size:${sz}px;color:${i<f?'#f59e0b':'#e2e8f0'}">${i<f?'★':'☆'}</span>`).join('')}</span><span style="font-size:${sz-1}px;font-weight:700;color:var(--g700);margin-inline-start:3px">${avg}</span><span style="font-size:${sz-2}px;color:var(--g400)" dir="ltr">(${cnt})</span></span>`
 }
 
-const LOGO_S=(sz,cls='')=>`<svg ${cls?`class="${cls}"`:''} viewBox="0 0 120 120" width="${sz}" height="${sz}" style="flex-shrink:0"><g transform="translate(60,60)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(30)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(60)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(90)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(120)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(150)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(180)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(210)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(240)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(270)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(300)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488" transform="rotate(330)"/></g></svg>`
+// Static logo - uses currentColor so it adapts to context
+const LOGO_S=(sz,cls='')=>`<svg ${cls?`class="${cls}"`:''} viewBox="0 0 120 120" width="${sz}" height="${sz}" style="flex-shrink:0;color:#0d9488"><g transform="translate(60,60)" fill="currentColor"><rect x="-6" y="-46" width="12" height="12" rx="3"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(30)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(60)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(90)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(120)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(150)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(180)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(210)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(240)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(270)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(300)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(330)"/></g></svg>`
 
-const LOGO_ANIM=(sz=70)=>`<div class="qlogo-wrap" style="width:${sz}px;height:${sz}px"><svg viewBox="0 0 120 120"><g transform="translate(60,60)"><g class="qp" style="--a:0deg"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g><g class="qp" style="--a:30deg"><g transform="rotate(30)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g><g class="qp" style="--a:60deg"><g transform="rotate(60)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g><g class="qp" style="--a:90deg"><g transform="rotate(90)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g><g class="qp" style="--a:120deg"><g transform="rotate(120)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g><g class="qp" style="--a:150deg"><g transform="rotate(150)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g><g class="qp" style="--a:180deg"><g transform="rotate(180)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g><g class="qp" style="--a:210deg"><g transform="rotate(210)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g><g class="qp" style="--a:240deg"><g transform="rotate(240)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g><g class="qp" style="--a:270deg"><g transform="rotate(270)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g><g class="qp" style="--a:300deg"><g transform="rotate(300)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g><g class="qp" style="--a:330deg"><g transform="rotate(330)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g></g></svg><div class="qshine"></div></div>`
+const LOGO_ANIM=(sz=70)=>`<div class="qlogo-wrap" style="width:${sz}px;height:${sz}px;color:#0d9488"><svg viewBox="0 0 120 120"><g transform="translate(60,60)" fill="currentColor"><g class="qp" style="--a:0deg"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g><g class="qp" style="--a:30deg"><g transform="rotate(30)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:60deg"><g transform="rotate(60)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:90deg"><g transform="rotate(90)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:120deg"><g transform="rotate(120)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:150deg"><g transform="rotate(150)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:180deg"><g transform="rotate(180)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:210deg"><g transform="rotate(210)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:240deg"><g transform="rotate(240)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:270deg"><g transform="rotate(270)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:300deg"><g transform="rotate(300)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:330deg"><g transform="rotate(330)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g></g></svg><div class="qshine"></div></div>`
 const LOGO_W=(sz)=>`<svg viewBox="0 0 120 120" width="${sz}" height="${sz}" style="flex-shrink:0"><g transform="translate(60,60)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(30)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(60)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(90)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(120)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(150)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(180)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(210)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(240)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(270)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(300)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(330)"/></g></svg>`
 
 function applyLang(){
@@ -740,6 +833,27 @@ function applyLang(){
   localStorage.setItem('ql',lang)
 }
 window.toggleLang=()=>{lang=isAr()?'en':'ar';applyLang();rerender()}
+
+// ═══ THEME (Light / Dark Mode) ═══
+window.toggleTheme=()=>{
+  const isDark=document.documentElement.classList.toggle('dark')
+  try{localStorage.setItem('qastni_theme',isDark?'dark':'light')}catch(e){}
+  // إعادة فتح القائمة لتحديث حالة الزر
+  if(!$('menu-overlay')?.classList.contains('hidden')){
+    openMenu()
+  }
+}
+
+// تطبيق الـ theme المحفوظ عند فتح الموقع
+function loadTheme(){
+  try{
+    const saved=localStorage.getItem('qastni_theme')
+    if(saved==='dark'){
+      document.documentElement.classList.add('dark')
+    }
+  }catch(e){}
+}
+loadTheme()
 
 function hideSplash(){
   if(_splashHidden)return
@@ -2744,6 +2858,7 @@ window.openMenu=()=>{
   const nm=PRF?.full_name||CU.email.split('@')[0]
   const color=PRF?.avatar_color||avc(CU.email)
   const isPrem=PRF?.is_premium===true
+  const isDark=document.documentElement.classList.contains('dark')
   const premBadge=isPrem?`<span class="vbadge" style="margin-inline-start:6px"><span class="star">⭐</span>${isAr()?'موثَّق':'Verified'}</span>`:''
 
   // بطاقة ترويجية للحسابات المجانية
@@ -2806,6 +2921,23 @@ window.openMenu=()=>{
           <div class="mtxt">
             <div class="mlbl ar-t">English</div><div class="mlbl en-t hidden">عربي</div>
             <div class="msub ar-t">تغيير اللغة</div><div class="msub en-t hidden">Change language</div>
+          </div>
+        </button>
+
+        <button class="menu-item" onclick="toggleTheme()">
+          <div class="micon" id="theme-ico">${isDark?'☀️':'🌙'}</div>
+          <div class="mtxt">
+            <div class="mlbl">
+              <span class="ar-t">${isDark?'الوضع النهاري':'الوضع الليلي'}</span>
+              <span class="en-t hidden">${isDark?'Light Mode':'Dark Mode'}</span>
+            </div>
+            <div class="msub">
+              <span class="ar-t">${isDark?'العودة للوضع الفاتح':'تشغيل الوضع الداكن'}</span>
+              <span class="en-t hidden">${isDark?'Switch to light theme':'Switch to dark theme'}</span>
+            </div>
+          </div>
+          <div class="theme-toggle">
+            <div class="theme-knob"></div>
           </div>
         </button>
         
