@@ -101,6 +101,23 @@ html.dark .mp-bar{background:var(--bg-elevated);box-shadow:0 12px 32px rgba(0,0,
 /* Warning/Disclaimer banner — adapt to dark */
 html.dark .disc{background:#3a2d12;border-color:#5c4520;color:#fde68a}
 
+/* Golden/amber inline-styled subscription cards on profile */
+html.dark .card[style*="#fffbeb"]{background:linear-gradient(135deg,#3a2d12 0%,var(--bg-card) 60%)!important;border-color:#5c4520!important}
+html.dark .card[style*="#fffbeb"] div[style*="color:var(--g900)"]{color:#fde68a!important}
+html.dark .card[style*="#fffbeb"] div[style*="color:var(--g600)"]{color:#a89b7a!important}
+html.dark .card[style*="#fffbeb"] strong[style*="color:#d97706"]{color:#fbbf24!important}
+
+/* Red/expired inline-styled cards */
+html.dark .card[style*="#fef2f2"]{background:linear-gradient(135deg,#2a1010 0%,var(--bg-card) 60%)!important;border-color:#5c2020!important}
+html.dark .card[style*="#fef2f2"] div[style*="color:var(--g900)"]{color:#fca5a5!important}
+html.dark .card[style*="#fef2f2"] div[style*="color:var(--g600)"]{color:#a87878!important}
+
+/* Inline golden notes (e.g., warning boxes inside detail page) */
+html.dark div[style*="background:linear-gradient(135deg,#fffbeb,#fff)"],
+html.dark div[style*="background:linear-gradient(135deg,#fffbeb 0%,#fff 100%)"]{background:linear-gradient(135deg,#3a2d12,var(--bg-card))!important;border-color:#5c4520!important;color:#fde68a!important}
+html.dark div[style*="background:linear-gradient(135deg,#fffbeb,#fff)"] *,
+html.dark div[style*="background:linear-gradient(135deg,#fffbeb 0%,#fff 100%)"] *{color:#fde68a!important}
+
 /* Tip/info boxes (.feebox) */
 html.dark .feebox{background:var(--bg-elevated);border-color:var(--border)}
 html.dark .feebox .txt{color:var(--text-secondary)}
