@@ -2455,19 +2455,25 @@ async function rUpub(){
   const fallbackName=(_upubData?.name||'').trim()
 
   if(!email){
-    c.innerHTML=`<div class="empty"><div class="eico">👤</div><div class="etit">${isAr()?'لا يوجد معلومات':'No data'}</div></div>`
+    c.innerHTML=`<div class="upub-page"><div class="upub-wrap"><div class="upub-empty">${isAr()?'لا يوجد معلومات':'No data'}</div></div></div>`
     return
   }
 
-  c.innerHTML=`<div style="text-align:center;padding:40px;display:flex;justify-content:center">${qLoader('lg','t')}</div>`
+  // عرض حالة تحميل
+  c.innerHTML=`<div class="upub-page"><div class="upub-wrap" style="text-align:center;padding:40px;display:flex;justify-content:center">${qLoader('lg','t')}</div></div>`
 
-  // جلب الملف الشخصي
+  // محاولة جلب الملف الشخصي عبر بيانات صفقة سابقة
   let profile=null
   try{
+    // أولاً نشوف لو فيه عمود email في profiles
     const{data}=await sb.from('profiles').select('full_name,avatar_color,is_premium,premium_expires_at,nafath_verified,created_at').eq('email',email).maybeSingle()
     profile=data
-  }catch(e){console.warn('Profile lookup failed',e)}
+  }catch(e){
+    // عمود email غير متاح أو RLS يمنعه
+    console.warn('Direct profile lookup failed, falling back to deals data',e)
+  }
 
+  // Fallback: نجيب الاسم من بيانات الصفقات إذا الملف الشخصي غير متاح
   if(!profile||!profile.full_name){
     const dealMatch=DEALS.find(d=>(d.buyer_email===email&&d.buyer_name)||d.seller_email===email)
     if(dealMatch&&dealMatch.buyer_email===email&&dealMatch.buyer_name){
@@ -2476,14 +2482,16 @@ async function rUpub(){
     }
   }
 
+  // جلب التقييمات
   let ratings=[]
   try{
-    const{data}=await sb.from('ratings').select('*').eq('to_email',email).order('created_at',{ascending:false}).limit(20)
+    const{data}=await sb.from('ratings').select('stars,comment,created_at,from_email').eq('to_email',email).order('created_at',{ascending:false}).limit(20)
     ratings=data||[]
   }catch(e){console.warn('upub ratings:',e)}
 
-  const avg=ratings.length?Math.round(ratings.reduce((s,r)=>s+r.stars,0)/ratings.length*10)/10:null
+  const avgRating=ratings.length?Math.round(ratings.reduce((s,r)=>s+r.stars,0)/ratings.length*10)/10:null
 
+  // جلب إحصائيات الصفقات (الصفقات اللي ظاهرة لك بحكم RLS)
   let dealsAsBuyer=0,dealsAsSeller=0,completedCount=0
   try{
     const{data:bd}=await sb.from('deals').select('id,status').eq('buyer_email',email)
@@ -2498,47 +2506,122 @@ async function rUpub(){
   const displayName=profile?.full_name||fallbackName||email.split('@')[0]
   const color=profile?.avatar_color||avc(email)
   const isPrem=profile?.is_premium===true
-  const expDate=profile?.premium_expires_at?new Date(profile.premium_expires_at):null
-  const isPremExpired=expDate&&expDate<new Date()
-  const isPremActive=isPrem&&!isPremExpired
   const isNafath=profile?.nafath_verified===true
   const memberSince=profile?.created_at?fmtD(profile.created_at):'-'
 
-  const profileBadge=isPremActive?`<span class="vbadge vbadge-lg" style="margin-inline-start:8px"><span class="star">⭐</span>${isAr()?'موثَّق':'Verified'}</span>`:''
+  const initials=ini(displayName)
+
+  const verifBadge=isPrem?`<span class="vbadge vbadge-lg"><span class="star">⭐</span>${isAr()?'موثَّق':'Verified'}</span>`:''
+  const floatBadge=isPrem?`<div class="upub-vbadge-float" title="${isAr()?'حساب موثَّق':'Verified account'}">⭐</div>`:''
+
+  // قسم Trust Status
+  const trustStatus=isPrem?`
+    <div class="upub-trust">
+      <div class="upub-trust-ic">⭐</div>
+      <div class="upub-trust-info">
+        <div class="upub-trust-title">${isAr()?'حساب موثَّق':'Verified Account'}</div>
+        <div class="upub-trust-desc">${isAr()?'هذا المستخدم مشترك في باقة موثَّق ويستفيد من حماية إضافية':'This user has the Verified plan with extra protections'}</div>
+      </div>
+    </div>`:`
+    <div class="upub-trust unverif">
+      <div class="upub-trust-ic">👤</div>
+      <div class="upub-trust-info">
+        <div class="upub-trust-title">${isAr()?'حساب عادي':'Regular Account'}</div>
+        <div class="upub-trust-desc">${isAr()?'لم يقم هذا المستخدم بالاشتراك في باقة موثَّق':'This user has not subscribed to the Verified plan'}</div>
+      </div>
+    </div>`
+
+  // قسم التقييم
+  const ratingCard=avgRating?`
+    <div class="upub-rating-card">
+      <div class="upub-rating-big">${avgRating}</div>
+      <div class="upub-rating-stars">${stars(avgRating,0,18)}</div>
+      <div class="upub-rating-count">${isAr()?`بناءً على <span dir="ltr">${ratings.length}</span> تقييم`:`Based on ${ratings.length} rating${ratings.length!==1?'s':''}`}</div>
+    </div>`:`
+    <div class="upub-rating-card" style="background:var(--g50);border-color:var(--g200)">
+      <div style="font-size:38px;margin-bottom:6px">⭐</div>
+      <div style="font-size:13px;font-weight:700;color:var(--g700);margin-bottom:3px">${isAr()?'لا يوجد تقييمات بعد':'No ratings yet'}</div>
+      <div style="font-size:11px;color:var(--g500)">${isAr()?'سيظهر التقييم بعد إكمال أول صفقة':'Will appear after first completed deal'}</div>
+    </div>`
+
+  // SVG شعار قسطني للـ watermark
+  const logoWatermark=`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><g transform="translate(60,60)">${Array.from({length:12},(_,i)=>`<rect x="-6" y="-46" width="12" height="12" rx="3" fill="#fff" transform="rotate(${i*30})"/>`).join('')}</g></svg>`
 
   c.innerHTML=`
-    <div class="card mb20">
-      <div style="background:linear-gradient(135deg,var(--teal2),#065f46);padding:28px 24px;text-align:center;border-radius:var(--r16) var(--r16) 0 0;position:relative">
-        <div style="position:absolute;top:14px;${isAr()?'left':'right'}:14px"><span class="samabadge">${isAr()?'محمي':'Protected'}</span></div>
-        <div style="width:68px;height:68px;border-radius:50%!important;background:${color};border:3px solid rgba(255,255,255,.3);display:inline-flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;margin-bottom:10px;overflow:hidden;flex-shrink:0">${ini(displayName)}</div>
-        <h2 style="color:#fff;font-size:18px;font-weight:800;display:inline-flex;align-items:center;flex-wrap:wrap;justify-content:center">${san(displayName)}${profileBadge}</h2>
-        <div style="color:rgba(255,255,255,.65);font-size:12px;margin-top:3px">${san(email)}</div>
-        <div style="margin-top:9px">${avg?stars(avg,ratings.length,14):`<span style="color:rgba(255,255,255,.5);font-size:11px">${isAr()?'لا تقييمات بعد':'No ratings yet'}</span>`}</div>
-      </div>
-      <div class="cbody">
-        <div class="igrid">
-          <div class="iitem"><div class="ilbl">${isAr()?'تاريخ الانضمام':'Member Since'}</div><div class="ival">${memberSince}</div></div>
-          <div class="iitem"><div class="ilbl">${isAr()?'البريد الإلكتروني':'Email'}</div><div class="ival" style="font-size:12px;word-break:break-all">${san(email)}</div></div>
-          <div class="iitem"><div class="ilbl">${isAr()?'حالة التحقق (نافذ)':'Identity (Nafath)'}</div><div class="ival" style="color:${isNafath?'var(--gr600)':'var(--g500)'}">${isNafath?(isAr()?'✓ مفعّل':'✓ Verified'):(isAr()?'غير مفعّل':'Not yet')}</div></div>
-          <div class="iitem"><div class="ilbl">${isAr()?'باقة موثَّق':'Verified Plan'}</div><div class="ival" style="color:${isPremActive?'#d97706':'var(--g500)'}">${isPremActive?(isAr()?'⭐ مشترك':'⭐ Active'):(isAr()?'غير مشترك':'Not subscribed')}</div></div>
+    <div class="upub-page">
+      <div class="upub-wrap">
+        <div class="upub-card">
+          <div class="upub-cover">
+            <div class="upub-watermark">${logoWatermark}</div>
+            <div class="upub-cover-content">
+              <div class="upub-cover-label">${isAr()?'مستخدم في قسطني':'QASTNI USER'}</div>
+              <div class="upub-avatar-wrap">
+                <div class="upub-avatar has-color" style="background:${color}">${initials}</div>
+                ${floatBadge}
+              </div>
+              <div class="upub-name">${san(displayName)} ${verifBadge}</div>
+              <div class="upub-email">${san(email)}</div>
+              ${avgRating?`
+                <div class="upub-rating">
+                  <span style="color:#fbbf24;font-size:14px">★</span>
+                  <span style="color:#fff;font-weight:800;font-size:13px">${avgRating}</span>
+                  <span style="color:rgba(255,255,255,.7);font-size:11px" dir="ltr">(${ratings.length})</span>
+                </div>
+              `:''}
+            </div>
+          </div>
+
+          <div class="upub-stats">
+            <div class="upub-stats-grid">
+              <div class="upub-stat">
+                <div class="upub-stat-num">${totalDeals}</div>
+                <div class="upub-stat-lbl">${isAr()?'صفقات':'DEALS'}</div>
+              </div>
+              <div class="upub-stat">
+                <div class="upub-stat-num">${completedCount}</div>
+                <div class="upub-stat-lbl">${isAr()?'مكتملة':'COMPLETED'}</div>
+              </div>
+              <div class="upub-stat">
+                <div class="upub-stat-num">${ratings.length}</div>
+                <div class="upub-stat-lbl">${isAr()?'تقييم':'RATINGS'}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="upub-body">
+            ${trustStatus}
+
+            <div class="upub-section">
+              <div class="upub-section-title"><span class="icon">📊</span>${isAr()?'التقييم العام':'Overall Rating'}</div>
+              ${ratingCard}
+            </div>
+
+            <div class="upub-section">
+              <div class="upub-section-title"><span class="icon">🔍</span>${isAr()?'حالة التحقق':'Verification Status'}</div>
+              <div class="upub-info-row">
+                <span class="upub-info-lbl">${isAr()?'التحقق من الهوية (نافذ)':'Identity (Nafath)'}</span>
+                <span class="upub-info-val ${isNafath?'':'unverif'}">${isNafath?(isAr()?'✓ مفعّل':'✓ Verified'):(isAr()?'غير مفعّل':'Not yet')}</span>
+              </div>
+              <div class="upub-info-row">
+                <span class="upub-info-lbl">${isAr()?'باقة موثَّق':'Verified Plan'}</span>
+                <span class="upub-info-val ${isPrem?'':'unverif'}">${isPrem?(isAr()?'⭐ مشترك':'⭐ Subscribed'):(isAr()?'غير مشترك':'Not subscribed')}</span>
+              </div>
+              <div class="upub-info-row">
+                <span class="upub-info-lbl">${isAr()?'تاريخ الانضمام':'Member since'}</span>
+                <span class="upub-info-val">${memberSince}</span>
+              </div>
+            </div>
+
+            <div class="upub-foot-note">
+              ${isAr()
+                ?'🛡️ المعلومات أعلاه مأخوذة من سجل المستخدم في قسطني. لحماية الخصوصية، التفاصيل الشخصية مثل رقم الجوال والهوية لا تظهر للأطراف الأخرى.'
+                :"🛡️ Information above is from this user's Qastni record. For privacy, personal details like phone and ID are not shown to other parties."}
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="igrid3 mb20">
-      <div class="scard"><div class="sico" style="background:var(--teal3)">📊</div><div class="sval">${totalDeals}</div><div class="slbl ar-t">إجمالي الصفقات</div><div class="slbl en-t hidden">Total Deals</div></div>
-      <div class="scard"><div class="sico" style="background:var(--gr100)">✅</div><div class="sval">${completedCount}</div><div class="slbl ar-t">مكتملة</div><div class="slbl en-t hidden">Completed</div></div>
-      <div class="scard"><div class="sico" style="background:var(--am100)">⭐</div><div class="sval">${avg||'—'}</div><div class="slbl ar-t">متوسط التقييم</div><div class="slbl en-t hidden">Avg Rating</div></div>
-    </div>
-
-    <div class="card mb20">
-      <div class="chdr"><h2>⭐ ${isAr()?'التقييمات المستلمة':'Reviews Received'}</h2><span class="badge b-teal">${ratings.length}</span></div>
-      <div class="cbody">${ratings.length?ratings.map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--g100)"><div class="flex aic jsb mb8"><strong class="text-sm">${san(r.from_name||'')}</strong>${stars(r.stars,1)}</div>${r.comment?`<p class="text-sm text-m">"${san(r.comment)}"</p>`:''}<div class="text-xs text-m mt8">${fmtD(r.created_at)}</div></div>`).join(''):empt('⭐',isAr()?'لا تقييمات بعد':'No reviews yet')}</div>
-    </div>
-
-    <div class="disc">🛡️ <span class="ar-t">المعلومات أعلاه عامة فقط. لحماية الخصوصية، التفاصيل الشخصية مثل رقم الجوال والهوية لا تظهر للأطراف الأخرى</span><span class="en-t hidden">Public info only. Personal details are hidden to protect privacy</span></div>
   `
-  applyLang()
 }
 
 // ═══════════════════════════════════════════════
