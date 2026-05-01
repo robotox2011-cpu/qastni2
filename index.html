@@ -240,7 +240,7 @@ html.dark .ptbl input[type="checkbox"].mp-check:checked::after{
 html.dark .faq-modal{background:var(--bg-card);border:1px solid var(--border)}
 .faq-hero{background:linear-gradient(135deg,#0f2a2a,#0f766e);padding:30px 22px 32px;text-align:center;color:#fff;position:relative;overflow:hidden;border-radius:var(--r20) var(--r20) 0 0}
 .faq-hero::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:radial-gradient(circle,rgba(94,234,212,.18),transparent 70%);border-radius:50%}
-.faq-close{position:absolute;top:14px;inset-inline-end:14px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;z-index:5}
+.faq-close{position:absolute;top:14px;inset-inline-start:14px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;z-index:5}
 .faq-close:hover{background:rgba(255,255,255,.25)}
 .faq-hero-ico{width:54px;height:54px;background:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;position:relative;z-index:2;box-shadow:0 6px 18px rgba(0,0,0,.15)}
 .faq-hero h2{font-size:22px;font-weight:900;margin:0;position:relative;z-index:2;color:#fff}
@@ -1167,16 +1167,16 @@ html.dark .bn-badge{background:#dc2626!important;border-color:var(--bg-card)!imp
 .faq-close:hover{background:rgba(255,255,255,.3)!important}
 .menu-close{font-size:20px!important;font-weight:300!important}
 
-/* 4. بطاقة الترقية في القائمة - من حافة لحافة بدون border-radius */
+/* 4. بطاقة الترقية في القائمة - ممتدة بحواف دائرية */
 .menu-promo-fullwidth{
-  border-radius:0!important;
-  margin:0 0 14px!important;
-  width:100%!important;
+  border-radius:14px!important;
+  margin:14px 14px!important;
+  width:calc(100% - 28px)!important;
   display:flex!important;
   align-items:center!important;
-  gap:14px!important
+  gap:14px!important;
+  box-sizing:border-box!important
 }
-.menu-promo-fullwidth::before{display:none!important}
 
 </style>
 </head>
@@ -2510,7 +2510,7 @@ async function rUpub(){
     <div class="card mb20">
       <div style="background:linear-gradient(135deg,var(--teal2),#065f46);padding:28px 24px;text-align:center;border-radius:var(--r16) var(--r16) 0 0;position:relative">
         <div style="position:absolute;top:14px;${isAr()?'left':'right'}:14px"><span class="samabadge">${isAr()?'محمي':'Protected'}</span></div>
-        <div style="width:68px;height:68px;border-radius:50%;background:${color};border:3px solid rgba(255,255,255,.3);display:inline-flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;margin-bottom:10px">${ini(displayName)}</div>
+        <div style="width:68px;height:68px;border-radius:50%!important;background:${color};border:3px solid rgba(255,255,255,.3);display:inline-flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;margin-bottom:10px;overflow:hidden;flex-shrink:0">${ini(displayName)}</div>
         <h2 style="color:#fff;font-size:18px;font-weight:800;display:inline-flex;align-items:center;flex-wrap:wrap;justify-content:center">${san(displayName)}${profileBadge}</h2>
         <div style="color:rgba(255,255,255,.65);font-size:12px;margin-top:3px">${san(email)}</div>
         <div style="margin-top:9px">${avg?stars(avg,ratings.length,14):`<span style="color:rgba(255,255,255,.5);font-size:11px">${isAr()?'لا تقييمات بعد':'No ratings yet'}</span>`}</div>
@@ -3342,9 +3342,9 @@ window.openMenu=()=>{
   const isDark=document.documentElement.classList.contains('dark')
   const premBadge=isPrem?`<span class="vbadge" style="margin-inline-start:6px"><span class="star">⭐</span>${isAr()?'موثَّق':'Verified'}</span>`:''
 
-  // بطاقة ترويجية للحسابات المجانية - ممدودة من حافة لحافة
+  // بطاقة ترويجية للحسابات المجانية - ممتدة بحواف دائرية
   const promoCard=isPrem?'':`
-    <button class="promo-banner menu-promo-fullwidth" onclick="closeMenu();nav('prem')" style="margin:0 0 14px;width:100%;border-radius:0;padding:18px 22px;direction:${isAr()?'rtl':'ltr'};box-sizing:border-box">
+    <button class="promo-banner menu-promo-fullwidth" onclick="closeMenu();nav('prem')" style="padding:18px 22px;direction:${isAr()?'rtl':'ltr'}">
       <div class="promo-icon" style="width:50px;height:50px;font-size:26px;border-radius:14px;flex-shrink:0">⭐</div>
       <div class="promo-content" style="flex:1;min-width:0">
         <div class="promo-title" style="font-size:15px;font-weight:800;margin-bottom:4px">
