@@ -1355,13 +1355,13 @@ const isAr=()=>lang==='ar'
 const $=id=>document.getElementById(id)
 
 // Qastni branded loader — uses same converge+flash animation as splash
-// Sizes: sm=24px, md=40px (default), lg=70px, xl=120px
+// Sizes: sm=22px, md=40px (default), lg=70px, xl=120px
 const qLoader=(size='md',color='t')=>{
-  const sz=size==='sm'?24:size==='lg'?70:size==='xl'?120:40
+  const sz=size==='sm'?22:size==='lg'?70:size==='xl'?120:40
   const fill=color==='w'?'rgba(255,255,255,.95)':'#0d9488'
-  const cls=sz<=28?'xs':sz<=44?'sm':''
+  const cls=sz<=24?'xs':sz<=44?'sm':''
   const pieces=Array.from({length:12},(_,i)=>`<g class="qp" style="--a:${i*30}deg"><g transform="rotate(${i*30})"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="${fill}"/></g></g>`).join('')
-  return `<div class="qlogo-wrap ${cls}" style="width:${sz}px;height:${sz}px"><svg viewBox="0 0 120 120"><g transform="translate(60,60)">${pieces}</g></svg><div class="qshine"></div></div>`
+  return `<span class="qlogo-wrap ${cls}" style="width:${sz}px;height:${sz}px;vertical-align:middle"><svg viewBox="0 0 120 120" style="display:block"><g transform="translate(60,60)">${pieces}</g></svg><span class="qshine"></span></span>`
 }
 
 // ═══════════════════════════════════════════════
@@ -1534,9 +1534,37 @@ window.doLogin=async()=>{
   $('lerr')?.classList.add('hidden')
   if(!em||!pw){showErr('lerr',isAr()?'يرجى ملء الحقول':'Fill fields');return}
   if(!valEmail(em)){showErr('lerr',isAr()?'البريد غير صالح':'Invalid email');return}
-  const btn=$('lbtn');btn.innerHTML=qLoader();btn.disabled=true
-  const{error}=await sb.auth.signInWithPassword({email:em,password:pw})
-  if(error){showErr('lerr',isAr()?'البريد أو كلمة المرور غير صحيحة':'Wrong email or password');btn.innerHTML=isAr()?'تسجيل الدخول':'Sign In';btn.disabled=false}
+  const btn=$('lbtn')
+  const originalHTML=btn.innerHTML
+  btn.innerHTML=qLoader('sm','w')+' <span style="margin-inline-start:8px">'+(isAr()?'جاري الدخول...':'Signing in...')+'</span>'
+  btn.disabled=true
+
+  const timeoutId=setTimeout(()=>{
+    btn.innerHTML=originalHTML
+    btn.disabled=false
+    showErr('lerr',isAr()?'⚠️ انقطع الاتصال. تأكد من الإنترنت':'⚠️ Connection timeout')
+  },15000)
+
+  try{
+    const{error}=await sb.auth.signInWithPassword({email:em,password:pw})
+    clearTimeout(timeoutId)
+    if(error){
+      let msg=isAr()?'البريد أو كلمة المرور غير صحيحة':'Wrong email or password'
+      if(error.message&&error.message.includes('Email not confirmed')){
+        msg=isAr()?'⚠️ يجب تأكيد البريد الإلكتروني أولاً. تحقق من بريدك':'⚠️ Email not confirmed. Check your inbox'
+      }
+      showErr('lerr',msg)
+      btn.innerHTML=originalHTML
+      btn.disabled=false
+    }
+    // النجاح — auth state listener يلتقطه
+  }catch(e){
+    clearTimeout(timeoutId)
+    console.error('[login] error:',e)
+    showErr('lerr',isAr()?'⚠️ خطأ في الاتصال':'⚠️ Network error')
+    btn.innerHTML=originalHTML
+    btn.disabled=false
+  }
 }
 
 window.doRegister=async()=>{
@@ -1555,27 +1583,78 @@ window.doRegister=async()=>{
   if(pw!==pw2){showErr('rerr',isAr()?'كلمتا المرور غير متطابقتان':'Passwords do not match');return}
   if(nm.length<2||nm.length>100){showErr('rerr',isAr()?'الاسم غير صالح':'Invalid name');return}
 
-  const btn=$('rbtn');btn.innerHTML=qLoader();btn.disabled=true
-  const{data,error}=await sb.auth.signUp({
-    email:em,
-    password:pw,
-    options:{
-      data:{full_name:san(nm),phone:san(ph),national_id:san(ni)},
-      emailRedirectTo:window.location.origin
+  const btn=$('rbtn')
+  // نخزّن النص الأصلي للزر عشان نرجعه
+  const originalBtnHTML=btn.innerHTML
+  btn.innerHTML=qLoader('sm','w')+' <span style="margin-inline-start:8px">'+(isAr()?'جاري الإنشاء...':'Creating...')+'</span>'
+  btn.disabled=true
+
+  // Timeout — إذا ما رد السيرفر خلال 20 ثانية، نعرض خطأ
+  const timeoutId=setTimeout(()=>{
+    btn.innerHTML=originalBtnHTML
+    btn.disabled=false
+    showErr('rerr',isAr()?'⚠️ انقطع الاتصال. تأكد من الإنترنت وحاول مرة ثانية':'⚠️ Connection timeout. Check your internet and try again')
+  },20000)
+
+  try{
+    console.log('[register] Attempting signUp for:',em)
+    const{data,error}=await sb.auth.signUp({
+      email:em,
+      password:pw,
+      options:{
+        data:{full_name:san(nm),phone:san(ph),national_id:san(ni)},
+        emailRedirectTo:window.location.origin
+      }
+    })
+
+    clearTimeout(timeoutId)
+    console.log('[register] Result:',{hasUser:!!data?.user,hasSession:!!data?.session,error:error?.message})
+
+    if(error){
+      btn.innerHTML=originalBtnHTML
+      btn.disabled=false
+      // ترجمة الأخطاء الشائعة
+      let msg=error.message
+      if(msg.includes('already registered')||msg.includes('already been')){
+        msg=isAr()?'⚠️ هذا البريد مسجّل من قبل. سجّل دخول بدلاً من ذلك':'⚠️ Email already registered. Sign in instead'
+      }else if(msg.includes('rate limit')||msg.includes('Email rate limit')){
+        msg=isAr()?'⚠️ تم تجاوز حد الإرسال. انتظر دقيقة وجرّب':'⚠️ Rate limit. Wait a minute and retry'
+      }else if(msg.includes('invalid')){
+        msg=isAr()?'⚠️ البريد الإلكتروني غير صالح':'⚠️ Invalid email'
+      }
+      showErr('rerr',msg)
+      return
     }
-  })
-  if(error){showErr('rerr',error.message);btn.innerHTML=isAr()?'إنشاء الحساب':'Create Account';btn.disabled=false;return}
 
-  // ═══ إذا Supabase مفعّل email confirmation ═══
-  if(data?.user&&!data?.session){
-    // المستخدم تسجل لكن محتاج يأكد بريده
-    btn.innerHTML=isAr()?'إنشاء الحساب':'Create Account';btn.disabled=false
-    showEmailConfirmModal(em)
-    return
+    // ═══ Supabase نجح ═══
+    if(data?.user&&!data?.session){
+      // Email confirmation مفعّل — المستخدم محتاج يأكد بريده
+      btn.innerHTML=originalBtnHTML
+      btn.disabled=false
+      showEmailConfirmModal(em)
+      return
+    }
+
+    if(data?.session){
+      // Email confirmation مو مفعّل — المستخدم دخل مباشرة
+      btn.innerHTML=originalBtnHTML
+      btn.disabled=false
+      // الـ auth state listener راح يلتقط هذا تلقائياً
+      return
+    }
+
+    // حالة غريبة — ما رد بأي شي
+    btn.innerHTML=originalBtnHTML
+    btn.disabled=false
+    showErr('rerr',isAr()?'⚠️ خطأ غير متوقع. حاول مرة ثانية':'⚠️ Unexpected error. Try again')
+
+  }catch(e){
+    clearTimeout(timeoutId)
+    console.error('[register] Exception:',e)
+    btn.innerHTML=originalBtnHTML
+    btn.disabled=false
+    showErr('rerr',isAr()?'⚠️ خطأ في الاتصال. تأكد من الإنترنت':'⚠️ Network error. Check internet')
   }
-
-  // إذا email confirmation مو مفعّل، نسجّل دخوله مباشرة
-  await sb.auth.signInWithPassword({email:em,password:pw})
 }
 
 // نافذة تأكيد البريد
