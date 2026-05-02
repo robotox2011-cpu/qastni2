@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover,maximum-scale=5"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,viewport-fit=cover"/>
 <title>قسطني | Qastni</title>
 
 <!-- PWA Setup -->
@@ -26,6 +26,22 @@ if ('serviceWorker' in navigator) {
     });
   });
 }
+
+// ═══ APP MODE: منع التكبير/التصغير (يخلي الموقع كأنه تطبيق native) ═══
+// منع pinch zoom على iOS Safari
+document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
+document.addEventListener('gesturechange',e=>e.preventDefault(),{passive:false});
+document.addEventListener('gestureend',e=>e.preventDefault(),{passive:false});
+
+// منع double-tap zoom
+let _lastTap=0;
+document.addEventListener('touchend',e=>{
+  const now=Date.now();
+  if(now-_lastTap<350){
+    e.preventDefault();
+  }
+  _lastTap=now;
+},{passive:false});
 </script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='5 5 110 110'><g transform='translate(60,60)'><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(30)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(60)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(90)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(120)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(150)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(180)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(210)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(240)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(270)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(300)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(330)'/></g></svg>"/>
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='5 5 110 110'><g transform='translate(60,60)'><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(30)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(60)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(90)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(120)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(150)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(180)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(210)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(240)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(270)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(300)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(330)'/></g></svg>"/>
@@ -370,8 +386,16 @@ html.dark svg g[fill="currentColor"]{color:#5eead4}
 .theme-knob{width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:3px;inset-inline-start:3px;transition:all .25s cubic-bezier(.4,0,.2,1);box-shadow:0 2px 6px rgba(0,0,0,.15)}
 html.dark .theme-toggle{background:var(--teal2)}
 html.dark .theme-knob{inset-inline-start:21px}
-html{font-size:16px;scroll-behavior:smooth}
-body{font-family:'Tajawal',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;direction:rtl;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;touch-action:pan-y}
+html{font-size:16px;scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-family:'Tajawal',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;direction:rtl;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+
+/* اسمح بتحديد النص في الحقول والمناطق التي يحتاج المستخدم نسخها */
+input,textarea,[contenteditable],.allow-select,.upub-email,.sb-uemail,.menu-uemail{
+  -webkit-user-select:text;
+  -moz-user-select:text;
+  -ms-user-select:text;
+  user-select:text
+}
 body.en{direction:ltr}
 .hidden{display:none!important}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--teal);border-radius:10px;opacity:.5}
@@ -404,7 +428,7 @@ body.en{direction:ltr}
 
 .shell{display:flex;min-height:100vh}
 .sidebar{width:240px;min-width:240px;background:var(--white);border-inline-end:1px solid var(--g200);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;z-index:20;box-shadow:2px 0 8px rgba(0,0,0,.04)}
-.main{flex:1;overflow-x:hidden;display:flex;flex-direction:column;min-width:0;touch-action:pan-y}
+.main{flex:1;overflow-x:hidden;display:flex;flex-direction:column;min-width:0}
 .topbar{background:var(--white);border-bottom:1px solid var(--g200);padding:0 22px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:15;box-shadow:0 1px 4px rgba(0,0,0,.05)}
 .page{padding:24px;flex:1}
 .pi{animation:pi .22s ease}
@@ -3677,18 +3701,6 @@ function attachSwipeDismiss(overlayId,onClose){
   },500)
 })()
 
-// فحص دوري لتنظيف أي transform عالق يمكن أن يعطّل السكرول
-setInterval(()=>{
-  document.querySelectorAll('.menu-overlay.hidden, .moverlay.hidden').forEach(ov=>{
-    ov.style.background=''
-    const sheet=ov.querySelector('.menu-modal,.faq-modal,.pmodal,.nafath-card,.modal')
-    if(sheet){
-      sheet.style.transform=''
-      sheet.style.transition=''
-    }
-  })
-},5000)
-
 // رجوع من نافذة فرعية (sugg/about) إلى القائمة الرئيسية
 window.backToMenu=(overlayId)=>{
   $(overlayId).classList.add('hidden')
@@ -4136,16 +4148,18 @@ async function initSession(session){
     }catch(e){}
     await nav(savedPage,savedPP)
     try{
-      // Debounced realtime listener - يمنع التعليق عند التحديثات السريعة
+      // Debounced realtime listener - فقط نحدّث البيانات بدون إعادة رسم
       let _rtDebounce=null
       _rtChannel=sb.channel('qrt_'+CU.id).on('postgres_changes',{event:'*',schema:'public',table:'deals'},()=>{
         clearTimeout(_rtDebounce)
         _rtDebounce=setTimeout(async()=>{
-          await loadDeals();updBadge()
-          if(page==='inc')rInc()
-          if(page==='dash')rDash()
-          if(page==='deals')rDeals()
-        },600)
+          // فقط نحدّث البيانات. لا نعيد رسم أي صفحة (يفسد السكرول والأحداث).
+          // المستخدم يشوف التحديثات لما ينقّل بين الصفحات
+          try{
+            await loadDeals()
+            updBadge()
+          }catch(e){console.warn('rt refresh:',e)}
+        },1500)
       }).subscribe()
     }catch(e){console.warn('Realtime setup failed (non-critical):',e)}
   }catch(e){
