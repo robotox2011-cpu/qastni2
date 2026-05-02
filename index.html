@@ -371,7 +371,7 @@ html.dark svg g[fill="currentColor"]{color:#5eead4}
 html.dark .theme-toggle{background:var(--teal2)}
 html.dark .theme-knob{inset-inline-start:21px}
 html{font-size:16px;scroll-behavior:smooth}
-body{font-family:'Tajawal',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;direction:rtl;-webkit-font-smoothing:antialiased}
+body{font-family:'Tajawal',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;direction:rtl;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;touch-action:pan-y}
 body.en{direction:ltr}
 .hidden{display:none!important}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--teal);border-radius:10px;opacity:.5}
@@ -404,7 +404,7 @@ body.en{direction:ltr}
 
 .shell{display:flex;min-height:100vh}
 .sidebar{width:240px;min-width:240px;background:var(--white);border-inline-end:1px solid var(--g200);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;z-index:20;box-shadow:2px 0 8px rgba(0,0,0,.04)}
-.main{flex:1;overflow-x:hidden;display:flex;flex-direction:column;min-width:0}
+.main{flex:1;overflow-x:hidden;display:flex;flex-direction:column;min-width:0;touch-action:pan-y}
 .topbar{background:var(--white);border-bottom:1px solid var(--g200);padding:0 22px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:15;box-shadow:0 1px 4px rgba(0,0,0,.05)}
 .page{padding:24px;flex:1}
 .pi{animation:pi .22s ease}
@@ -3594,20 +3594,36 @@ function attachSwipeDismiss(overlayId,onClose){
   let startY=0,currentY=0,isDragging=false,sheet=null
 
   function getSheet(){
-    return ov.querySelector('.menu-modal,.faq-modal,.pmodal,.nafath-card')
+    return ov.querySelector('.menu-modal,.faq-modal,.pmodal,.nafath-card,.modal')
+  }
+
+  function resetSwipeState(){
+    isDragging=false
+    if(sheet){
+      sheet.style.transform=''
+      sheet.style.transition=''
+    }
+    ov.style.background=''
+    sheet=null
+    startY=0
+    currentY=0
   }
 
   ov.addEventListener('touchstart',(e)=>{
+    // الحرس الأول: لو الـ overlay مخفي، لا تتدخل أبداً
+    if(ov.classList.contains('hidden')){resetSwipeState();return}
     sheet=getSheet()
-    if(!sheet)return
-    // اسمح بالسحب فقط من رأس الـ sheet (أعلى 80px) أو من الخلفية فوقه
+    if(!sheet){resetSwipeState();return}
     const t=e.touches[0]
     const r=sheet.getBoundingClientRect()
-    // إذا اللمس على الـ overlay الخارجي (فوق الـ sheet)، اعتبره start صحيح
-    // إذا اللمس داخل الـ sheet، اسمح فقط في الجزء العلوي (handle area)
+    // اسمح بالسحب فقط من رأس الـ sheet (أعلى 60px) أو من الخلفية فوقه
     const isInTopArea=t.clientY>=r.top&&t.clientY<=r.top+60
     const isAboveSheet=t.clientY<r.top
-    if(!isInTopArea&&!isAboveSheet)return
+    if(!isInTopArea&&!isAboveSheet){
+      // اللمس داخل المحتوى — لا تتدخل، اترك السكرول طبيعي
+      resetSwipeState()
+      return
+    }
     startY=t.clientY
     currentY=startY
     isDragging=true
@@ -3615,52 +3631,63 @@ function attachSwipeDismiss(overlayId,onClose){
   },{passive:true})
 
   ov.addEventListener('touchmove',(e)=>{
-    if(!isDragging||!sheet)return
+    if(!isDragging||!sheet||ov.classList.contains('hidden'))return
     currentY=e.touches[0].clientY
     const dy=currentY-startY
     if(dy>0){
       sheet.style.transform=`translateY(${dy}px)`
-      // قلل opacity للخلفية تدريجياً
       const op=Math.max(.2,1-(dy/400))
       ov.style.background=`rgba(15,23,42,${.55*op})`
     }
   },{passive:true})
 
   ov.addEventListener('touchend',()=>{
-    if(!isDragging||!sheet){isDragging=false;return}
+    if(!isDragging||!sheet){resetSwipeState();return}
     const dy=currentY-startY
     sheet.style.transition='transform .25s cubic-bezier(.32,.72,0,1)'
     ov.style.background=''
     if(dy>120){
-      // أغلقها
       sheet.style.transform='translateY(100%)'
       setTimeout(()=>{
-        sheet.style.transform=''
-        sheet.style.transition=''
+        resetSwipeState()
         if(onClose)onClose()
         else ov.classList.add('hidden')
       },230)
     }else{
-      // ارجعها
       sheet.style.transform=''
+      isDragging=false
     }
-    isDragging=false
   },{passive:true})
+
+  // إعادة تعيين الحالة في حال الإلغاء (مكالمة، إشعار، إلخ)
+  ov.addEventListener('touchcancel',()=>resetSwipeState(),{passive:true})
 }
 
 // نطبقها مرة وحدة على الـ overlays المعروفة
 ;(function setupSwipeDismiss(){
-  if(window.innerWidth>768)return // فقط على الجوال
+  if(window.innerWidth>768)return
   setTimeout(()=>{
     attachSwipeDismiss('menu-overlay',()=>closeMenu())
-    attachSwipeDismiss('faq-overlay',()=>closeFAQ&&closeFAQ())
-    attachSwipeDismiss('about-overlay',()=>backToMenu&&backToMenu('about-overlay'))
-    attachSwipeDismiss('sugg-overlay',()=>backToMenu&&backToMenu('sugg-overlay'))
-    attachSwipeDismiss('thanks-overlay',()=>closeThanks&&closeThanks())
-    attachSwipeDismiss('pm-overlay',()=>closePM&&closePM())
-    attachSwipeDismiss('nafath-overlay',()=>closeNafath&&closeNafath())
+    attachSwipeDismiss('faq-overlay',()=>typeof closeFAQ==='function'&&closeFAQ())
+    attachSwipeDismiss('about-overlay',()=>typeof backToMenu==='function'&&backToMenu('about-overlay'))
+    attachSwipeDismiss('sugg-overlay',()=>typeof backToMenu==='function'&&backToMenu('sugg-overlay'))
+    attachSwipeDismiss('thanks-overlay',()=>typeof closeThanks==='function'&&closeThanks())
+    attachSwipeDismiss('pm-overlay',()=>typeof closePM==='function'&&closePM())
+    attachSwipeDismiss('nafath-overlay',()=>typeof closeNafath==='function'&&closeNafath())
   },500)
 })()
+
+// فحص دوري لتنظيف أي transform عالق يمكن أن يعطّل السكرول
+setInterval(()=>{
+  document.querySelectorAll('.menu-overlay.hidden, .moverlay.hidden').forEach(ov=>{
+    ov.style.background=''
+    const sheet=ov.querySelector('.menu-modal,.faq-modal,.pmodal,.nafath-card,.modal')
+    if(sheet){
+      sheet.style.transform=''
+      sheet.style.transition=''
+    }
+  })
+},5000)
 
 // رجوع من نافذة فرعية (sugg/about) إلى القائمة الرئيسية
 window.backToMenu=(overlayId)=>{
