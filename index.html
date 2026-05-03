@@ -501,6 +501,1281 @@ html.dark .feed-time{color:var(--text-muted)}
    🧮 PUBLIC CALCULATOR (محذوفة)
    ═══════════════════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════════
+   🌌 QASTNI CINEMATIC UI SYSTEM v2.0 — مستوى عالمي
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ═══ Mesh Gradient Background — خلفية متحركة أسطورية ═══ */
+.mesh-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.mesh-bg::before{
+  content:'';
+  position:absolute;
+  inset:-50%;
+  background:
+    radial-gradient(at 27% 37%,#ccfbf1 0,transparent 50%),
+    radial-gradient(at 97% 21%,#a7f3d0 0,transparent 50%),
+    radial-gradient(at 52% 99%,#5eead4 0,transparent 50%),
+    radial-gradient(at 10% 29%,#0d9488 0,transparent 50%),
+    radial-gradient(at 97% 96%,#0f766e 0,transparent 50%),
+    radial-gradient(at 33% 50%,#fef3c7 0,transparent 50%),
+    radial-gradient(at 79% 53%,#5eead4 0,transparent 50%);
+  filter:blur(100px) saturate(1.5);
+  opacity:.18;
+  animation:meshShift 30s ease-in-out infinite alternate;
+}
+@keyframes meshShift{
+  0%{transform:translate(0,0) rotate(0deg) scale(1)}
+  33%{transform:translate(-3%,2%) rotate(2deg) scale(1.05)}
+  66%{transform:translate(3%,-2%) rotate(-2deg) scale(.95)}
+  100%{transform:translate(0,0) rotate(0deg) scale(1)}
+}
+
+html.dark .mesh-bg::before{
+  background:
+    radial-gradient(at 27% 37%,#0d9488 0,transparent 50%),
+    radial-gradient(at 97% 21%,#0f766e 0,transparent 50%),
+    radial-gradient(at 52% 99%,#5eead4 0,transparent 50%),
+    radial-gradient(at 10% 29%,#134e4a 0,transparent 50%),
+    radial-gradient(at 97% 96%,#0a3838 0,transparent 50%),
+    radial-gradient(at 33% 50%,#fbbf24 0,transparent 50%),
+    radial-gradient(at 79% 53%,#5eead4 0,transparent 50%);
+  opacity:.12;
+}
+
+/* ═══ Floating Particles — جزيئات ذهبية متساقطة ═══ */
+.particles-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.particle{
+  position:absolute;
+  width:4px;height:4px;
+  background:radial-gradient(circle,rgba(94,234,212,.9),rgba(94,234,212,0));
+  border-radius:50%;
+  filter:blur(.5px);
+  box-shadow:0 0 6px rgba(94,234,212,.6);
+  pointer-events:none;
+}
+@keyframes floatParticle{
+  0%{transform:translateY(100vh) translateX(0) scale(0);opacity:0}
+  10%{opacity:1;transform:translateY(80vh) translateX(20px) scale(1)}
+  90%{opacity:.6}
+  100%{transform:translateY(-10vh) translateX(var(--drift,-50px)) scale(.5);opacity:0}
+}
+
+/* ═══ Glassmorphism Cards — البطاقات الزجاجية ═══ */
+.glass{
+  background:rgba(255,255,255,.65);
+  backdrop-filter:blur(20px) saturate(1.8);
+  -webkit-backdrop-filter:blur(20px) saturate(1.8);
+  border:1px solid rgba(255,255,255,.3);
+  box-shadow:
+    0 8px 32px rgba(15,42,42,.08),
+    inset 0 1px 0 rgba(255,255,255,.6);
+}
+html.dark .glass{
+  background:rgba(15,31,31,.55);
+  border-color:rgba(94,234,212,.15);
+  box-shadow:
+    0 8px 32px rgba(0,0,0,.4),
+    inset 0 1px 0 rgba(94,234,212,.1);
+}
+
+.glass-strong{
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(28px) saturate(2);
+  -webkit-backdrop-filter:blur(28px) saturate(2);
+  border:1px solid rgba(255,255,255,.4);
+}
+html.dark .glass-strong{
+  background:rgba(15,31,31,.78);
+  border-color:rgba(94,234,212,.18);
+}
+
+/* ═══ 3D Tilt Effect — البطاقات تطلع بـ 3D ═══ */
+.card-tilt{
+  transform-style:preserve-3d;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .4s ease;
+  will-change:transform;
+}
+.card-tilt:hover{
+  transform:translateY(-6px) scale(1.01);
+}
+@media(hover:hover){
+  .card-tilt:hover{
+    box-shadow:
+      0 20px 60px -15px rgba(13,148,136,.25),
+      0 0 0 1px rgba(94,234,212,.2);
+  }
+}
+
+/* ═══ Cinematic Buttons — أزرار سينمائية ═══ */
+.btn-cinema{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(135deg,#0d9488 0%,#0f766e 100%);
+  color:#fff;
+  border:none;
+  padding:14px 28px;
+  border-radius:14px;
+  font-weight:800;
+  font-size:14px;
+  cursor:pointer;
+  font-family:inherit;
+  box-shadow:
+    0 8px 24px rgba(13,148,136,.35),
+    inset 0 1px 0 rgba(255,255,255,.25),
+    inset 0 -2px 0 rgba(0,0,0,.1);
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  letter-spacing:0;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  isolation:isolate;
+}
+.btn-cinema::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,#5eead4 0%,#0d9488 100%);
+  opacity:0;
+  transition:opacity .3s;
+  z-index:-1;
+}
+.btn-cinema::after{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:60%;
+  height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
+  transform:skewX(-20deg);
+  transition:left .6s ease;
+  z-index:1;
+}
+.btn-cinema:hover{
+  transform:translateY(-2px);
+  box-shadow:
+    0 12px 32px rgba(13,148,136,.5),
+    inset 0 1px 0 rgba(255,255,255,.35);
+}
+.btn-cinema:hover::before{opacity:1}
+.btn-cinema:hover::after{left:100%}
+.btn-cinema:active{transform:translateY(0) scale(.98)}
+
+.btn-gold{
+  background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 50%,#d97706 100%);
+  color:#1a0e00;
+  box-shadow:
+    0 8px 24px rgba(245,158,11,.4),
+    inset 0 1px 0 rgba(255,255,255,.4);
+}
+.btn-gold:hover{
+  box-shadow:
+    0 12px 36px rgba(245,158,11,.6),
+    inset 0 1px 0 rgba(255,255,255,.5);
+}
+
+/* ═══ Hero Section — الجزء العلوي الفخم ═══ */
+.cinema-hero{
+  position:relative;
+  padding:32px 24px 28px;
+  margin:-24px -16px 24px;
+  background:
+    radial-gradient(circle at 30% 0%,rgba(94,234,212,.15) 0%,transparent 50%),
+    linear-gradient(180deg,rgba(204,251,241,.4) 0%,transparent 100%);
+  border-radius:0 0 32px 32px;
+  overflow:hidden;
+}
+html.dark .cinema-hero{
+  background:
+    radial-gradient(circle at 30% 0%,rgba(94,234,212,.1) 0%,transparent 50%),
+    linear-gradient(180deg,rgba(13,148,136,.08) 0%,transparent 100%);
+}
+.cinema-hero::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  inset-inline-end:-30%;
+  width:400px;
+  height:400px;
+  background:radial-gradient(circle,rgba(94,234,212,.18),transparent 70%);
+  border-radius:50%;
+  animation:heroFloat 8s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes heroFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(-30px,20px) scale(1.1)}
+}
+.cinema-hero-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:6px 13px;
+  background:linear-gradient(135deg,rgba(94,234,212,.2),rgba(13,148,136,.15));
+  border:1px solid rgba(94,234,212,.3);
+  border-radius:99px;
+  font-size:11px;
+  font-weight:800;
+  color:var(--teal2);
+  margin-bottom:14px;
+  backdrop-filter:blur(10px);
+  position:relative;
+  overflow:hidden;
+}
+html.dark .cinema-hero-badge{
+  color:#5eead4;
+  background:linear-gradient(135deg,rgba(94,234,212,.15),rgba(13,148,136,.1));
+}
+.cinema-hero-badge::before{
+  content:'';
+  position:absolute;
+  top:0;left:-100%;
+  width:50%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
+  animation:badgeShine 3s linear infinite;
+}
+@keyframes badgeShine{0%{left:-100%}100%{left:200%}}
+
+.cinema-hero-title{
+  font-size:32px;
+  font-weight:900;
+  line-height:1.15;
+  letter-spacing:0;
+  background:linear-gradient(135deg,#0f172a 0%,#0f766e 50%,#0d9488 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:8px;
+  animation:heroTitleReveal 1s cubic-bezier(.34,1.56,.64,1);
+}
+html.dark .cinema-hero-title{
+  background:linear-gradient(135deg,#f0fdfa 0%,#5eead4 50%,#a7f3d0 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+@keyframes heroTitleReveal{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:none}
+}
+.cinema-hero-subtitle{
+  font-size:15px;
+  color:var(--text-secondary);
+  line-height:1.6;
+  font-weight:500;
+  animation:heroTitleReveal 1s cubic-bezier(.34,1.56,.64,1) .2s both;
+}
+
+@media(max-width:480px){
+  .cinema-hero{padding:24px 18px 22px;margin:-12px -8px 20px;border-radius:0 0 24px 24px}
+  .cinema-hero-title{font-size:26px}
+  .cinema-hero-subtitle{font-size:13.5px}
+}
+
+/* ═══ Cinematic Stats — البطاقات الإحصائية الفخمة ═══ */
+.cinema-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin-bottom:24px;
+}
+@media(max-width:768px){.cinema-stats{grid-template-columns:1fr 1fr;gap:10px}}
+
+.cinema-stat{
+  position:relative;
+  padding:18px 16px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid var(--border);
+  overflow:hidden;
+  transition:all .35s cubic-bezier(.34,1.56,.64,1);
+  cursor:pointer;
+  isolation:isolate;
+}
+html.dark .cinema-stat{
+  background:var(--bg-card);
+  border-color:var(--border);
+}
+.cinema-stat::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,var(--stat-color,#0d9488)/10 0%,transparent 60%);
+  opacity:.08;
+  z-index:-1;
+}
+.cinema-stat::after{
+  content:'';
+  position:absolute;
+  top:-50%;
+  inset-inline-end:-30%;
+  width:140px;
+  height:140px;
+  background:radial-gradient(circle,var(--stat-color,#0d9488),transparent 70%);
+  border-radius:50%;
+  opacity:.1;
+  transition:all .4s ease;
+  z-index:-1;
+}
+.cinema-stat:hover{
+  transform:translateY(-4px);
+  border-color:var(--stat-color,#0d9488);
+  box-shadow:
+    0 14px 40px -10px rgba(13,148,136,.25),
+    0 0 0 1px rgba(94,234,212,.2);
+}
+.cinema-stat:hover::after{
+  transform:scale(1.4);
+  opacity:.2;
+}
+
+.cinema-stat-icon{
+  width:42px;height:42px;
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  margin-bottom:12px;
+  background:linear-gradient(135deg,var(--stat-color,#0d9488),var(--stat-color2,#0f766e));
+  color:#fff;
+  box-shadow:0 6px 16px var(--stat-shadow,rgba(13,148,136,.3));
+  transition:transform .3s;
+}
+.cinema-stat:hover .cinema-stat-icon{
+  transform:scale(1.1) rotate(-5deg);
+}
+
+.cinema-stat-value{
+  font-size:28px;
+  font-weight:900;
+  color:var(--text-primary);
+  line-height:1;
+  letter-spacing:-.5px;
+  margin-bottom:4px;
+  font-feature-settings:'tnum';
+  background:linear-gradient(135deg,var(--text-primary),var(--stat-color,#0d9488));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.cinema-stat-label{
+  font-size:12px;
+  font-weight:700;
+  color:var(--text-muted);
+  letter-spacing:0;
+}
+
+.cinema-stat-trend{
+  position:absolute;
+  top:14px;
+  inset-inline-end:14px;
+  font-size:10.5px;
+  font-weight:800;
+  padding:3px 8px;
+  border-radius:99px;
+  background:var(--gr100);
+  color:var(--gr600);
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+}
+html.dark .cinema-stat-trend{background:rgba(34,197,94,.15);color:#86efac}
+
+@media(max-width:480px){
+  .cinema-stat{padding:14px 12px;border-radius:16px}
+  .cinema-stat-icon{width:36px;height:36px;font-size:17px;border-radius:11px;margin-bottom:9px}
+  .cinema-stat-value{font-size:23px}
+  .cinema-stat-label{font-size:10.5px}
+}
+
+/* ═══ Cinematic Section Header ═══ */
+.cinema-shdr{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:24px 0 14px;
+  padding:0 4px;
+}
+.cinema-shdr-title{
+  font-size:18px;
+  font-weight:900;
+  color:var(--text-primary);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  letter-spacing:0;
+}
+.cinema-shdr-icon{
+  width:32px;height:32px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#0d9488,#0f766e);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:15px;
+  box-shadow:0 4px 12px rgba(13,148,136,.3);
+}
+.cinema-shdr-action{
+  font-size:12px;
+  font-weight:700;
+  color:var(--teal2);
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-family:inherit;
+  padding:6px 12px;
+  border-radius:8px;
+  transition:all .15s;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
+html.dark .cinema-shdr-action{color:#5eead4}
+.cinema-shdr-action:hover{background:var(--teal3);transform:translateX(-2px)}
+html.dark .cinema-shdr-action:hover{background:rgba(94,234,212,.1)}
+
+/* ═══ Cinematic Deal Cards ═══ */
+.cinema-deal{
+  position:relative;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:16px 18px;
+  margin-bottom:11px;
+  cursor:pointer;
+  transition:all .35s cubic-bezier(.34,1.56,.64,1);
+  overflow:hidden;
+  isolation:isolate;
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+html.dark .cinema-deal{background:var(--bg-card);border-color:var(--border)}
+.cinema-deal::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(94,234,212,.05) 0%,transparent 60%);
+  opacity:0;
+  transition:opacity .3s;
+  z-index:-1;
+}
+.cinema-deal:hover{
+  transform:translateY(-3px);
+  border-color:rgba(94,234,212,.4);
+  box-shadow:
+    0 14px 32px -8px rgba(13,148,136,.2),
+    0 0 0 1px rgba(94,234,212,.15);
+}
+.cinema-deal:hover::before{opacity:1}
+
+.cinema-deal-avatar{
+  width:46px;height:46px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  color:#fff;
+  font-size:16px;
+  flex-shrink:0;
+  box-shadow:0 6px 14px rgba(0,0,0,.12);
+  position:relative;
+  transition:transform .3s;
+}
+.cinema-deal:hover .cinema-deal-avatar{transform:rotate(-5deg) scale(1.05)}
+
+.cinema-deal-body{flex:1;min-width:0}
+.cinema-deal-name{
+  font-size:14px;
+  font-weight:800;
+  color:var(--text-primary);
+  margin-bottom:3px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.cinema-deal-meta{
+  font-size:11.5px;
+  color:var(--text-muted);
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.cinema-deal-side{text-align:end;flex-shrink:0}
+.cinema-deal-amount{
+  font-size:15px;
+  font-weight:900;
+  color:var(--text-primary);
+  letter-spacing:0;
+  line-height:1.1;
+  margin-bottom:3px;
+}
+.cinema-deal-status{
+  font-size:10px;
+  font-weight:800;
+  padding:3px 9px;
+  border-radius:99px;
+  display:inline-block;
+}
+
+/* ═══ Floating Action Button — الزر العائم الثوري ═══ */
+.cinema-fab{
+  position:fixed;
+  inset-inline-end:18px;
+  bottom:90px;
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#0d9488 0%,#0f766e 100%);
+  color:#fff;
+  border:none;
+  font-size:28px;
+  cursor:pointer;
+  z-index:40;
+  box-shadow:
+    0 12px 32px rgba(13,148,136,.45),
+    inset 0 1px 0 rgba(255,255,255,.3);
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:inherit;
+}
+.cinema-fab::before{
+  content:'';
+  position:absolute;
+  inset:-4px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#5eead4,#0d9488);
+  z-index:-1;
+  opacity:0;
+  filter:blur(10px);
+  transition:opacity .3s;
+}
+.cinema-fab:hover{
+  transform:scale(1.08) rotate(90deg);
+  box-shadow:0 16px 40px rgba(13,148,136,.6);
+}
+.cinema-fab:hover::before{opacity:1}
+.cinema-fab:active{transform:scale(.95)}
+@media(min-width:769px){.cinema-fab{bottom:24px}}
+
+/* ═══ Counter Animation Helper ═══ */
+.cinema-counter{
+  display:inline-block;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:'tnum';
+}
+
+/* ═══ Page Transitions السينمائية ═══ */
+@keyframes pageEnter{
+  from{opacity:0;transform:translateY(20px) scale(.98)}
+  to{opacity:1;transform:none}
+}
+.page:not(.hidden){animation:pageEnter .5s cubic-bezier(.34,1.56,.64,1)}
+
+/* ═══ Number Counter Animation ═══ */
+@keyframes counterPulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.06)}
+  100%{transform:scale(1)}
+}
+.counter-update{animation:counterPulse .4s ease}
+
+/* ═══ Cinematic Loading Skeleton (محسّن) ═══ */
+.sk-cinema{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(90deg,
+    var(--g100) 0%,
+    var(--g50) 25%,
+    rgba(94,234,212,.15) 50%,
+    var(--g50) 75%,
+    var(--g100) 100%);
+  background-size:300% 100%;
+  animation:cinemaShimmer 2s ease-in-out infinite;
+  border-radius:12px;
+}
+@keyframes cinemaShimmer{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
+}
+html.dark .sk-cinema{
+  background:linear-gradient(90deg,
+    var(--bg-elevated) 0%,
+    var(--bg-card) 25%,
+    rgba(94,234,212,.08) 50%,
+    var(--bg-card) 75%,
+    var(--bg-elevated) 100%);
+  background-size:300% 100%;
+}
+
+/* ═══ Cinematic Welcome — رسالة الترحيب الفخمة ═══ */
+.cinema-welcome{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:6px;
+}
+.cinema-welcome-emoji{
+  font-size:36px;
+  display:inline-block;
+  animation:wave 3s ease-in-out infinite;
+  transform-origin:70% 70%;
+}
+.cinema-welcome-text{flex:1;min-width:0}
+
+/* ═══ Sparkle Decoration ═══ */
+.sparkle{position:relative}
+.sparkle::after{
+  content:'✨';
+  position:absolute;
+  top:-6px;inset-inline-end:-12px;
+  font-size:14px;
+  animation:sparkleFloat 2s ease-in-out infinite;
+}
+@keyframes sparkleFloat{
+  0%,100%{transform:translateY(0) rotate(0deg);opacity:.7}
+  50%{transform:translateY(-4px) rotate(15deg);opacity:1}
+}
+
+/* ═══ Hover Glow Effects ═══ */
+.glow-on-hover{position:relative;transition:all .3s}
+.glow-on-hover::after{
+  content:'';
+  position:absolute;
+  inset:-2px;
+  background:linear-gradient(135deg,#5eead4,#0d9488,#5eead4);
+  background-size:200% 200%;
+  border-radius:inherit;
+  z-index:-1;
+  opacity:0;
+  filter:blur(8px);
+  transition:opacity .3s;
+  animation:glowMove 3s linear infinite;
+}
+.glow-on-hover:hover::after{opacity:.7}
+@keyframes glowMove{
+  0%{background-position:0% 50%}
+  100%{background-position:200% 50%}
+}
+
+/* ═══ Cinematic Bottom Nav (محسّن جداً) ═══ */
+.bottom-nav.cinema{
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(28px) saturate(2);
+  -webkit-backdrop-filter:blur(28px) saturate(2);
+  border-top:1px solid rgba(255,255,255,.6);
+  box-shadow:0 -8px 32px rgba(15,42,42,.08),inset 0 1px 0 rgba(255,255,255,.7);
+}
+html.dark .bottom-nav.cinema{
+  background:rgba(15,31,31,.85);
+  border-top-color:rgba(94,234,212,.15);
+  box-shadow:0 -8px 32px rgba(0,0,0,.4),inset 0 1px 0 rgba(94,234,212,.08);
+}
+
+/* ═══ Live Activity Pulse (للأشياء الحية) ═══ */
+.live-pulse{position:relative}
+.live-pulse::before{
+  content:'';
+  position:absolute;
+  width:8px;height:8px;
+  background:#22c55e;
+  border-radius:50%;
+  inset-inline-start:-14px;
+  top:50%;
+  transform:translateY(-50%);
+  box-shadow:0 0 0 0 rgba(34,197,94,.6);
+  animation:livePulse 2s ease-in-out infinite;
+}
+@keyframes livePulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}
+  50%{box-shadow:0 0 0 6px rgba(34,197,94,0)}
+}
+
+/* ═══ Cinematic Card Hover Tilt (3D) ═══ */
+@media(hover:hover) and (min-width:769px){
+  .tilt-card{
+    transform-style:preserve-3d;
+    perspective:1000px;
+  }
+  .tilt-card:hover{
+    transform:perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-4px);
+  }
+}
+
+/* ═══ Smooth Reveal Animations ═══ */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(15px)}
+  to{opacity:1;transform:none}
+}
+.reveal-1{animation:fadeUp .6s cubic-bezier(.34,1.56,.64,1) .1s both}
+.reveal-2{animation:fadeUp .6s cubic-bezier(.34,1.56,.64,1) .2s both}
+.reveal-3{animation:fadeUp .6s cubic-bezier(.34,1.56,.64,1) .3s both}
+.reveal-4{animation:fadeUp .6s cubic-bezier(.34,1.56,.64,1) .4s both}
+.reveal-5{animation:fadeUp .6s cubic-bezier(.34,1.56,.64,1) .5s both}
+
+/* ═══ Cinema Topbar (محسّن) ═══ */
+.topbar.cinema{
+  background:rgba(255,255,255,.7);
+  backdrop-filter:blur(28px) saturate(1.8);
+  -webkit-backdrop-filter:blur(28px) saturate(1.8);
+  border-bottom:1px solid rgba(94,234,212,.15);
+  box-shadow:0 1px 4px rgba(15,42,42,.04);
+}
+html.dark .topbar.cinema{
+  background:rgba(15,31,31,.7);
+  border-bottom-color:rgba(94,234,212,.1);
+}
+
+/* ═══ Beautiful Empty States ═══ */
+.cinema-empty{
+  text-align:center;
+  padding:48px 24px;
+  position:relative;
+  overflow:hidden;
+}
+.cinema-empty-icon{
+  font-size:64px;
+  margin-bottom:14px;
+  display:inline-block;
+  filter:drop-shadow(0 8px 20px rgba(94,234,212,.4));
+  animation:emptyFloat 4s ease-in-out infinite;
+}
+@keyframes emptyFloat{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-10px) rotate(5deg)}
+}
+.cinema-empty-title{
+  font-size:17px;
+  font-weight:800;
+  color:var(--text-primary);
+  margin-bottom:6px;
+}
+.cinema-empty-desc{
+  font-size:13px;
+  color:var(--text-muted);
+  line-height:1.5;
+  max-width:300px;
+  margin:0 auto;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   🎬 CINEMATIC AUTH SCREEN — صفحة تسجيل الدخول السينمائية الخرافية
+   ═══════════════════════════════════════════════════════════════════════ */
+.cinema-auth{
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  position:relative;
+  overflow:hidden;
+  background:#0a1414;
+}
+
+/* الخلفية متعددة الطبقات */
+.cinema-auth-bg{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+.cinema-auth-bg::before{
+  content:'';
+  position:absolute;
+  inset:-50%;
+  background:
+    radial-gradient(at 27% 37%,#0d9488 0,transparent 50%),
+    radial-gradient(at 97% 21%,#0f766e 0,transparent 50%),
+    radial-gradient(at 52% 99%,#5eead4 0,transparent 50%),
+    radial-gradient(at 10% 29%,#134e4a 0,transparent 50%),
+    radial-gradient(at 97% 96%,#0a3838 0,transparent 50%),
+    radial-gradient(at 33% 50%,#fbbf24 0,transparent 50%),
+    radial-gradient(at 79% 53%,#5eead4 0,transparent 50%);
+  filter:blur(120px) saturate(1.8);
+  opacity:.5;
+  animation:authMeshShift 25s ease-in-out infinite alternate;
+}
+@keyframes authMeshShift{
+  0%{transform:translate(0,0) rotate(0deg) scale(1)}
+  33%{transform:translate(-3%,2%) rotate(2deg) scale(1.05)}
+  66%{transform:translate(3%,-2%) rotate(-2deg) scale(.95)}
+  100%{transform:translate(0,0) rotate(0deg) scale(1)}
+}
+
+/* شبكة هندسية خفيفة (grid pattern) */
+.cinema-auth-grid{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(94,234,212,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(94,234,212,.04) 1px,transparent 1px);
+  background-size:50px 50px;
+  mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);
+}
+
+/* جسيمات متطايرة */
+.cinema-auth-orbs{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  overflow:hidden;
+}
+.cinema-auth-orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(40px);
+  opacity:.5;
+  animation:orbFloat 20s ease-in-out infinite;
+}
+.cinema-auth-orb:nth-child(1){
+  width:300px;height:300px;
+  background:radial-gradient(circle,#5eead4,transparent);
+  top:10%;left:10%;
+  animation-delay:0s;
+}
+.cinema-auth-orb:nth-child(2){
+  width:400px;height:400px;
+  background:radial-gradient(circle,#0d9488,transparent);
+  bottom:10%;inset-inline-end:5%;
+  animation-delay:-7s;
+}
+.cinema-auth-orb:nth-child(3){
+  width:250px;height:250px;
+  background:radial-gradient(circle,#fbbf24,transparent);
+  top:50%;inset-inline-start:50%;
+  animation-delay:-14s;
+  opacity:.3;
+}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(50px,-30px) scale(1.1)}
+  66%{transform:translate(-30px,50px) scale(.95)}
+}
+
+/* البطاقة السينمائية الرئيسية */
+.cinema-auth-card{
+  position:relative;
+  z-index:10;
+  width:100%;
+  max-width:480px;
+  background:rgba(15,31,31,.55);
+  backdrop-filter:blur(40px) saturate(1.8);
+  -webkit-backdrop-filter:blur(40px) saturate(1.8);
+  border:1px solid rgba(94,234,212,.18);
+  border-radius:32px;
+  overflow:hidden;
+  box-shadow:
+    0 32px 80px -20px rgba(0,0,0,.6),
+    0 0 0 1px rgba(94,234,212,.08),
+    inset 0 1px 0 rgba(255,255,255,.08);
+  animation:authCardEntry 1.2s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes authCardEntry{
+  0%{opacity:0;transform:translateY(40px) scale(.92);filter:blur(20px)}
+  60%{opacity:1;filter:blur(0)}
+  100%{transform:translateY(0) scale(1);filter:blur(0)}
+}
+
+/* الإطار المضيء حول البطاقة */
+.cinema-auth-card::before{
+  content:'';
+  position:absolute;
+  inset:-2px;
+  border-radius:34px;
+  padding:2px;
+  background:linear-gradient(135deg,
+    rgba(94,234,212,.6) 0%,
+    rgba(13,148,136,.3) 25%,
+    rgba(251,191,36,.4) 50%,
+    rgba(94,234,212,.3) 75%,
+    rgba(94,234,212,.6) 100%);
+  background-size:200% 200%;
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  z-index:-1;
+  animation:borderGlow 4s linear infinite;
+  pointer-events:none;
+  opacity:.7;
+}
+@keyframes borderGlow{
+  0%{background-position:0% 50%}
+  100%{background-position:200% 50%}
+}
+
+/* الـ Header الفخم */
+.cinema-auth-hero{
+  padding:36px 32px 26px;
+  text-align:center;
+  position:relative;
+  background:linear-gradient(180deg,rgba(13,148,136,.15) 0%,transparent 100%);
+  border-bottom:1px solid rgba(94,234,212,.1);
+  overflow:hidden;
+}
+.cinema-auth-hero::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:radial-gradient(circle at center,rgba(94,234,212,.15),transparent 50%);
+  animation:heroPulse 4s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes heroPulse{
+  0%,100%{opacity:.5;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.1)}
+}
+
+/* الشعار المتوهج */
+.cinema-auth-logo{
+  position:relative;
+  display:inline-block;
+  margin-bottom:14px;
+  animation:logoEntry 1.5s cubic-bezier(.34,1.56,.64,1) .3s both;
+}
+@keyframes logoEntry{
+  0%{opacity:0;transform:scale(0) rotate(-180deg)}
+  60%{transform:scale(1.15) rotate(20deg)}
+  100%{opacity:1;transform:scale(1) rotate(0deg)}
+}
+.cinema-auth-logo::before{
+  content:'';
+  position:absolute;
+  inset:-20px;
+  background:radial-gradient(circle,rgba(94,234,212,.5),transparent 70%);
+  filter:blur(20px);
+  animation:logoGlow 3s ease-in-out infinite;
+  z-index:-1;
+}
+@keyframes logoGlow{
+  0%,100%{transform:scale(1);opacity:.6}
+  50%{transform:scale(1.3);opacity:1}
+}
+.cinema-auth-logo svg{
+  filter:drop-shadow(0 0 24px rgba(94,234,212,.7));
+}
+
+/* العنوان بـ gradient */
+.cinema-auth-title{
+  font-size:36px;
+  font-weight:900;
+  margin-bottom:6px;
+  letter-spacing:0;
+  background:linear-gradient(135deg,#fff 0%,#a7f3d0 50%,#5eead4 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  text-shadow:0 0 40px rgba(94,234,212,.3);
+  animation:titleReveal 1s ease-out .5s both;
+}
+@keyframes titleReveal{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:none}
+}
+
+.cinema-auth-subtitle{
+  font-size:14px;
+  color:rgba(255,255,255,.7);
+  font-weight:500;
+  line-height:1.6;
+  animation:titleReveal 1s ease-out .7s both;
+}
+
+/* شارات الثقة */
+.cinema-auth-shields{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-top:14px;
+  flex-wrap:wrap;
+  animation:titleReveal 1s ease-out .9s both;
+}
+.cinema-auth-shield{
+  padding:5px 11px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(94,234,212,.2);
+  border-radius:99px;
+  font-size:10.5px;
+  font-weight:700;
+  color:rgba(255,255,255,.85);
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  backdrop-filter:blur(10px);
+  transition:all .25s;
+}
+.cinema-auth-shield:hover{
+  background:rgba(94,234,212,.1);
+  border-color:rgba(94,234,212,.4);
+  transform:translateY(-1px);
+}
+
+/* Tabs الفخمة */
+.cinema-auth-tabs{
+  display:flex;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(94,234,212,.1);
+  border-radius:14px;
+  padding:4px;
+  margin:24px 32px 0;
+  position:relative;
+  z-index:2;
+  animation:titleReveal 1s ease-out 1.1s both;
+}
+.cinema-auth-tab{
+  flex:1;
+  padding:11px 14px;
+  background:none;
+  border:none;
+  border-radius:11px;
+  font-size:13px;
+  font-weight:800;
+  color:rgba(255,255,255,.5);
+  cursor:pointer;
+  font-family:inherit;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  position:relative;
+  letter-spacing:0;
+}
+.cinema-auth-tab.active{
+  background:linear-gradient(135deg,#0d9488 0%,#0f766e 100%);
+  color:#fff;
+  box-shadow:
+    0 4px 14px rgba(13,148,136,.4),
+    inset 0 1px 0 rgba(255,255,255,.2);
+}
+.cinema-auth-tab:hover:not(.active){
+  color:rgba(255,255,255,.85);
+}
+
+/* Body — حقول الإدخال */
+.cinema-auth-body{
+  padding:24px 32px 32px;
+  position:relative;
+}
+
+/* Field Group السينمائي */
+.cinema-fg{
+  margin-bottom:14px;
+  position:relative;
+  animation:fieldReveal .6s ease-out both;
+}
+.cinema-fg.delay-1{animation-delay:.2s}
+.cinema-fg.delay-2{animation-delay:.3s}
+.cinema-fg.delay-3{animation-delay:.4s}
+.cinema-fg.delay-4{animation-delay:.5s}
+.cinema-fg.delay-5{animation-delay:.6s}
+@keyframes fieldReveal{
+  from{opacity:0;transform:translateX(-10px)}
+  to{opacity:1;transform:none}
+}
+
+.cinema-fl{
+  display:block;
+  font-size:11.5px;
+  font-weight:700;
+  color:rgba(255,255,255,.65);
+  margin-bottom:6px;
+  letter-spacing:0;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.cinema-fl-req{color:#fbbf24;font-weight:900}
+
+/* الحقل نفسه */
+.cinema-fc{
+  width:100%;
+  padding:13px 16px;
+  background:rgba(255,255,255,.05);
+  border:1.5px solid rgba(94,234,212,.15);
+  border-radius:12px;
+  color:#fff;
+  font-size:14.5px;
+  font-family:inherit;
+  outline:none;
+  transition:all .25s ease;
+  font-weight:500;
+  -webkit-text-fill-color:#fff;
+}
+.cinema-fc::placeholder{
+  color:rgba(255,255,255,.3);
+  font-weight:400;
+}
+.cinema-fc:hover{
+  background:rgba(255,255,255,.08);
+  border-color:rgba(94,234,212,.3);
+}
+.cinema-fc:focus{
+  background:rgba(255,255,255,.1);
+  border-color:#5eead4;
+  box-shadow:
+    0 0 0 4px rgba(94,234,212,.12),
+    0 4px 20px rgba(13,148,136,.15);
+  transform:translateY(-1px);
+}
+
+/* Autofill على Chrome */
+.cinema-fc:-webkit-autofill,
+.cinema-fc:-webkit-autofill:hover,
+.cinema-fc:-webkit-autofill:focus{
+  -webkit-box-shadow:0 0 0 100px rgba(13,148,136,.15) inset;
+  -webkit-text-fill-color:#fff;
+  caret-color:#fff;
+}
+
+/* صف من الحقول */
+.cinema-frow{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+}
+
+/* رسالة الخطأ */
+.cinema-err{
+  background:linear-gradient(135deg,rgba(220,38,38,.15),rgba(220,38,38,.08));
+  border:1px solid rgba(220,38,38,.3);
+  color:#fca5a5;
+  padding:11px 14px;
+  border-radius:11px;
+  font-size:12.5px;
+  font-weight:600;
+  margin-bottom:14px;
+  animation:errShake .5s cubic-bezier(.36,.07,.19,.97);
+}
+@keyframes errShake{
+  0%,100%{transform:translateX(0)}
+  20%,60%{transform:translateX(-4px)}
+  40%,80%{transform:translateX(4px)}
+}
+
+/* الزر السينمائي الرئيسي */
+.cinema-btn-main{
+  width:100%;
+  padding:15px 24px;
+  background:linear-gradient(135deg,#0d9488 0%,#0f766e 100%);
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+  font-family:inherit;
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  letter-spacing:0;
+  box-shadow:
+    0 8px 24px rgba(13,148,136,.45),
+    inset 0 1px 0 rgba(255,255,255,.25);
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-top:6px;
+}
+.cinema-btn-main::before{
+  content:'';
+  position:absolute;
+  top:0;left:-100%;
+  width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
+  transform:skewX(-20deg);
+  animation:btnShine 3s ease-in-out infinite;
+  z-index:1;
+}
+@keyframes btnShine{
+  0%,100%{left:-100%}
+  50%{left:200%}
+}
+.cinema-btn-main:hover{
+  transform:translateY(-2px);
+  box-shadow:
+    0 14px 32px rgba(13,148,136,.6),
+    inset 0 1px 0 rgba(255,255,255,.35);
+}
+.cinema-btn-main:active{transform:translateY(0) scale(.98)}
+.cinema-btn-main:disabled{
+  opacity:.7;
+  cursor:not-allowed;
+  transform:none;
+}
+
+/* الـ Footer */
+.cinema-auth-foot{
+  text-align:center;
+  padding:18px 24px;
+  font-size:11px;
+  color:rgba(255,255,255,.4);
+  border-top:1px solid rgba(94,234,212,.08);
+  background:rgba(0,0,0,.15);
+  font-weight:500;
+  line-height:1.6;
+}
+.cinema-auth-foot strong{
+  color:rgba(94,234,212,.9);
+  font-weight:700;
+}
+
+/* زر تبديل اللغة */
+.cinema-lang-switch{
+  position:absolute;
+  top:18px;
+  inset-inline-end:18px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(94,234,212,.2);
+  color:rgba(255,255,255,.85);
+  padding:6px 14px;
+  border-radius:99px;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+  font-family:inherit;
+  backdrop-filter:blur(10px);
+  z-index:11;
+  transition:all .2s;
+}
+.cinema-lang-switch:hover{
+  background:rgba(94,234,212,.15);
+  border-color:rgba(94,234,212,.4);
+  color:#fff;
+}
+
+/* Mobile */
+@media(max-width:480px){
+  .cinema-auth{padding:14px}
+  .cinema-auth-card{border-radius:24px}
+  .cinema-auth-hero{padding:30px 22px 22px}
+  .cinema-auth-title{font-size:28px}
+  .cinema-auth-subtitle{font-size:13px}
+  .cinema-auth-tabs{margin:18px 22px 0;padding:3px}
+  .cinema-auth-tab{padding:10px 12px;font-size:12.5px}
+  .cinema-auth-body{padding:18px 22px 24px}
+  .cinema-fc{padding:12px 14px;font-size:14px}
+  .cinema-frow{grid-template-columns:1fr;gap:0}
+  .cinema-frow .cinema-fg{margin-bottom:14px}
+  .cinema-btn-main{padding:13px 20px;font-size:14px}
+  .cinema-auth-shields{gap:6px}
+  .cinema-auth-shield{padding:4px 9px;font-size:9.5px}
+}
+
 /* ═══════ FAQ PAGE STYLES ═══════ */
 .faq-modal{background:#fff;border-radius:var(--r20);box-shadow:var(--shl);width:100%;max-width:480px;max-height:92vh;overflow-y:auto;animation:slideUp .3s ease;position:relative}
 html.dark .faq-modal{background:var(--bg-card);border:1px solid var(--border)}
@@ -1507,6 +2782,10 @@ html.dark .bn-badge{background:#dc2626!important;border-color:var(--bg-card)!imp
 </head>
 <body>
 
+<!-- 🌌 CINEMATIC BACKGROUND LAYERS -->
+<div class="mesh-bg"></div>
+<div class="particles-bg" id="particles-bg"></div>
+
 <div id="splash">
   <div class="qlogo-wrap" style="width:120px;height:120px">
     <svg viewBox="0 0 120 120">
@@ -1793,43 +3072,143 @@ function hideSplash(){
 }
 
 function getAuthHTML(){
-  return`<div class="auth-screen">
-  <div class="auth-card">
-    <div class="ahdr">
-      <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
-        ${LOGO_W(68)}
-        <div class="atitle">قسطني</div>
-        <div class="asub ar-t">منصة التقسيط الآمنة بين الأفراد</div>
-        <div class="asub en-t hidden">Safe P2P Installment Platform</div>
-      </div>
-      <div class="atabs" style="margin-top:14px">
-        <button class="atab active" id="tl" onclick="switchAT('login')"><span class="ar-t">تسجيل الدخول</span><span class="en-t hidden">Sign In</span></button>
-        <button class="atab" id="tr" onclick="switchAT('register')"><span class="ar-t">حساب جديد</span><span class="en-t hidden">Register</span></button>
-      </div>
-      <div style="margin-top:10px;text-align:center"><button class="lbtn" data-lb onclick="toggleLang()" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);color:#fff">${isAr()?'English':'عربي'}</button></div>
+  return`<div class="cinema-auth">
+    <!-- 🌌 الخلفية المتعددة الطبقات -->
+    <div class="cinema-auth-bg"></div>
+    <div class="cinema-auth-grid"></div>
+    <div class="cinema-auth-orbs">
+      <div class="cinema-auth-orb"></div>
+      <div class="cinema-auth-orb"></div>
+      <div class="cinema-auth-orb"></div>
     </div>
-    <div id="fl" class="abody">
-      <div class="fg"><label class="fl"><span class="ar-t">البريد الإلكتروني</span><span class="en-t hidden">Email</span></label><input class="fc" type="email" id="l-em" placeholder="you@example.com" autocomplete="email" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-      <div class="fg"><label class="fl"><span class="ar-t">كلمة المرور</span><span class="en-t hidden">Password</span></label><input class="fc" type="password" id="l-pw" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-      <div id="lerr" class="alert alert-d hidden"></div>
-      <button class="btn bp bfull blg" id="lbtn" onclick="doLogin()"><span class="ar-t">تسجيل الدخول</span><span class="en-t hidden">Sign In</span></button>
-    </div>
-    <div id="fr" class="abody hidden">
-      <div class="fg"><label class="fl"><span class="ar-t">الاسم الكامل</span><span class="en-t hidden">Full Name</span> <span class="req">*</span></label><input class="fc" type="text" id="r-nm" placeholder="${isAr()?'أحمد محمد':'Ahmed Mohammed'}" autocomplete="name"/></div>
-      <div class="fg"><label class="fl"><span class="ar-t">البريد الإلكتروني</span><span class="en-t hidden">Email</span> <span class="req">*</span></label><input class="fc" type="email" id="r-em" placeholder="you@example.com" autocomplete="email"/></div>
-      <div class="frow">
-        <div class="fg"><label class="fl"><span class="ar-t">رقم الجوال</span><span class="en-t hidden">Phone</span></label><input class="fc" type="tel" id="r-ph" placeholder="+966 5X XXX XXXX"/></div>
-        <div class="fg"><label class="fl"><span class="ar-t">رقم الهوية</span><span class="en-t hidden">ID</span></label><input class="fc" type="text" id="r-ni" placeholder="1XXXXXXXXX" maxlength="10"/></div>
+
+    <!-- زر تبديل اللغة -->
+    <button class="cinema-lang-switch" data-lb onclick="toggleLang()">${isAr()?'English':'عربي'}</button>
+
+    <!-- البطاقة الرئيسية -->
+    <div class="cinema-auth-card">
+      <!-- Hero Section -->
+      <div class="cinema-auth-hero">
+        <div class="cinema-auth-logo">${LOGO_W(72)}</div>
+        <h1 class="cinema-auth-title">قسطني</h1>
+        <p class="cinema-auth-subtitle ar-t">منصة سعودية للتقسيط الآمن بين الأفراد</p>
+        <p class="cinema-auth-subtitle en-t hidden">Saudi P2P Installment Platform</p>
+        <div class="cinema-auth-shields">
+          <div class="cinema-auth-shield">🏛️ <span class="ar-t">قيد ترخيص ساما</span><span class="en-t hidden">SAMA Pending</span></div>
+          <div class="cinema-auth-shield">🔐 <span class="ar-t">تحقق نافذ</span><span class="en-t hidden">Nafath</span></div>
+          <div class="cinema-auth-shield">🛡️ <span class="ar-t">آمن وموثَّق</span><span class="en-t hidden">Verified</span></div>
+        </div>
       </div>
-      <div class="frow">
-        <div class="fg"><label class="fl"><span class="ar-t">كلمة المرور</span><span class="en-t hidden">Password</span> <span class="req">*</span></label><input class="fc" type="password" id="r-pw" placeholder="••••••••" autocomplete="new-password" minlength="8"/></div>
-        <div class="fg"><label class="fl"><span class="ar-t">تأكيد كلمة المرور</span><span class="en-t hidden">Confirm</span> <span class="req">*</span></label><input class="fc" type="password" id="r-pw2" placeholder="••••••••" autocomplete="new-password"/></div>
+
+      <!-- Tabs -->
+      <div class="cinema-auth-tabs">
+        <button class="cinema-auth-tab active" id="tl" onclick="switchAT('login')">
+          <span class="ar-t">تسجيل الدخول</span><span class="en-t hidden">Sign In</span>
+        </button>
+        <button class="cinema-auth-tab" id="tr" onclick="switchAT('register')">
+          <span class="ar-t">حساب جديد</span><span class="en-t hidden">Register</span>
+        </button>
       </div>
-      <div id="rerr" class="alert alert-d hidden"></div>
-      <button class="btn bp bfull blg" id="rbtn" onclick="doRegister()"><span class="ar-t">إنشاء الحساب</span><span class="en-t hidden">Create Account</span></button>
+
+      <!-- Login Form -->
+      <div id="fl" class="cinema-auth-body">
+        <div class="cinema-fg delay-1">
+          <label class="cinema-fl">
+            <span style="font-size:13px">📧</span>
+            <span class="ar-t">البريد الإلكتروني</span>
+            <span class="en-t hidden">Email</span>
+          </label>
+          <input class="cinema-fc" type="email" id="l-em" placeholder="you@example.com" autocomplete="email" onkeydown="if(event.key==='Enter')doLogin()"/>
+        </div>
+        <div class="cinema-fg delay-2">
+          <label class="cinema-fl">
+            <span style="font-size:13px">🔒</span>
+            <span class="ar-t">كلمة المرور</span>
+            <span class="en-t hidden">Password</span>
+          </label>
+          <input class="cinema-fc" type="password" id="l-pw" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+        </div>
+        <div id="lerr" class="cinema-err hidden"></div>
+        <button class="cinema-btn-main" id="lbtn" onclick="doLogin()">
+          <span class="ar-t">تسجيل الدخول</span>
+          <span class="en-t hidden">Sign In</span>
+          <span style="font-size:16px">${isAr()?'←':'→'}</span>
+        </button>
+      </div>
+
+      <!-- Register Form -->
+      <div id="fr" class="cinema-auth-body hidden">
+        <div class="cinema-fg delay-1">
+          <label class="cinema-fl">
+            <span style="font-size:13px">👤</span>
+            <span class="ar-t">الاسم الكامل</span>
+            <span class="en-t hidden">Full Name</span>
+            <span class="cinema-fl-req">*</span>
+          </label>
+          <input class="cinema-fc" type="text" id="r-nm" placeholder="${isAr()?'أحمد محمد':'Ahmed Mohammed'}" autocomplete="name"/>
+        </div>
+        <div class="cinema-fg delay-2">
+          <label class="cinema-fl">
+            <span style="font-size:13px">📧</span>
+            <span class="ar-t">البريد الإلكتروني</span>
+            <span class="en-t hidden">Email</span>
+            <span class="cinema-fl-req">*</span>
+          </label>
+          <input class="cinema-fc" type="email" id="r-em" placeholder="you@example.com" autocomplete="email"/>
+        </div>
+        <div class="cinema-frow cinema-fg delay-3" style="margin-bottom:0">
+          <div class="cinema-fg" style="margin-bottom:0">
+            <label class="cinema-fl">
+              <span style="font-size:13px">📱</span>
+              <span class="ar-t">رقم الجوال</span>
+              <span class="en-t hidden">Phone</span>
+            </label>
+            <input class="cinema-fc" type="tel" id="r-ph" placeholder="+966 5X XXX XXXX"/>
+          </div>
+          <div class="cinema-fg" style="margin-bottom:0">
+            <label class="cinema-fl">
+              <span style="font-size:13px">🆔</span>
+              <span class="ar-t">رقم الهوية</span>
+              <span class="en-t hidden">National ID</span>
+            </label>
+            <input class="cinema-fc" type="text" id="r-ni" placeholder="1XXXXXXXXX" maxlength="10"/>
+          </div>
+        </div>
+        <div class="cinema-frow cinema-fg delay-4" style="margin-bottom:0">
+          <div class="cinema-fg" style="margin-bottom:0">
+            <label class="cinema-fl">
+              <span style="font-size:13px">🔒</span>
+              <span class="ar-t">كلمة المرور</span>
+              <span class="en-t hidden">Password</span>
+              <span class="cinema-fl-req">*</span>
+            </label>
+            <input class="cinema-fc" type="password" id="r-pw" placeholder="••••••••" autocomplete="new-password" minlength="8"/>
+          </div>
+          <div class="cinema-fg" style="margin-bottom:0">
+            <label class="cinema-fl">
+              <span style="font-size:13px">✅</span>
+              <span class="ar-t">تأكيد كلمة المرور</span>
+              <span class="en-t hidden">Confirm</span>
+              <span class="cinema-fl-req">*</span>
+            </label>
+            <input class="cinema-fc" type="password" id="r-pw2" placeholder="••••••••" autocomplete="new-password"/>
+          </div>
+        </div>
+        <div id="rerr" class="cinema-err hidden" style="margin-top:14px"></div>
+        <button class="cinema-btn-main delay-5" id="rbtn" onclick="doRegister()" style="margin-top:18px">
+          <span class="ar-t">إنشاء الحساب</span>
+          <span class="en-t hidden">Create Account</span>
+          <span style="font-size:18px">✨</span>
+        </button>
+      </div>
+
+      <!-- Footer -->
+      <div class="cinema-auth-foot">
+        <span class="ar-t">قسطني <strong>منصة سعودية</strong> تُيسّر الاتفاقيات بين الأفراد فقط — لا تُجري معاملات مالية</span>
+        <span class="en-t hidden"><strong>Saudi platform</strong> facilitating P2P agreements only — no financial transactions</span>
+      </div>
     </div>
-    <div class="afoot"><span class="ar-t">هذه المنصة تُيسّر الاتفاقيات فقط ولا تُجري أي معاملات مالية</span><span class="en-t hidden">Facilitates agreements only — no real financial transactions.</span></div>
-  </div></div>`
+  </div>`
 }
 
 window.switchAT=tab=>{
@@ -2079,21 +3458,78 @@ function buildShell(){
       </div>
 
       <div class="page hidden" id="pg-dash"><div class="pi">
-        <div class="disc">⚠️ <span class="ar-t">قسطني — قيد الترخيص من البنك المركزي السعودي. الرسوم سعي وتيسير وليست فوائد ربوية. النظام التجريبي حالياً</span><span class="en-t hidden">Qastni — Pending SAMA license. Service fees, not interest. Currently in test mode</span></div>
-        <div id="dash-prem-reminder"></div>
-        <div id="dash-seller-onb"></div>
-        <h1 class="ptit" id="dwelcome">مرحباً 👋</h1>
-        <p class="psub ar-t">إليك ملخص نشاطك في منصة قسطني</p><p class="psub en-t hidden">Your Qastni activity summary</p>
-        <div class="sgrid">
-          <div class="scard"><div class="sico" style="background:var(--teal3)">📊</div><div class="sval" id="sa">0</div><div class="slbl ar-t">صفقات نشطة</div><div class="slbl en-t hidden">Active</div></div>
-          <div class="scard"><div class="sico" style="background:var(--gr100)">✅</div><div class="sval" id="sd">0</div><div class="slbl ar-t">مكتملة</div><div class="slbl en-t hidden">Completed</div></div>
-          <div class="scard"><div class="sico" style="background:#dcfce7">💰</div><div class="sval" id="srecv" style="color:#16a34a">0</div><div class="slbl ar-t">مستحق لي</div><div class="slbl en-t hidden">Owed to me</div></div>
-          <div class="scard"><div class="sico" style="background:#fee2e2">💸</div><div class="sval" id="sowe" style="color:#dc2626">0</div><div class="slbl ar-t">عليّ</div><div class="slbl en-t hidden">I owe</div></div>
+        <!-- ═══ Hero Section السينمائي ═══ -->
+        <div class="cinema-hero reveal-1">
+          <div class="cinema-hero-badge">
+            <span class="live-pulse" style="margin-inline-start:14px">●</span>
+            <span class="ar-t">منصة سعودية بترخيص قيد الإعداد</span>
+            <span class="en-t hidden">Saudi platform • License pending</span>
+          </div>
+          <div class="cinema-welcome">
+            <span class="cinema-welcome-emoji">👋</span>
+            <div class="cinema-welcome-text">
+              <h1 class="cinema-hero-title" id="dwelcome">مرحباً</h1>
+              <p class="cinema-hero-subtitle ar-t">منصة قسطني — التقسيط الآمن والذكي بين الأفراد</p>
+              <p class="cinema-hero-subtitle en-t hidden">Qastni — Smart & secure P2P installments</p>
+            </div>
+          </div>
         </div>
-        <div class="shdr"><h2 class="stit ar-t">صفقاتك النشطة</h2><h2 class="stit en-t hidden">Active Deals</h2><button class="btn bsec bsm" onclick="nav('deals')"><span class="ar-t">عرض الكل</span><span class="en-t hidden">View All</span></button></div>
-        <div id="dl"></div>
-        <div id="dash-activity-feed" style="margin-top:18px"></div>
-        <div class="mt20"><button class="btn bp blg" onclick="nav('create')">➕ <span class="ar-t">بيع بالتقسيط</span><span class="en-t hidden">Sell on Installment</span></button></div>
+
+        <div id="dash-prem-reminder" class="reveal-2"></div>
+        <div id="dash-seller-onb" class="reveal-2"></div>
+
+        <!-- ═══ Stats Cinematic ═══ -->
+        <div class="cinema-stats reveal-3">
+          <div class="cinema-stat" style="--stat-color:#0d9488;--stat-color2:#0f766e;--stat-shadow:rgba(13,148,136,.3)">
+            <div class="cinema-stat-icon">📊</div>
+            <div class="cinema-stat-value cinema-counter" id="sa" data-current="0">0</div>
+            <div class="cinema-stat-label ar-t">صفقات نشطة</div>
+            <div class="cinema-stat-label en-t hidden">Active</div>
+          </div>
+          <div class="cinema-stat" style="--stat-color:#22c55e;--stat-color2:#16a34a;--stat-shadow:rgba(34,197,94,.3)">
+            <div class="cinema-stat-icon">✅</div>
+            <div class="cinema-stat-value cinema-counter" id="sd" data-current="0">0</div>
+            <div class="cinema-stat-label ar-t">مكتملة</div>
+            <div class="cinema-stat-label en-t hidden">Completed</div>
+          </div>
+          <div class="cinema-stat" style="--stat-color:#16a34a;--stat-color2:#15803d;--stat-shadow:rgba(22,163,74,.3)">
+            <div class="cinema-stat-icon">💰</div>
+            <div class="cinema-stat-value cinema-counter" id="srecv" data-current="0">0</div>
+            <div class="cinema-stat-label ar-t">مستحق لي</div>
+            <div class="cinema-stat-label en-t hidden">Owed to me</div>
+          </div>
+          <div class="cinema-stat" style="--stat-color:#dc2626;--stat-color2:#b91c1c;--stat-shadow:rgba(220,38,38,.3)">
+            <div class="cinema-stat-icon">💸</div>
+            <div class="cinema-stat-value cinema-counter" id="sowe" data-current="0">0</div>
+            <div class="cinema-stat-label ar-t">عليّ</div>
+            <div class="cinema-stat-label en-t hidden">I owe</div>
+          </div>
+        </div>
+
+        <!-- ═══ Active Deals Section ═══ -->
+        <div class="cinema-shdr reveal-4">
+          <div class="cinema-shdr-title">
+            <div class="cinema-shdr-icon">📋</div>
+            <span class="ar-t">صفقاتك النشطة</span>
+            <span class="en-t hidden">Active Deals</span>
+          </div>
+          <button class="cinema-shdr-action" onclick="nav('deals')">
+            <span class="ar-t">عرض الكل</span>
+            <span class="en-t hidden">View All</span>
+            <span style="font-size:14px">←</span>
+          </button>
+        </div>
+        <div id="dl" class="reveal-4"></div>
+
+        <div id="dash-activity-feed" class="reveal-5" style="margin-top:24px"></div>
+
+        <div class="mt20 reveal-5">
+          <button class="btn-cinema glow-on-hover" onclick="nav('create')" style="width:100%;justify-content:center;padding:16px 28px;font-size:15px">
+            <span style="font-size:20px">➕</span>
+            <span class="ar-t">بيع بالتقسيط</span>
+            <span class="en-t hidden">Sell on Installment</span>
+          </button>
+        </div>
       </div></div>
 
       <div class="page hidden" id="pg-create"><div class="pi" style="max-width:680px">
@@ -2632,44 +4068,49 @@ function bCard(d){
 
 function rDash(){
   const nm=PRF?.full_name||CU.email.split('@')[0]
-  const dw=$('dwelcome');if(dw)dw.textContent=isAr()?`مرحباً، ${nm} 👋`:`Welcome, ${nm} 👋`
-  const sa=$('sa');if(sa)sa.textContent=DEALS.filter(d=>d.status==='active').length
-  const sd=$('sd');if(sd)sd.textContent=DEALS.filter(d=>d.status==='completed').length
+  const dw=$('dwelcome');if(dw)dw.textContent=isAr()?`مرحباً، ${nm}`:`Welcome, ${nm}`
+
+  const activeCount=DEALS.filter(d=>d.status==='active').length
+  const completedCount=DEALS.filter(d=>d.status==='completed').length
 
   // حساب المستحق لي (كبائع) و عليّ (كمشتري) — يستثني الصفقات المكتملة والأقساط المدفوعة
   let owedToMe=0,iOwe=0
   DEALS.forEach(d=>{
-    // نحسب فقط الصفقات النشطة (مو المكتملة ولا الملغاة)
     if(d.status!=='active'&&d.status!=='approved')return
-
     const iAmBuyer=d.buyer_id===CU.id||d.buyer_email===CU.email
     const iAmSeller=d.seller_email===CU.email
-
-    // الأقساط المتبقية فقط (غير المدفوعة)
     const unpaidPays=(d.payments||[]).filter(p=>!p.is_paid)
     const unpaidTotal=unpaidPays.reduce((s,p)=>{
       const fee=p.platform_fee||(d.platform_fee_per_payment||0)
       return s+p.amount+fee
     },0)
-
     if(iAmSeller){
-      // أنا بائع — المستحق لي هو ما لم يُدفع بعد (بدون رسوم المشتري)
       const unpaidSellerAmt=unpaidPays.reduce((s,p)=>s+p.amount,0)
       owedToMe+=unpaidSellerAmt
     }
     if(iAmBuyer){
-      // أنا مشتري — اللي عليّ هو ما لم يُدفع بعد (مع رسوم المشتري)
       iOwe+=unpaidTotal
     }
   })
 
-  const fmt=n=>n>=1000?(n/1000).toFixed(1)+'K':Math.round(n).toString()
-  const srecv=$('srecv');if(srecv)srecv.textContent=fmt(owedToMe)
-  const sowe=$('sowe');if(sowe)sowe.textContent=fmt(iOwe)
+  // 🎬 Counter animations — الأرقام تعد من 0 بشكل سينمائي
+  setTimeout(()=>{
+    animateCounter($('sa'),activeCount,1000)
+    animateCounter($('sd'),completedCount,1100)
+    animateCounter($('srecv'),Math.round(owedToMe),1300)
+    animateCounter($('sowe'),Math.round(iOwe),1500)
+  },300)
 
-  // عرض الصفقات النشطة والمعلقة فقط (مو المكتملة أو الملغاة)
+  // عرض الصفقات النشطة والمعلقة فقط
   const activeDeals=DEALS.filter(d=>['active','approved','pending'].includes(d.status))
-  const dl=$('dl');if(dl)dl.innerHTML=activeDeals.slice(0,5).map(bCard).join('')||empt('📄',isAr()?'لا توجد صفقات نشطة':'No active deals')
+  const dl=$('dl')
+  if(dl){
+    dl.innerHTML=activeDeals.slice(0,5).map(bCard).join('')||`<div class="cinema-empty">
+      <div class="cinema-empty-icon">📄</div>
+      <div class="cinema-empty-title">${isAr()?'لا توجد صفقات نشطة':'No active deals'}</div>
+      <div class="cinema-empty-desc">${isAr()?'ابدأ رحلتك بإنشاء أول صفقة تقسيط الآن':'Start your journey by creating your first deal'}</div>
+    </div>`
+  }
 
   // ═══ Premium expiry reminder ═══
   const remSlot=$('dash-prem-reminder')
@@ -2677,17 +4118,20 @@ function rDash(){
     remSlot.innerHTML=buildPremReminder()
   }
 
-  // ═══ 🚀 Seller Onboarding (يختفي تلقائياً لما تكتمل كل الخطوات) ═══
+  // ═══ 🚀 Seller Onboarding ═══
   const onbSlot=$('dash-seller-onb')
   if(onbSlot){
     onbSlot.innerHTML=renderSellerOnboarding()
   }
 
-  // ═══ 📰 Activity Feed (نشاطك الأخير) ═══
+  // ═══ 📰 Activity Feed ═══
   const feedSlot=$('dash-activity-feed')
   if(feedSlot){
     feedSlot.innerHTML=renderActivityFeed()
   }
+
+  // 🎨 تفعيل 3D tilt على البطاقات
+  setTimeout(()=>attachTiltEffects(),100)
 }
 
 function buildPremReminder(){
@@ -5340,6 +6784,97 @@ window.dismissInstallBanner=()=>{
     setTimeout(()=>{b.classList.add('hidden');b.style.transform=''},400)
   }
   try{localStorage.setItem(INSTALL_KEY,'1')}catch(e){}
+}
+
+// ═══════════════════════════════════════════════
+// 🌌 CINEMATIC EFFECTS — التأثيرات السينمائية
+// ═══════════════════════════════════════════════
+
+// ✨ توليد الجزيئات الذهبية المتساقطة
+function spawnParticles(count=15){
+  const bg=$('particles-bg')
+  if(!bg)return
+  bg.innerHTML=''
+  for(let i=0;i<count;i++){
+    const p=document.createElement('div')
+    p.className='particle'
+    const left=Math.random()*100
+    const dur=15+Math.random()*15
+    const delay=Math.random()*15
+    const size=2+Math.random()*4
+    const drift=(Math.random()-.5)*200
+    const opacity=.3+Math.random()*.5
+    p.style.cssText=`
+      left:${left}%;
+      bottom:0;
+      width:${size}px;
+      height:${size}px;
+      opacity:${opacity};
+      --drift:${drift}px;
+      animation:floatParticle ${dur}s linear ${delay}s infinite;
+    `
+    bg.appendChild(p)
+  }
+}
+
+// 🔢 Counter Animation — أرقام تعد من الصفر
+function animateCounter(el,target,duration=1500,prefix='',suffix=''){
+  if(!el)return
+  const start=parseFloat(el.dataset.current||0)
+  const startTime=performance.now()
+  const range=target-start
+  function update(now){
+    const elapsed=now-startTime
+    const progress=Math.min(elapsed/duration,1)
+    // ease out cubic
+    const eased=1-Math.pow(1-progress,3)
+    const current=start+range*eased
+    el.textContent=prefix+(target>=1000?Math.round(current).toLocaleString('en-US'):Math.round(current).toString())+suffix
+    if(progress<1){
+      requestAnimationFrame(update)
+    }else{
+      el.dataset.current=target
+      el.classList.add('counter-update')
+      setTimeout(()=>el.classList.remove('counter-update'),400)
+    }
+  }
+  requestAnimationFrame(update)
+}
+
+// 🎨 3D Tilt Effect (للديسكتوب فقط)
+function attachTiltEffects(){
+  if(window.innerWidth<769)return
+  document.querySelectorAll('.cinema-stat,.cinema-deal').forEach(card=>{
+    if(card.dataset.tiltAttached)return
+    card.dataset.tiltAttached='1'
+    card.addEventListener('mousemove',(e)=>{
+      const r=card.getBoundingClientRect()
+      const x=e.clientX-r.left
+      const y=e.clientY-r.top
+      const cx=r.width/2
+      const cy=r.height/2
+      const rx=((y-cy)/cy)*-3
+      const ry=((x-cx)/cx)*3
+      card.style.transform=`perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-3px)`
+    })
+    card.addEventListener('mouseleave',()=>{
+      card.style.transform=''
+    })
+  })
+}
+
+// 📊 Initialize cinematic effects
+function initCinematicEffects(){
+  spawnParticles(15)
+  // إعادة توليد الجزيئات كل 30 ثانية لتنويع الحركة
+  setInterval(()=>{spawnParticles(15)},30000)
+}
+
+// تشغيل الجزيئات لما الموقع يحمّل
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',initCinematicEffects)
+}else{
+  initCinematicEffects()
 }
 
 // ═══════════════════════════════════════════════
