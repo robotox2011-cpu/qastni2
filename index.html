@@ -20,9 +20,9 @@
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('service-worker.js').then((reg) => {
-      console.log('[Qastni] Service Worker registered:', reg.scope);
+      Q.log('[Qastni] Service Worker registered:', reg.scope);
     }).catch((err) => {
-      console.warn('[Qastni] Service Worker failed:', err);
+      Q.warn('[Qastni] Service Worker failed:', err);
     });
   });
 }
@@ -433,6 +433,25 @@ body.en{direction:ltr}
 .page{padding:24px;flex:1}
 .pi{animation:pi .22s ease}
 @keyframes pi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ LOADING SKELETONS — تأثير shimmer فخم
+   ═══════════════════════════════════════════════════════════ */
+.sk{position:relative;overflow:hidden;background:linear-gradient(90deg,var(--g100) 0%,var(--g200) 50%,var(--g100) 100%);background-size:200% 100%;animation:shimmer 1.4s ease-in-out infinite;border-radius:8px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+html.dark .sk{background:linear-gradient(90deg,var(--bg-elevated) 0%,var(--bg-hover) 50%,var(--bg-elevated) 100%);background-size:200% 100%}
+.sk-text{height:14px;border-radius:4px;margin-bottom:8px}
+.sk-text.lg{height:22px}
+.sk-text.sm{height:11px}
+.sk-text.short{width:40%}
+.sk-text.med{width:65%}
+.sk-text.long{width:85%}
+.sk-circle{border-radius:50%;width:42px;height:42px;flex-shrink:0}
+.sk-card{background:var(--white);border:1px solid var(--g200);border-radius:var(--r16);padding:15px 16px;margin-bottom:9px;box-shadow:var(--sh)}
+.sk-row{display:flex;align-items:flex-start;gap:12px}
+.sk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+@media(max-width:768px){.sk-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.sk-grid{grid-template-columns:1fr}}
 
 .sb-top{padding:16px 14px 12px;border-bottom:1px solid var(--g100);display:flex;align-items:center;gap:9px}
 .sb-name{font-size:16px;font-weight:900;color:var(--teal2)}
@@ -1296,6 +1315,35 @@ html.dark .bn-badge{background:#dc2626!important;border-color:var(--bg-card)!imp
 <script>
 'use strict'
 
+// ═══════════════════════════════════════════════
+// LOGGER ذكي — يشتغل بالتطوير، صامت في production
+// ═══════════════════════════════════════════════
+const _isDev=window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1'||window.location.hostname.includes('.local')
+const _origLog=console.log,_origWarn=console.warn,_origError=console.error
+const Q={
+  log:_isDev?(...a)=>_origLog('[Qastni]',...a):()=>{},
+  warn:_isDev?(...a)=>_origWarn('[Qastni]',...a):()=>{},
+  error:(...a)=>_origError('[Qastni]',...a)  // الأخطاء دائماً تظهر
+}
+// نطفّي console.log في production نهائياً
+if(!_isDev){
+  console.log=()=>{}
+  console.warn=()=>{}
+  // console.error نخليها للأخطاء الحرجة
+}
+
+// ═══════════════════════════════════════════════
+// ERROR BOUNDARY عام — يلتقط أي خطأ غير متوقع
+// ═══════════════════════════════════════════════
+window.addEventListener('error',(e)=>{
+  Q.error('Uncaught error:',e.message,e.filename,e.lineno)
+  // لا نزعج المستخدم بكل خطأ، فقط الأخطاء المرئية
+  if(e.message&&e.message.toLowerCase().includes('script error'))return
+})
+window.addEventListener('unhandledrejection',(e)=>{
+  Q.error('Unhandled promise rejection:',e.reason)
+})
+
 const _rl={login:0,reg:0}
 function checkRL(key,limit=30000){
   const now=Date.now()
@@ -1363,6 +1411,15 @@ const qLoader=(size='md',color='t')=>{
   const pieces=Array.from({length:12},(_,i)=>`<g class="qp" style="--a:${i*30}deg"><g transform="rotate(${i*30})"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="${fill}"/></g></g>`).join('')
   return `<span class="qlogo-wrap ${cls}" style="width:${sz}px;height:${sz}px;vertical-align:middle"><svg viewBox="0 0 120 120" style="display:block"><g transform="translate(60,60)">${pieces}</g></svg><span class="qshine"></span></span>`
 }
+
+// ═══════════════════════════════════════════════
+// ✨ SKELETON HELPERS — لوحات تحميل احترافية
+// ═══════════════════════════════════════════════
+const skDealCard=()=>`<div class="sk-card"><div class="sk-row"><div class="sk sk-circle"></div><div style="flex:1"><div class="sk sk-text lg long"></div><div class="sk sk-text sm med"></div><div class="sk sk-text short"></div></div><div style="text-align:end;flex-shrink:0"><div class="sk sk-text" style="width:80px"></div><div class="sk sk-text sm" style="width:60px"></div></div></div></div>`
+const skDealsList=(n=4)=>Array.from({length:n},()=>skDealCard()).join('')
+const skStat=()=>`<div class="scard"><div class="sk sk-circle" style="width:36px;height:36px;border-radius:10px;margin-bottom:9px"></div><div class="sk sk-text lg short"></div><div class="sk sk-text sm med"></div></div>`
+const skStatsGrid=()=>`<div class="sgrid">${Array.from({length:4},()=>skStat()).join('')}</div>`
+const skProfile=()=>`<div style="display:flex;justify-content:center;padding:30px"><div class="sk sk-circle" style="width:70px;height:70px"></div></div><div style="text-align:center"><div class="sk sk-text lg" style="width:140px;margin:0 auto 8px"></div><div class="sk sk-text sm" style="width:200px;margin:0 auto"></div></div>`
 
 // ═══════════════════════════════════════════════
 // PAYMENT LOGOS (inline SVG — no network requests)
@@ -1597,7 +1654,7 @@ window.doRegister=async()=>{
   },20000)
 
   try{
-    console.log('[register] Attempting signUp for:',em)
+    Q.log('[register] Attempting signUp for:',em)
     const{data,error}=await sb.auth.signUp({
       email:em,
       password:pw,
@@ -1608,7 +1665,7 @@ window.doRegister=async()=>{
     })
 
     clearTimeout(timeoutId)
-    console.log('[register] Result:',{hasUser:!!data?.user,hasSession:!!data?.session,error:error?.message})
+    Q.log('[register] Result:',{hasUser:!!data?.user,hasSession:!!data?.session,error:error?.message})
 
     if(error){
       btn.innerHTML=originalBtnHTML
@@ -1889,7 +1946,7 @@ function buildShell(){
     </nav>
   </div>`
   applyLang()
-  loadSBStars().catch(e=>console.warn('loadSBStars failed:',e))
+  loadSBStars().catch(e=>Q.warn('loadSBStars failed:',e))
 }
 
 const PT={dash:{ar:'الرئيسية',en:'Dashboard'},create:{ar:'بيع بالتقسيط',en:'Sell on Installment'},inc:{ar:'العروض الواردة',en:'Incoming Offers'},deals:{ar:'صفقاتي',en:'My Deals'},detail:{ar:'تفاصيل الصفقة',en:'Deal Details'},profile:{ar:'ملفي الشخصي',en:'My Profile'},prem:{ar:'الترقية لموثَّق',en:'Upgrade to Verified'},upub:{ar:'الملف الشخصي',en:'Profile'}}
@@ -1997,16 +2054,60 @@ async function loadSBStars(){
     if(!data?.length){el.innerHTML=`<span style="font-size:10px;color:var(--g400)">${isAr()?'لا تقييمات':'No ratings'}</span>`;return}
     const avg=Math.round(data.reduce((s,r)=>s+r.stars,0)/data.length*10)/10
     el.innerHTML=stars(avg,data.length,11)
-  }catch(e){console.warn('loadSBStars error:',e)}
+  }catch(e){Q.warn('loadSBStars error:',e)}
 }
 
-async function loadDeals(){
+// ═══ Pagination state ═══
+const DEALS_PER_PAGE=20
+let _dealsPage=0,_dealsHasMore=true,_dealsLoading=false
+
+async function loadDeals(reset=true){
+  if(_dealsLoading)return
+  _dealsLoading=true
   try{
-    // نجيب الصفقات اللي أنا فيها سواء كبائع أو كمشتري (id أو email)
-    const{data,error}=await sb.from('deals').select('*,payments(*)').or(`buyer_id.eq.${CU.id},buyer_email.eq.${CU.email},seller_id.eq.${CU.id},seller_email.eq.${CU.email}`).order('created_at',{ascending:false})
-    if(error){console.warn('loadDeals error:',error);DEALS=[];return}
-    DEALS=data||[]
-  }catch(e){console.warn('loadDeals exception:',e);DEALS=[]}
+    if(reset){
+      _dealsPage=0
+      _dealsHasMore=true
+      DEALS=[]
+    }
+    if(!_dealsHasMore){_dealsLoading=false;return}
+
+    const from=_dealsPage*DEALS_PER_PAGE
+    const to=from+DEALS_PER_PAGE-1
+
+    // نجيب الصفقات بـ pagination — أداء أفضل بكثير لـ 10K+ مستخدم
+    const{data,error,count}=await sb.from('deals')
+      .select('*,payments(*)',{count:'exact'})
+      .or(`buyer_id.eq.${CU.id},buyer_email.eq.${CU.email},seller_id.eq.${CU.id},seller_email.eq.${CU.email}`)
+      .order('created_at',{ascending:false})
+      .range(from,to)
+
+    if(error){Q.warn('loadDeals error:',error);_dealsLoading=false;return}
+
+    const newDeals=data||[]
+    if(reset){
+      DEALS=newDeals
+    }else{
+      DEALS=[...DEALS,...newDeals]
+    }
+
+    _dealsHasMore=newDeals.length===DEALS_PER_PAGE
+    _dealsPage++
+    Q.log(`Loaded ${newDeals.length} deals (page ${_dealsPage}, total: ${DEALS.length})`)
+  }catch(e){
+    Q.warn('loadDeals exception:',e)
+    if(reset)DEALS=[]
+  }finally{
+    _dealsLoading=false
+  }
+}
+
+// تحميل المزيد من الصفقات
+window.loadMoreDeals=async()=>{
+  if(_dealsLoading||!_dealsHasMore)return
+  await loadDeals(false)
+  if(page==='deals')rDeals()
+  if(page==='dash')rDash()
 }
 
 window.calcI=()=>{
@@ -2073,7 +2174,7 @@ window.submitDeal=async()=>{
   const wasPrem=PRF?.premium_expires_at!=null  // كان موثَّق سابقاً
   const limit=(isPrem&&!isPremExpired)?5:3
 
-  console.log('[Qastni] Active deals count:',myActiveCount,'/ Limit:',limit,'/ Premium:',isPrem)
+  Q.log('[Qastni] Active deals count:',myActiveCount,'/ Limit:',limit,'/ Premium:',isPrem)
 
   if(myActiveCount>=limit){
     showLimitReachedModal(myActiveCount,limit,isPrem,isPremExpired,wasPrem)
@@ -2103,7 +2204,7 @@ window.submitDeal=async()=>{
   // الفحص الحقيقي للحد الشهري يصير على المشتري لما يقبل الصفقة
   // لكن يمكن إضافة تحذير إذا البائع يعرف المشتري
 
-  console.log('[Qastni] Monthly burden:',currentMonthlyBurden,'/ Limit:',monthlyLimit,'/ New:',newMonthlyTotal)
+  Q.log('[Qastni] Monthly burden:',currentMonthlyBurden,'/ Limit:',monthlyLimit,'/ New:',newMonthlyTotal)
 
   // ═══ Nafath check ═══ — لو ما تحقّق من نافذ، نعرض شاشة نافذ أولاً
   if(!PRF?.nafath_verified){
@@ -2392,13 +2493,23 @@ window.filtD=f=>{
 
 function rDeals(){
   let m=[...DEALS];if(filt!=='all')m=m.filter(d=>d.status===filt)
-  const el=$('dealsl');if(el)el.innerHTML=m.length?m.map(bCard).join(''):empt('📋',isAr()?'لا توجد صفقات':'No deals')
+  const el=$('dealsl');if(!el)return
+  if(!m.length){
+    el.innerHTML=empt('📋',isAr()?'لا توجد صفقات':'No deals')
+    return
+  }
+  let html=m.map(bCard).join('')
+  // زر "تحميل المزيد" — يظهر فقط إذا فيه صفقات أكثر و filt='all'
+  if(_dealsHasMore&&filt==='all'){
+    html+=`<button class="btn bg bfull" onclick="loadMoreDeals()" id="loadmore-deals" style="margin-top:14px">${isAr()?'تحميل المزيد':'Load more'} ↓</button>`
+  }
+  el.innerHTML=html
 }
 
 async function rDetail(id){
   if(!id)return
   const el=$('detc');if(!el)return
-  el.innerHTML=`<div style="text-align:center;padding:36px;display:flex;justify-content:center">${LOGO_ANIM(50)}</div>`
+  el.innerHTML=`<div class="sk-card"><div class="sk-row"><div class="sk sk-circle"></div><div style="flex:1"><div class="sk sk-text lg long"></div><div class="sk sk-text sm med"></div></div></div></div>${skDealsList(2)}`
   try{
     let d=DEALS.find(x=>x.id===id)
     if(!d){const{data}=await sb.from('deals').select('*,payments(*),ratings(*)').eq('id',id).maybeSingle();d=data}
@@ -2505,12 +2616,25 @@ async function rDetail(id){
 
 async function rProfile(){
   const nm=PRF?.full_name||CU.email.split('@')[0],color=PRF?.avatar_color||avc(CU.email)
-  let rats=[]
+  let rats=[],totalRats=0,avgRat=null
   try{
-    const{data}=await sb.from('ratings').select('*').eq('to_email',CU.email)
+    // نجيب أول 10 تقييمات + العدد الكامل
+    const{data,count}=await sb.from('ratings')
+      .select('*',{count:'exact'})
+      .eq('to_email',CU.email)
+      .order('created_at',{ascending:false})
+      .limit(10)
     rats=data||[]
-  }catch(e){console.warn('rProfile ratings error:',e)}
-  const avg=rats.length?Math.round(rats.reduce((s,r)=>s+r.stars,0)/rats.length*10)/10:null
+    totalRats=count||0
+    // نجيب المتوسط بفصل (أسرع)
+    if(totalRats>0){
+      const{data:allStars}=await sb.from('ratings').select('stars').eq('to_email',CU.email)
+      if(allStars&&allStars.length){
+        avgRat=Math.round(allStars.reduce((s,r)=>s+r.stars,0)/allStars.length*10)/10
+      }
+    }
+  }catch(e){Q.warn('rProfile ratings:',e)}
+  const avg=avgRat
   
   // حساب الأقساط النشطة الحالية للمستخدم كمشتري
   const activeDeals=DEALS.filter(d=>d.status==='active'&&(d.buyer_id===CU.id||d.buyer_email===CU.email))
@@ -2587,7 +2711,7 @@ async function rProfile(){
         <div style="width:68px;height:68px;border-radius:50%;background:${color};border:3px solid rgba(255,255,255,.3);display:inline-flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;margin-bottom:10px">${ini(nm)}</div>
         <h2 style="color:#fff;font-size:18px;font-weight:800;display:inline-flex;align-items:center;flex-wrap:wrap;justify-content:center">${san(nm)}${profileBadge}</h2>
         <div style="color:rgba(255,255,255,.65);font-size:12px;margin-top:3px">${san(CU.email)}</div>
-        <div style="margin-top:9px">${avg?stars(avg,rats.length,14):`<span style="color:rgba(255,255,255,.5);font-size:11px">${isAr()?'لا تقييمات بعد':'No ratings yet'}</span>`}</div>
+        <div style="margin-top:9px">${avg?stars(avg,totalRats,14):`<span style="color:rgba(255,255,255,.5);font-size:11px">${isAr()?'لا تقييمات بعد':'No ratings yet'}</span>`}</div>
       </div>
       <div class="cbody">
         <div class="igrid">
@@ -2637,8 +2761,8 @@ async function rProfile(){
       <div class="scard"><div class="sico" style="background:var(--am100)">⭐</div><div class="sval">${avg||'—'}</div><div class="slbl ar-t">متوسط التقييم</div><div class="slbl en-t hidden">Avg Rating</div></div>
     </div>
     <div class="card mb20">
-      <div class="chdr"><h2>⭐ ${isAr()?'التقييمات المستلمة':'Reviews Received'}</h2><span class="badge b-teal">${rats.length}</span></div>
-      <div class="cbody">${rats.length?rats.map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--g100)"><div class="flex aic jsb mb8"><strong class="text-sm">${san(r.from_name)}</strong>${stars(r.stars,1)}</div>${r.comment?`<p class="text-sm text-m">"${san(r.comment)}"</p>`:''}<div class="text-xs text-m mt8">${fmtD(r.created_at)}</div></div>`).join(''):empt('⭐',isAr()?'لا تقييمات بعد':'No reviews yet')}</div>
+      <div class="chdr"><h2>⭐ ${isAr()?'التقييمات المستلمة':'Reviews Received'}</h2><span class="badge b-teal">${totalRats}</span></div>
+      <div class="cbody">${rats.length?rats.map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--g100)"><div class="flex aic jsb mb8"><strong class="text-sm">${san(r.from_name)}</strong>${stars(r.stars,1)}</div>${r.comment?`<p class="text-sm text-m">"${san(r.comment)}"</p>`:''}<div class="text-xs text-m mt8">${fmtD(r.created_at)}</div></div>`).join('')+(totalRats>rats.length?`<div style="text-align:center;padding:12px 0 0;color:var(--g500);font-size:12px">+ ${totalRats-rats.length} ${isAr()?'تقييم آخر':'more reviews'}</div>`:''):empt('⭐',isAr()?'لا تقييمات بعد':'No reviews yet')}</div>
     </div>
     <div class="disc">⚠️ <span class="ar-t">قسطني — قيد الترخيص من البنك المركزي السعودي. الرسوم سعي وتيسير وليست فوائد ربوية</span><span class="en-t hidden">Qastni — Pending SAMA license. Service fees, not interest. Currently in test mode</span></div>`
   applyLang()
@@ -2790,7 +2914,7 @@ async function rUpub(){
     profile=data
   }catch(e){
     // عمود email غير متاح أو RLS يمنعه
-    console.warn('Direct profile lookup failed, falling back to deals data',e)
+    Q.warn('Direct profile lookup failed, falling back to deals data',e)
   }
 
   // Fallback: نجيب الاسم من بيانات الصفقات إذا الملف الشخصي غير متاح
@@ -2807,7 +2931,7 @@ async function rUpub(){
   try{
     const{data}=await sb.from('ratings').select('stars,comment,created_at,from_email').eq('to_email',email).order('created_at',{ascending:false}).limit(20)
     ratings=data||[]
-  }catch(e){console.warn('upub ratings:',e)}
+  }catch(e){Q.warn('upub ratings:',e)}
 
   const avgRating=ratings.length?Math.round(ratings.reduce((s,r)=>s+r.stars,0)/ratings.length*10)/10:null
 
@@ -2820,7 +2944,7 @@ async function rUpub(){
     dealsAsSeller=(sd||[]).length
     const allDeals=[...(bd||[]),...(sd||[])]
     completedCount=allDeals.filter(d=>d.status==='completed').length
-  }catch(e){console.warn('upub deals:',e)}
+  }catch(e){Q.warn('upub deals:',e)}
 
   const totalDeals=dealsAsBuyer+dealsAsSeller
   const displayName=profile?.full_name||fallbackName||email.split('@')[0]
@@ -3157,12 +3281,12 @@ function openPMPremium(){
           </button>
         </div>
 
-        <div id="pm-card-fields" class="pm-card-fields">
+        <div class="pm-card-fields">
           <div class="text-xs text-m mb8" style="font-weight:700">${isAr()?'بيانات البطاقة':'Card details'}</div>
-          <input type="text" class="pcard-input" placeholder="0000 0000 0000 0000" maxlength="19" id="pm-cardno" autocomplete="off"/>
+          <input type="text" class="pcard-input" placeholder="0000 0000 0000 0000" maxlength="19" data-pm="cardno" autocomplete="off"/>
           <div class="pcard-row">
-            <input type="text" class="pcard-input" placeholder="MM/YY" maxlength="5" id="pm-exp" autocomplete="off"/>
-            <input type="text" class="pcard-input" placeholder="CVV" maxlength="3" id="pm-cvv" autocomplete="off"/>
+            <input type="text" class="pcard-input" placeholder="MM/YY" maxlength="5" data-pm="exp" autocomplete="off"/>
+            <input type="text" class="pcard-input" placeholder="CVV" maxlength="3" data-pm="cvv" autocomplete="off"/>
           </div>
         </div>
 
@@ -3174,14 +3298,14 @@ function openPMPremium(){
       </div>
       <div class="pmod-foot">
         <button class="btn bg" onclick="closePM()" style="flex:1">${isAr()?'إلغاء':'Cancel'}</button>
-        <button class="btn bp" id="pm-pay-btn" onclick="processPMPremium()" style="flex:2.2">⭐ ${isAr()?'فعّل الاشتراك':'Activate'} 150 ${isAr()?'ر.س':'SAR'}</button>
+        <button class="btn bp" data-pay-btn="1" onclick="processPMPremium()" style="flex:2.2">⭐ ${isAr()?'فعّل الاشتراك':'Activate'} 150 ${isAr()?'ر.س':'SAR'}</button>
       </div>
     </div>`
   $('pm-overlay').classList.remove('hidden')
 }
 
 window.processPMPremium=async()=>{
-  const btn=$('pm-pay-btn')
+  const btn=document.querySelector('[data-pay-btn]')
   if(!btn)return
   btn.innerHTML=qLoader()
   btn.disabled=true
@@ -3314,7 +3438,7 @@ window.confirmNafath=async()=>{
         details:{sandbox:true}
       })
     }catch(e){}
-  }catch(e){console.warn(e)}
+  }catch(e){Q.warn(e)}
 
   $('nafath-overlay')?.classList.add('hidden')
   toast(isAr()?'✓ تم التحقق من هويتك بنجاح':'✓ Identity verified','s')
@@ -3451,12 +3575,12 @@ function openPMMulti(deal,paymentList,total){
           </button>
         </div>
 
-        <div id="pm-card-fields" class="pm-card-fields">
+        <div class="pm-card-fields">
           <div class="text-xs text-m mb8" style="font-weight:700">${isAr()?'بيانات البطاقة':'Card details'}</div>
-          <input type="text" class="pcard-input" placeholder="0000 0000 0000 0000" maxlength="19" id="pm-cardno" autocomplete="off"/>
+          <input type="text" class="pcard-input" placeholder="0000 0000 0000 0000" maxlength="19" data-pm="cardno" autocomplete="off"/>
           <div class="pcard-row">
-            <input type="text" class="pcard-input" placeholder="MM/YY" maxlength="5" id="pm-exp" autocomplete="off"/>
-            <input type="text" class="pcard-input" placeholder="CVV" maxlength="3" id="pm-cvv" autocomplete="off"/>
+            <input type="text" class="pcard-input" placeholder="MM/YY" maxlength="5" data-pm="exp" autocomplete="off"/>
+            <input type="text" class="pcard-input" placeholder="CVV" maxlength="3" data-pm="cvv" autocomplete="off"/>
           </div>
         </div>
 
@@ -3468,14 +3592,14 @@ function openPMMulti(deal,paymentList,total){
       </div>
       <div class="pmod-foot">
         <button class="btn bg" onclick="closePM()" style="flex:1">${isAr()?'إلغاء':'Cancel'}</button>
-        <button class="btn bp" id="pm-pay-btn" onclick="processPMMulti()" style="flex:2.2">💳 ${isAr()?'ادفع':'Pay'} ${fmtSAR(total)}</button>
+        <button class="btn bp" data-pay-btn="1" onclick="processPMMulti()" style="flex:2.2">💳 ${isAr()?'ادفع':'Pay'} ${fmtSAR(total)}</button>
       </div>
     </div>`
   $('pm-overlay').classList.remove('hidden')
 }
 
 window.processPMMulti=async()=>{
-  const btn=$('pm-pay-btn')
+  const btn=document.querySelector('[data-pay-btn]')
   if(!btn)return
   btn.innerHTML=qLoader()
   btn.disabled=true
@@ -3635,12 +3759,12 @@ function openPM(deal,pay){
           </button>
         </div>
         
-        <div id="pm-card-fields" class="pm-card-fields">
+        <div class="pm-card-fields">
           <div class="text-xs text-m mb8" style="font-weight:700">${isAr()?'بيانات البطاقة':'Card details'}</div>
-          <input type="text" class="pcard-input" placeholder="0000 0000 0000 0000" maxlength="19" id="pm-cardno" autocomplete="off"/>
+          <input type="text" class="pcard-input" placeholder="0000 0000 0000 0000" maxlength="19" data-pm="cardno" autocomplete="off"/>
           <div class="pcard-row">
-            <input type="text" class="pcard-input" placeholder="MM/YY" maxlength="5" id="pm-exp" autocomplete="off"/>
-            <input type="text" class="pcard-input" placeholder="CVV" maxlength="3" id="pm-cvv" autocomplete="off"/>
+            <input type="text" class="pcard-input" placeholder="MM/YY" maxlength="5" data-pm="exp" autocomplete="off"/>
+            <input type="text" class="pcard-input" placeholder="CVV" maxlength="3" data-pm="cvv" autocomplete="off"/>
           </div>
         </div>
         
@@ -3652,7 +3776,7 @@ function openPM(deal,pay){
       </div>
       <div class="pmod-foot">
         <button class="btn bg" onclick="closePM()" style="flex:1">${isAr()?'إلغاء':'Cancel'}</button>
-        <button class="btn bp" id="pm-pay-btn" onclick="processPM()" style="flex:2.2">🔒 ${isAr()?'ادفع الآن':'Pay Now'} ${fmtSAR(total)}</button>
+        <button class="btn bp" data-pay-btn="1" onclick="processPM()" style="flex:2.2">🔒 ${isAr()?'ادفع الآن':'Pay Now'} ${fmtSAR(total)}</button>
       </div>
     </div>`
   $('pm-overlay').classList.remove('hidden')
@@ -3661,14 +3785,15 @@ function openPM(deal,pay){
 window.selPM=m=>{
   _PS.method=m
   document.querySelectorAll('.pm-row').forEach(b=>b.classList.toggle('active',b.dataset.m===m))
-  const cf=$('pm-card-fields')
+  // نستخدم querySelector لأن DOM يستضيف modal واحد فقط في نفس الوقت
+  const cf=document.querySelector('#pm-overlay .pm-card-fields')
   if(cf)cf.classList.toggle('show',m==='visa'||m==='mada')
 }
 
 window.closePM=()=>{$('pm-overlay').classList.add('hidden')}
 
 window.processPM=async()=>{
-  const btn=$('pm-pay-btn')
+  const btn=document.querySelector('[data-pay-btn]')
   if(!btn)return
   btn.innerHTML=qLoader('sm','w')+' '+(isAr()?'جاري المعالجة...':'Processing...')
   btn.disabled=true
@@ -4399,7 +4524,7 @@ async function initSession(session){
   try{
     CU=session.user
     const{data:p,error:pe}=await sb.from('profiles').select('*').eq('id',CU.id).maybeSingle()
-    if(pe)console.warn('Profile fetch warning:',pe)
+    if(pe)Q.warn('Profile fetch warning:',pe)
     PRF=p||{full_name:CU.user_metadata?.full_name||'',phone:CU.user_metadata?.phone||'',national_id:CU.user_metadata?.national_id||''}
     await loadDeals()
     buildShell()
@@ -4422,10 +4547,10 @@ async function initSession(session){
           try{
             await loadDeals()
             updBadge()
-          }catch(e){console.warn('rt refresh:',e)}
+          }catch(e){Q.warn('rt refresh:',e)}
         },1500)
       }).subscribe()
-    }catch(e){console.warn('Realtime setup failed (non-critical):',e)}
+    }catch(e){Q.warn('Realtime setup failed (non-critical):',e)}
   }catch(e){
     console.error('Session init failed:',e)
     _started=false
@@ -4439,7 +4564,7 @@ async function initSession(session){
 }
 
 sb.auth.onAuthStateChange((event,session)=>{
-  console.log('[auth]',event,!!session)
+  Q.log('[auth]',event,!!session)
   if(event==='SIGNED_OUT'){
     _started=false
     CU=null;PRF=null;DEALS=[]
@@ -4456,9 +4581,9 @@ sb.auth.onAuthStateChange((event,session)=>{
 
 ;(async()=>{
   try{
-    console.log('[boot] checking session...')
+    Q.log('[boot] checking session...')
     const{data:{session}}=await sb.auth.getSession()
-    console.log('[boot] session:',!!session)
+    Q.log('[boot] session:',!!session)
     if(session&&!_started){
       _started=true
       await initSession(session)
