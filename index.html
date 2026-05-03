@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,viewport-fit=cover"/>
-<title>قسطني v47 | Qastni</title>
+<title>قسطني | Qastni</title>
 
 <!-- PWA Setup -->
 <link rel="manifest" href="manifest.json"/>
@@ -46,7 +46,7 @@ document.addEventListener('touchend',e=>{
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='5 5 110 110'><g transform='translate(60,60)'><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(30)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(60)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(90)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(120)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(150)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(180)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(210)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(240)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(270)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(300)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(330)'/></g></svg>"/>
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='5 5 110 110'><g transform='translate(60,60)'><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(30)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(60)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(90)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(120)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(150)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(180)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(210)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(240)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(270)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(300)'/><rect x='-7' y='-50' width='14' height='14' rx='3.5' fill='%230d9488' transform='rotate(330)'/></g></svg>"/>
 <meta name="theme-color" content="#0d9488"/>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Noto+Naskh+Arabic:wght@400;500;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -470,6 +470,82 @@ html.dark .feed-time{color:var(--text-muted)}
 .feed-empty{padding:32px 20px;text-align:center;color:var(--g400)}
 .feed-empty-ico{font-size:34px;margin-bottom:8px;opacity:.4}
 .feed-empty-text{font-size:12.5px}
+
+/* عداد العدد الكلي */
+.feed-count{
+  margin-inline-start:auto;
+  background:rgba(13,148,136,.1);
+  color:var(--teal2);
+  font-size:11px;
+  font-weight:800;
+  padding:3px 9px;
+  border-radius:99px;
+  border:1px solid rgba(13,148,136,.2);
+}
+html.dark .feed-count{
+  background:rgba(94,234,212,.1);
+  color:#5eead4;
+  border-color:rgba(94,234,212,.2);
+}
+
+/* زر "اظهار المزيد" السينمائي */
+.feed-more-btn{
+  width:100%;
+  padding:13px 16px;
+  background:linear-gradient(135deg,rgba(13,148,136,.06),rgba(94,234,212,.03));
+  border:none;
+  border-top:1px solid rgba(13,148,136,.1);
+  cursor:pointer;
+  font-family:inherit;
+  font-size:13px;
+  font-weight:800;
+  color:var(--teal2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  transition:all .25s cubic-bezier(.34,1.56,.64,1);
+  letter-spacing:0;
+  position:relative;
+  overflow:hidden;
+}
+.feed-more-btn::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(13,148,136,.1),rgba(94,234,212,.05));
+  opacity:0;
+  transition:opacity .25s;
+}
+.feed-more-btn:hover{
+  color:#fff;
+  background:linear-gradient(135deg,#0d9488,#0f766e);
+  border-top-color:#0d9488;
+}
+.feed-more-btn:hover::before{opacity:1}
+.feed-more-btn:active{transform:scale(.98)}
+html.dark .feed-more-btn{
+  color:#5eead4;
+  background:linear-gradient(135deg,rgba(94,234,212,.06),rgba(13,148,136,.03));
+  border-top-color:rgba(94,234,212,.1);
+}
+html.dark .feed-more-btn:hover{
+  color:#0a1414;
+  background:linear-gradient(135deg,#5eead4,#0d9488);
+  border-top-color:#5eead4;
+}
+.feed-more-text{
+  position:relative;
+  z-index:1;
+}
+.feed-more-arrow{
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+  position:relative;
+  z-index:1;
+}
+.feed-more-arrow.rotated{
+  transform:rotate(180deg);
+}
 
 /* ═══════════════════════════════════════════════════════════
    🚀 NEW SELLER ONBOARDING (Dashboard widget)
@@ -1847,16 +1923,34 @@ html.dark .bottom-nav{
   border-top-color:rgba(94,234,212,.12)!important;
   box-shadow:0 -8px 32px rgba(0,0,0,.4),inset 0 1px 0 rgba(94,234,212,.08)!important;
 }
-.bn-item{transition:all .25s cubic-bezier(.34,1.56,.64,1)!important}
-.bn-item.active{transform:translateY(-2px)}
-.bn-item.active .bn-ico{transform:scale(1.15) rotate(-5deg)!important;filter:drop-shadow(0 4px 8px rgba(13,148,136,.4))}
+.bn-item{transition:color .25s ease,opacity .25s ease!important}
+.bn-item.active{transform:none!important}
+.bn-item.active .bn-ico{transform:scale(1.1)!important;filter:drop-shadow(0 3px 6px rgba(13,148,136,.4))}
 .bn-fab{
   background:linear-gradient(135deg,#0d9488 0%,#0f766e 100%)!important;
   box-shadow:0 8px 24px rgba(13,148,136,.5),inset 0 1px 0 rgba(255,255,255,.3)!important;
-  transition:all .3s cubic-bezier(.34,1.56,.64,1)!important;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease,background .25s ease!important;
+  transform-origin:center center!important;
+  will-change:transform;
 }
-.bn-fab:hover{transform:scale(1.1) rotate(90deg);box-shadow:0 12px 32px rgba(13,148,136,.7)!important}
-.bn-fab:active{transform:scale(.95)}
+.bn-fab:hover{
+  transform:scale(1.08)!important;
+  box-shadow:0 12px 32px rgba(13,148,136,.7)!important;
+}
+.bn-fab:active{transform:scale(.92)!important}
+.bn-item.fab-wrap{
+  position:relative;
+  flex-direction:column;
+  gap:2px;
+  justify-content:flex-start;
+  padding-top:0;
+}
+/* تأكد إنه ما يتحرك أبداً */
+.bn-item.fab-wrap.active{transform:none!important}
+.bn-item.fab-wrap.active .bn-fab{
+  background:linear-gradient(135deg,#0f766e 0%,#0d9488 100%)!important;
+  transform:scale(1.05)!important;
+}
 
 /* ═══ ALL BUTTONS — تحسين كامل لكل الأزرار ═══ */
 .btn{
@@ -2999,6 +3093,26 @@ html.dark .tbn{color:rgba(240,253,250,.55)!important}
   letter-spacing:0!important;
   text-shadow:0 4px 20px rgba(251,191,36,.4);
 }
+.prem-hero-title .accent-text{
+  background:linear-gradient(135deg,#fbbf24 0%,#fcd34d 50%,#fbbf24 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  display:inline-block;
+  font-weight:900;
+}
+.prem-hero-title .hero-star{
+  display:inline-block;
+  font-size:28px;
+  margin:0 6px;
+  filter:drop-shadow(0 4px 12px rgba(251,191,36,.6));
+  animation:heroStarPulse 2s ease-in-out infinite;
+  -webkit-text-fill-color:initial;
+}
+@keyframes heroStarPulse{
+  0%,100%{transform:scale(1) rotate(0deg);filter:drop-shadow(0 4px 12px rgba(251,191,36,.6))}
+  50%{transform:scale(1.15) rotate(15deg);filter:drop-shadow(0 6px 20px rgba(251,191,36,.9))}
+}
 .prem-hero-subtitle{
   color:rgba(255,255,255,.9)!important;
   font-size:14px!important;
@@ -3320,7 +3434,14 @@ html.dark svg g[fill="currentColor"]{color:#5eead4}
 html.dark .theme-toggle{background:var(--teal2)}
 html.dark .theme-knob{inset-inline-start:21px}
 html{font-size:16px;scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body{font-family:'Tajawal',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;direction:rtl;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;overflow-x:hidden;overscroll-behavior-y:contain;touch-action:manipulation}
+body{font-family:'Tajawal',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;direction:rtl;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;overflow-x:hidden;overscroll-behavior-y:contain;touch-action:manipulation;text-rendering:optimizeLegibility;font-feature-settings:'kern','liga','calt';font-variant-ligatures:contextual}
+/* ⚡ تأكد إن التشكيل العربي يطلع كامل (شدة، تنوين، نقاط) */
+*{font-feature-settings:'kern','liga','calt'}
+.ar-t,[lang="ar"],h1,h2,h3,h4,.cinema-hero-title,.cinema-hero-subtitle,
+.dt-hero-title,.menu-uname,.prf-name,.upub-cinema-name,.ptit{
+  font-feature-settings:'kern' 1,'liga' 1,'calt' 1,'mark' 1,'mkmk' 1!important;
+  text-rendering:geometricPrecision;
+}
 html{-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
 /* ⚡ منع الـ scroll lockup */
 .page{overflow-y:visible;-webkit-overflow-scrolling:touch}
@@ -3503,8 +3624,11 @@ textarea.fc{resize:vertical;min-height:70px}
 .alert{padding:10px 13px;border-radius:var(--r8);font-size:12px;font-weight:600;margin-bottom:13px;border:1px solid transparent}
 .alert-d{background:var(--r50);color:var(--r600);border-color:#fca5a5}
 
-.moverlay{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
-.modal{background:var(--white);border-radius:var(--r20);box-shadow:var(--shl);width:100%;max-width:400px;animation:pi .2s ease}
+.moverlay{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+@media(max-height:700px){
+  .moverlay{align-items:flex-start;padding:14px}
+}
+.modal{background:var(--white);border-radius:var(--r20);box-shadow:var(--shl);width:100%;max-width:400px;animation:pi .2s ease;max-height:none}
 .mhdr{padding:16px 20px 13px;border-bottom:1px solid var(--g100);display:flex;align-items:center;justify-content:space-between}
 .mclose{font-size:16px;cursor:pointer;color:var(--g400);border:none;background:none;padding:3px;border-radius:6px}
 .mclose:hover{background:var(--g100)}
@@ -3784,6 +3908,10 @@ textarea.fc{resize:vertical;min-height:70px}
   max-height:92vh;
   display:flex;
   flex-direction:column;
+  margin:auto;
+}
+@media(max-height:700px){
+  .pmodal{max-height:none;margin:0 auto}
 }
 html.dark .pmodal{
   background:rgba(15,31,31,.95)!important;
@@ -3875,8 +4003,10 @@ html.dark .pmodal{
 .pmod-bd{
   padding:22px 24px;
   overflow-y:auto;
-  flex:1;
+  flex:1 1 auto;
   background:transparent;
+  min-height:0;
+  -webkit-overflow-scrolling:touch;
 }
 html.dark .pmod-bd{background:transparent}
 
@@ -6711,7 +6841,7 @@ function buildShell(){
           <div class="cinema-welcome">
             <span class="cinema-welcome-emoji">👋</span>
             <div class="cinema-welcome-text">
-              <h1 class="cinema-hero-title" id="dwelcome">مرحباً</h1>
+              <h1 class="cinema-hero-title" id="dwelcome">مرحبا</h1>
               <p class="cinema-hero-subtitle ar-t">منصة قسطني — التقسيط الآمن والذكي بين الأفراد</p>
               <p class="cinema-hero-subtitle en-t hidden">Qastni — Smart & secure P2P installments</p>
             </div>
@@ -7199,7 +7329,7 @@ function showLimitReachedModal(currentCount,limit,isPrem,isPremExpired,wasPrem){
 
   if(isExpiredCase){
     // الحالة "أ" — اشتراكه انتهى وعنده صفقات أكثر من الحد المجاني
-    title=isAr()?'مرحباً بعودتك 👋':'Welcome back 👋'
+    title=isAr()?'مرحبا بعودتك 👋':'Welcome back 👋'
     desc=isAr()
       ?`صفقاتك السابقة محفوظة لك <span dir="ltr">(${currentCount} نشطة)</span>، ولكن لإنشاء صفقات جديدة تحتاج لتجديد <strong>اشتراك موثَّق</strong>.`
       :`Your existing deals are safe (${currentCount} active), but to create new ones you need to renew your <strong>Verified subscription</strong>.`
@@ -7340,7 +7470,7 @@ function bCard(d){
 
 function rDash(){
   const nm=PRF?.full_name||CU.email.split('@')[0]
-  const dw=$('dwelcome');if(dw)dw.textContent=isAr()?`مرحباً، ${nm}`:`Welcome, ${nm}`
+  const dw=$('dwelcome');if(dw)dw.textContent=isAr()?`مرحبا، ${nm}`:`Welcome, ${nm}`
 
   const activeCount=DEALS.filter(d=>d.status==='active').length
   const completedCount=DEALS.filter(d=>d.status==='completed').length
@@ -8227,7 +8357,7 @@ function rPrem(){
       </div>
     </div>
     <div class="prem-hero">
-      <div class="prem-hero-badge">⭐ ${isAr()?'مرحباً بعودتك':'WELCOME BACK'}</div>
+      <div class="prem-hero-badge">⭐ ${isAr()?'مرحبا بعودتك':'WELCOME BACK'}</div>
       <h1 class="prem-hero-title">${isAr()?'جدّد':'Renew your'} <span class="accent">${isAr()?'شارة موثَّق ⭐':'Verified ⭐ badge'}</span></h1>
       <p class="prem-hero-sub">${isAr()?'استرجع كل المميّزات اللي كنت تستمتع فيها — وكمّل صفقاتك بدون قيود':"Restore every benefit you used to enjoy — and continue your deals without limits"}</p>
     </div>`
@@ -8235,8 +8365,8 @@ function rPrem(){
     heroSection=`
     <div class="prem-hero">
       <div class="prem-hero-badge">⭐ ${isAr()?'الترقية لموثَّق':'UPGRADE TO VERIFIED'}</div>
-      <h1 class="prem-hero-title">${isAr()?'كن':'Become a'} <span class="accent">${isAr()?'موثَّق ⭐':'Verified ⭐'}</span> ${isAr()?'في قسطني':'on Qastni'}</h1>
-      <p class="prem-hero-sub">${isAr()?'احصل على شارة موثَّقة، حماية مدمجة، وتجربة مميّزة في كل تعاملاتك':'Get a verified badge, built-in protection, and a premium experience for all your transactions'}</p>
+      <h1 class="prem-hero-title">${isAr()?'كن <span class="accent-text">موثَّقاً</span> <span class="hero-star">⭐</span> في قسطني':'Become a <span class="accent-text">Verified</span> <span class="hero-star">⭐</span> Member'}</h1>
+      <p class="prem-hero-sub">${isAr()?'احصل على شارة الموثَّق، حماية مدمجة، وتجربة مميّزة في كل تعاملاتك':'Get a verified badge, built-in protection, and a premium experience for all your transactions'}</p>
     </div>`
   }
 
@@ -9991,7 +10121,14 @@ function getActivityFeed(){
 
   // ترتيب من الأحدث للأقدم
   items.sort((a,b)=>b.time-a.time)
-  return items.slice(0,7)
+  return items.slice(0,15)
+}
+
+let _feedExpanded=false
+window.toggleFeedExpand=()=>{
+  _feedExpanded=!_feedExpanded
+  const slot=$('dash-activity-feed')
+  if(slot)slot.innerHTML=renderActivityFeed()
 }
 
 function renderActivityFeed(){
@@ -10008,12 +10145,18 @@ function renderActivityFeed(){
       </div>
     </div>`
   }
+  const showCount=_feedExpanded?items.length:3
+  const visibleItems=items.slice(0,showCount)
+  const hiddenCount=items.length-3
+  const hasMore=items.length>3
+
   return `<div class="feed-card">
     <div class="feed-header">
       <div class="feed-header-icon">📰</div>
       <div class="feed-header-title">${isAr()?'نشاطك الأخير':'Recent Activity'}</div>
+      ${hasMore?`<div class="feed-count">${items.length}</div>`:''}
     </div>
-    <div class="feed-list">${items.map(it=>`
+    <div class="feed-list">${visibleItems.map(it=>`
       <div class="feed-item">
         <div class="feed-ico ${it.type}">${it.ico}</div>
         <div class="feed-body">
@@ -10022,6 +10165,18 @@ function renderActivityFeed(){
         </div>
       </div>
     `).join('')}</div>
+    ${hasMore?`
+      <button class="feed-more-btn" onclick="toggleFeedExpand()">
+        <span class="feed-more-text">
+          ${_feedExpanded
+            ?(isAr()?'عرض أقل':'Show less')
+            :(isAr()?`عرض المزيد (${hiddenCount})`:`Show more (${hiddenCount})`)}
+        </span>
+        <svg class="feed-more-arrow ${_feedExpanded?'rotated':''}" viewBox="0 0 24 24" fill="none" width="16" height="16">
+          <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    `:''}
   </div>`
 }
 
