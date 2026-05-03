@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,viewport-fit=cover"/>
-<title>قسطني | Qastni</title>
+<title>قسطني v47 | Qastni</title>
 
 <!-- PWA Setup -->
 <link rel="manifest" href="manifest.json"/>
@@ -506,7 +506,7 @@ html.dark .feed-time{color:var(--text-muted)}
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ═══ Mesh Gradient Background — خلفية متحركة أسطورية ═══ */
-.mesh-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.mesh-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;contain:strict}
 .mesh-bg::before{
   content:'';
   position:absolute;
@@ -521,13 +521,29 @@ html.dark .feed-time{color:var(--text-muted)}
     radial-gradient(at 79% 53%,#5eead4 0,transparent 50%);
   filter:blur(100px) saturate(1.5);
   opacity:.18;
-  animation:meshShift 30s ease-in-out infinite alternate;
+  animation:meshShift 60s ease-in-out infinite alternate;
+  will-change:transform;
+  transform:translateZ(0);
+  backface-visibility:hidden;
 }
 @keyframes meshShift{
-  0%{transform:translate(0,0) rotate(0deg) scale(1)}
-  33%{transform:translate(-3%,2%) rotate(2deg) scale(1.05)}
-  66%{transform:translate(3%,-2%) rotate(-2deg) scale(.95)}
-  100%{transform:translate(0,0) rotate(0deg) scale(1)}
+  0%{transform:translate3d(0,0,0) scale(1)}
+  100%{transform:translate3d(2%,-1%,0) scale(1.05)}
+}
+
+/* ⚡ تخفيف على الجوال */
+@media(max-width:768px){
+  .mesh-bg::before{
+    filter:blur(80px) saturate(1.3);
+    opacity:.12;
+    animation:none;  /* إيقاف الأنيميشن على الجوال = أسرع كثير */
+  }
+}
+
+/* ⚡ احترام تفضيل المستخدم لتخفيف الحركة */
+@media(prefers-reduced-motion:reduce){
+  .mesh-bg::before,.particle{animation:none!important}
+  *,*::before,*::after{animation-duration:.01s!important;transition-duration:.01s!important}
 }
 
 html.dark .mesh-bg::before{
@@ -2304,17 +2320,50 @@ html.dark .menu-it:hover,html.dark .menu-item:hover{
 }
 
 /* ═══ SCROLLBAR ═══ */
-::-webkit-scrollbar{width:8px;height:8px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{
-  background:linear-gradient(180deg,rgba(13,148,136,.3),rgba(13,148,136,.15));
+/* ═══ Custom Scrollbar — السكرول بار الفخم ═══ */
+::-webkit-scrollbar{width:14px;height:14px}
+::-webkit-scrollbar-track{
+  background:rgba(13,148,136,.04);
   border-radius:99px;
-  border:2px solid transparent;
+}
+html.dark ::-webkit-scrollbar-track{
+  background:rgba(94,234,212,.04);
+}
+::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg,#0d9488,#0f766e);
+  border-radius:99px;
+  border:3px solid transparent;
   background-clip:padding-box;
+  min-height:60px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.15);
 }
 ::-webkit-scrollbar-thumb:hover{
-  background:linear-gradient(180deg,rgba(13,148,136,.5),rgba(13,148,136,.3));
+  background:linear-gradient(180deg,#5eead4,#0d9488);
   background-clip:padding-box;
+  cursor:grab;
+}
+::-webkit-scrollbar-thumb:active{
+  background:linear-gradient(180deg,#0d9488,#065f46);
+  background-clip:padding-box;
+  cursor:grabbing;
+}
+::-webkit-scrollbar-corner{background:transparent}
+
+/* ⚡ على الموبايل والـ tablet نخلي السكرول بار رفيع */
+@media(max-width:1023px){
+  ::-webkit-scrollbar{width:6px;height:6px}
+  ::-webkit-scrollbar-thumb{
+    border:1px solid transparent;
+    background:linear-gradient(180deg,rgba(13,148,136,.4),rgba(13,148,136,.25));
+    background-clip:padding-box;
+  }
+}
+
+/* Firefox scrollbar */
+html{scrollbar-width:auto;scrollbar-color:#0d9488 rgba(13,148,136,.04)}
+html.dark{scrollbar-color:#0d9488 rgba(94,234,212,.04)}
+@media(max-width:1023px){
+  html{scrollbar-width:thin}
 }
 
 /* ═══ SELECTION ═══ */
@@ -2602,23 +2651,55 @@ html.dark .fbar{
 }
 
 /* ═══ HELPER GROUPS — Reveal animation للجميع ═══ */
-.fg{animation:fadeUp .5s cubic-bezier(.34,1.56,.64,1) both}
+.fg{animation:fadeUp .4s cubic-bezier(.34,1.56,.64,1) both;will-change:auto}
 .fg:nth-child(1){animation-delay:0s}
-.fg:nth-child(2){animation-delay:.05s}
-.fg:nth-child(3){animation-delay:.1s}
-.fg:nth-child(4){animation-delay:.15s}
-.fg:nth-child(5){animation-delay:.2s}
+.fg:nth-child(2){animation-delay:.04s}
+.fg:nth-child(3){animation-delay:.08s}
+.fg:nth-child(4){animation-delay:.12s}
+.fg:nth-child(5){animation-delay:.16s}
+/* ⚡ بعد ما تنتهي الانيميشن، نمسح will-change تلقائياً */
+.fg{animation-fill-mode:both}
 
-/* ═══ MOBILE تحسينات ═══ */
-@media(max-width:480px){
+/* ⚡ إيقاف الـ tilt على الجوال والـ tablet */
+@media(max-width:1023px){
+  .cinema-stat,.cinema-deal{
+    transform:none!important;
+    transform-style:flat!important;
+  }
+}
+
+/* ═══ MOBILE تحسينات الأداء ═══ */
+@media(max-width:768px){
+  /* ⚡ تخفيف الـ blur على الموبايل لمنع التعليق */
   .topbar,.bottom-nav{
-    backdrop-filter:blur(20px) saturate(1.6);
-    -webkit-backdrop-filter:blur(20px) saturate(1.6);
+    backdrop-filter:blur(14px) saturate(1.4)!important;
+    -webkit-backdrop-filter:blur(14px) saturate(1.4)!important;
   }
-  .card,.scard,.dcard{
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
+  .card,.scard,.dcard,.icard{
+    backdrop-filter:blur(8px)!important;
+    -webkit-backdrop-filter:blur(8px)!important;
   }
+  .menu-modal,.faq-modal,.modal,.pmodal,.nafath-card{
+    backdrop-filter:blur(20px) saturate(1.4)!important;
+    -webkit-backdrop-filter:blur(20px) saturate(1.4)!important;
+  }
+  .pm-row,.pcard-input,.pbreakdown,.pm-card-fields{
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+  /* إيقاف الـ shine animation على الموبايل */
+  .btn.bp::after,.cinema-btn-main::before,.pmod-foot .btn.bp::after{
+    animation:none!important;
+    display:none!important;
+  }
+  /* إيقاف orbs المتحركة */
+  .menu-hdr::before,.pmod-hdr::before,.menu-promo-fullwidth::before,
+  .prf-hero::before,.prem-hero::before,.dt-hero::before,
+  .scard::after,.cinema-hero::before,.calcbox::before,.pamt-box::before{
+    animation:none!important;
+  }
+  /* إيقاف progress bar shine */
+  .pfill{animation:none!important}
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -3191,7 +3272,11 @@ html.dark svg g[fill="currentColor"]{color:#5eead4}
 html.dark .theme-toggle{background:var(--teal2)}
 html.dark .theme-knob{inset-inline-start:21px}
 html{font-size:16px;scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body{font-family:'Tajawal',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;direction:rtl;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+body{font-family:'Tajawal',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;direction:rtl;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;overflow-x:hidden;overscroll-behavior-y:contain;touch-action:manipulation}
+html{-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+/* ⚡ منع الـ scroll lockup */
+.page{overflow-y:visible;-webkit-overflow-scrolling:touch}
+.pi{position:relative;z-index:1}
 
 /* اسمح بتحديد النص في الحقول والمناطق التي يحتاج المستخدم نسخها */
 input,textarea,[contenteditable],.allow-select,.upub-email,.sb-uemail,.menu-uemail{
@@ -4229,6 +4314,824 @@ html.dark .pmod-foot .btn.bg{
 html.dark .pmod-foot .btn.bg:hover{
   background:rgba(94,234,212,.15)!important;
   border-color:#5eead4!important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   🎬 CINEMATIC ARROWS & CLOSE BUTTONS — أسهم وإكسات سينمائية
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ═══ زر الرجوع في sub-modals (FAQ, About, Suggestion) ═══ */
+.menu-back{
+  position:absolute;
+  top:14px;
+  inset-inline-start:14px;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:rgba(255,255,255,.12)!important;
+  border:1px solid rgba(94,234,212,.25)!important;
+  color:#fff;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all .35s cubic-bezier(.34,1.56,.64,1)!important;
+  line-height:1;
+  z-index:10;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  padding:0;
+  font-family:inherit;
+}
+.menu-back svg{
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+}
+/* ✅ السهم يأشر للجهة الصحيحة عند الـ hover */
+.menu-back:hover{
+  background:rgba(94,234,212,.25)!important;
+  border-color:rgba(94,234,212,.5)!important;
+  transform:scale(1.1);
+  box-shadow:0 6px 18px rgba(94,234,212,.3);
+}
+.menu-back:hover svg{
+  /* RTL: السهم يطلع لليمين (عكس direction) - LTR: لليسار */
+  transform:translateX(-3px);
+}
+.menu-back:active{transform:scale(.95)}
+
+/* ═══ زر الرجوع في الـ topbar — السهم لا يدور ═══ */
+.back-btn{
+  background:rgba(13,148,136,.08)!important;
+  border:1.5px solid rgba(13,148,136,.2)!important;
+  color:var(--teal2)!important;
+  width:38px!important;
+  height:38px!important;
+  border-radius:11px!important;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all .35s cubic-bezier(.34,1.56,.64,1)!important;
+  padding:0!important;
+}
+.back-btn svg{
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+}
+.back-btn:hover{
+  background:var(--teal2)!important;
+  color:#fff!important;
+  border-color:var(--teal2)!important;
+  box-shadow:0 8px 20px rgba(13,148,136,.35)!important;
+  transform:translateY(-1px);
+}
+.back-btn:hover svg{
+  transform:translateX(-3px);
+}
+.back-btn:active{transform:scale(.95)}
+html.dark .back-btn{
+  background:rgba(94,234,212,.1)!important;
+  color:#5eead4!important;
+  border-color:rgba(94,234,212,.2)!important;
+}
+html.dark .back-btn:hover{
+  background:#5eead4!important;
+  color:#0a1414!important;
+  border-color:#5eead4!important;
+}
+
+/* ═══ أزرار "إغلاق" (X) — الإكسات السينمائية ═══ */
+.menu-close,.pmod-close,.faq-close-x{
+  position:absolute;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:rgba(255,255,255,.12)!important;
+  border:1px solid rgba(94,234,212,.25)!important;
+  color:#fff!important;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:15px;
+  font-weight:700;
+  transition:all .35s cubic-bezier(.34,1.56,.64,1)!important;
+  z-index:10;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  padding:0;
+  font-family:inherit;
+  line-height:1;
+}
+/* الإكسة تدور وتكبر عند الـ hover */
+.menu-close:hover,.pmod-close:hover,.faq-close-x:hover{
+  background:rgba(220,38,38,.25)!important;
+  border-color:rgba(220,38,38,.5)!important;
+  transform:rotate(90deg) scale(1.1);
+  color:#fff!important;
+}
+.menu-close:active,.pmod-close:active,.faq-close-x:active{
+  transform:rotate(90deg) scale(.95);
+}
+
+/* تموضع زر الإغلاق */
+.menu-close{top:14px;inset-inline-start:14px}
+.pmod-close{top:14px;inset-inline-end:14px}
+
+/* ═══ أسهم الـ Promo Banner و Menu Items (›) ═══ */
+.promo-arrow,.menu-item-arrow{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:700;
+  flex-shrink:0;
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+}
+button:hover .promo-arrow,
+.menu-item:hover .menu-item-arrow{
+  transform:translateX(-4px);
+}
+[dir="ltr"] button:hover .promo-arrow,
+.en button:hover .promo-arrow{
+  transform:translateX(4px);
+}
+
+/* ═══ أسهم في seller-onboarding ═══ */
+.seller-onb-step-arrow{
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+}
+.seller-onb-step:hover .seller-onb-step-arrow{
+  transform:translateX(-4px);
+}
+
+/* ═══ Animated arrows in cinema-shdr-action ═══ */
+.cinema-shdr-action span:last-child{
+  display:inline-block;
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+}
+.cinema-shdr-action:hover span:last-child{
+  transform:translateX(-4px);
+}
+
+/* ═══ احترام الـ direction للـ LTR ═══ */
+.en .menu-back:hover svg,
+.en .back-btn:hover svg{
+  transform:translateX(3px);
+}
+.en .promo-arrow,
+.en .menu-item:hover .menu-item-arrow,
+.en .seller-onb-step:hover .seller-onb-step-arrow,
+.en .cinema-shdr-action:hover span:last-child{
+  transform:translateX(4px);
+}
+[dir="ltr"] .menu-back:hover svg,
+[dir="ltr"] .back-btn:hover svg{
+  transform:translateX(3px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   🎬 CINEMA PUBLIC PROFILE — صفحة الملف الشخصي العام السينمائية
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.upub-cinema{
+  position:relative;
+  min-height:100vh;
+  padding:14px;
+  overflow:hidden;
+}
+
+/* خلفيات orbs متحركة */
+.upub-bg-orbs{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:0;
+}
+.upub-orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(60px);
+  opacity:.3;
+  pointer-events:none;
+}
+.upub-orb:nth-child(1){
+  width:300px;height:300px;
+  background:radial-gradient(circle,#5eead4,transparent);
+  top:-50px;
+  inset-inline-end:-50px;
+  animation:upubOrb1 12s ease-in-out infinite;
+}
+.upub-orb:nth-child(2){
+  width:400px;height:400px;
+  background:radial-gradient(circle,#0d9488,transparent);
+  bottom:-100px;
+  inset-inline-start:-100px;
+  animation:upubOrb2 14s ease-in-out infinite;
+}
+.upub-orb:nth-child(3){
+  width:200px;height:200px;
+  background:radial-gradient(circle,#fbbf24,transparent);
+  top:40%;
+  inset-inline-start:30%;
+  animation:upubOrb3 16s ease-in-out infinite;
+  opacity:.2;
+}
+@keyframes upubOrb1{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(-40px,30px) scale(1.15)}
+}
+@keyframes upubOrb2{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(50px,-20px) scale(1.1)}
+}
+@keyframes upubOrb3{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(-20px,40px) scale(1.2)}
+}
+
+/* زر الرجوع */
+.upub-back-btn{
+  position:fixed;
+  top:14px;
+  inset-inline-start:14px;
+  z-index:50;
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background:rgba(255,255,255,.85)!important;
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(94,234,212,.3)!important;
+  color:var(--teal2)!important;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all .35s cubic-bezier(.34,1.56,.64,1)!important;
+  box-shadow:0 8px 22px rgba(0,0,0,.08);
+  padding:0;
+  font-family:inherit;
+}
+.upub-back-btn svg{transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.upub-back-btn:hover{
+  background:var(--teal2)!important;
+  color:#fff!important;
+  transform:translateY(-1px);
+  box-shadow:0 10px 26px rgba(13,148,136,.4);
+}
+.upub-back-btn:hover svg{transform:translateX(-3px)}
+html.dark .upub-back-btn{
+  background:rgba(15,31,31,.85)!important;
+  color:#5eead4!important;
+  border-color:rgba(94,234,212,.25)!important;
+}
+html.dark .upub-back-btn:hover{
+  background:#5eead4!important;
+  color:#0a1414!important;
+}
+
+/* البطاقة الرئيسية */
+.upub-cinema-card{
+  position:relative;
+  z-index:10;
+  max-width:520px;
+  margin:0 auto;
+  background:rgba(255,255,255,.9)!important;
+  backdrop-filter:blur(40px) saturate(1.8);
+  -webkit-backdrop-filter:blur(40px) saturate(1.8);
+  border:1px solid rgba(255,255,255,.5)!important;
+  border-radius:28px!important;
+  overflow:hidden;
+  box-shadow:
+    0 32px 80px -10px rgba(15,42,42,.18),
+    0 0 0 1px rgba(94,234,212,.08),
+    inset 0 1px 0 rgba(255,255,255,.7)!important;
+  margin-top:30px;
+  animation:upubCardEntry .8s cubic-bezier(.34,1.56,.64,1);
+}
+html.dark .upub-cinema-card{
+  background:rgba(15,31,31,.92)!important;
+  border-color:rgba(94,234,212,.15)!important;
+  box-shadow:
+    0 32px 80px -10px rgba(0,0,0,.6),
+    inset 0 1px 0 rgba(94,234,212,.1)!important;
+}
+@keyframes upubCardEntry{
+  0%{opacity:0;transform:translateY(40px) scale(.95);filter:blur(8px)}
+  100%{opacity:1;transform:none;filter:blur(0)}
+}
+
+/* Hero */
+.upub-cinema-hero{
+  background:linear-gradient(135deg,#051818 0%,#0f2a2a 35%,#0f766e 75%,#0d9488 110%)!important;
+  padding:36px 24px 32px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.upub-cinema-hero-bg::before{
+  content:'';
+  position:absolute;
+  top:-60%;
+  inset-inline-end:-30%;
+  width:300px;
+  height:300px;
+  background:radial-gradient(circle,rgba(94,234,212,.4),transparent 65%);
+  border-radius:50%;
+  animation:upubHeroOrb 8s ease-in-out infinite;
+  pointer-events:none;
+}
+.upub-cinema-hero-bg::after{
+  content:'';
+  position:absolute;
+  bottom:-40%;
+  inset-inline-start:-20%;
+  width:200px;
+  height:200px;
+  background:radial-gradient(circle,rgba(251,191,36,.2),transparent 70%);
+  border-radius:50%;
+  pointer-events:none;
+}
+@keyframes upubHeroOrb{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(-30px,20px) scale(1.15)}
+}
+
+.upub-cinema-hero-content{
+  position:relative;
+  z-index:2;
+}
+
+/* Eyebrow */
+.upub-cinema-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:6px 14px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(94,234,212,.3);
+  border-radius:99px;
+  font-size:10.5px;
+  font-weight:800;
+  color:rgba(94,234,212,.95);
+  margin-bottom:18px;
+  letter-spacing:.5px;
+  backdrop-filter:blur(10px);
+}
+.live-pulse-dot{
+  width:7px;
+  height:7px;
+  background:#22c55e;
+  border-radius:50%;
+  box-shadow:0 0 0 0 rgba(34,197,94,.6);
+  animation:livePulseDot 2s ease-in-out infinite;
+}
+@keyframes livePulseDot{
+  0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}
+  50%{box-shadow:0 0 0 5px rgba(34,197,94,0)}
+}
+
+/* Avatar أسطوري */
+.upub-cinema-avatar-wrap{
+  position:relative;
+  display:inline-block;
+  margin-bottom:14px;
+}
+.upub-cinema-avatar{
+  width:96px;
+  height:96px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--av-color,#0d9488),var(--av-color2,#0f766e));
+  color:#fff;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:38px;
+  font-weight:900;
+  box-shadow:
+    0 14px 40px rgba(0,0,0,.35),
+    0 0 0 4px rgba(255,255,255,.18),
+    0 0 0 7px rgba(94,234,212,.3),
+    inset 0 -10px 24px rgba(0,0,0,.18),
+    inset 0 10px 24px rgba(255,255,255,.22);
+  position:relative;
+  animation:upubAvatarEntry 1.2s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes upubAvatarEntry{
+  0%{transform:scale(0) rotate(-180deg);opacity:0}
+  60%{transform:scale(1.15) rotate(20deg);opacity:1}
+  100%{transform:scale(1) rotate(0deg);opacity:1}
+}
+.upub-cinema-avatar::before{
+  content:'';
+  position:absolute;
+  inset:-12px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(94,234,212,.5),transparent 70%);
+  filter:blur(16px);
+  z-index:-1;
+  animation:upubAvatarGlow 3s ease-in-out infinite;
+}
+@keyframes upubAvatarGlow{
+  0%,100%{opacity:.5;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.2)}
+}
+
+/* تاج موثَّق */
+.upub-cinema-crown{
+  position:absolute;
+  top:-8px;
+  inset-inline-end:-8px;
+  width:36px;
+  height:36px;
+  background:linear-gradient(135deg,#fbbf24,#f59e0b);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  border:3px solid #fff;
+  box-shadow:0 8px 20px rgba(251,191,36,.5);
+  animation:crownFloat2 3s ease-in-out infinite;
+  z-index:2;
+}
+@keyframes crownFloat2{
+  0%,100%{transform:translateY(0) rotate(-5deg)}
+  50%{transform:translateY(-4px) rotate(5deg)}
+}
+
+/* الاسم */
+.upub-cinema-name{
+  font-size:24px;
+  font-weight:900;
+  color:#fff;
+  margin-bottom:8px;
+  letter-spacing:0;
+  text-shadow:0 4px 14px rgba(0,0,0,.2);
+  background:linear-gradient(135deg,#fff 0%,#a7f3d0 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* Verified Badge */
+.upub-cinema-vbadge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 14px;
+  background:linear-gradient(135deg,#fbbf24,#f59e0b);
+  color:#1a0e00;
+  border-radius:99px;
+  font-size:11px;
+  font-weight:900;
+  margin-bottom:8px;
+  box-shadow:0 6px 16px rgba(251,191,36,.4);
+  letter-spacing:0;
+}
+
+.upub-cinema-email{
+  font-size:13px;
+  color:rgba(255,255,255,.75);
+  font-weight:600;
+  margin-bottom:18px;
+  direction:ltr;
+}
+
+/* Rating Block */
+.upub-cinema-rating{
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(94,234,212,.25);
+  border-radius:18px;
+  padding:14px 20px;
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  margin-top:6px;
+}
+.upub-cinema-rating.empty{
+  flex-direction:column;
+  gap:2px;
+  padding:14px 24px;
+}
+.upub-cinema-rating-num{
+  font-size:32px;
+  font-weight:900;
+  color:#fbbf24;
+  line-height:1;
+  letter-spacing:-1px;
+  text-shadow:0 4px 12px rgba(251,191,36,.4);
+}
+.upub-cinema-rating-stars{display:flex;gap:1px}
+.upub-cinema-rating-count{
+  font-size:11px;
+  color:rgba(255,255,255,.7);
+  font-weight:600;
+  white-space:nowrap;
+}
+
+/* Stats Grid */
+.upub-cinema-stats{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:1px;
+  background:rgba(94,234,212,.15);
+  padding:1px;
+}
+html.dark .upub-cinema-stats{
+  background:rgba(94,234,212,.1);
+}
+.upub-cinema-stat{
+  background:#fff;
+  padding:18px 14px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  transition:all .35s cubic-bezier(.34,1.56,.64,1);
+  cursor:default;
+}
+html.dark .upub-cinema-stat{
+  background:rgba(15,31,31,.95);
+}
+.upub-cinema-stat::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  inset-inline-end:-30%;
+  width:120px;
+  height:120px;
+  background:radial-gradient(circle,var(--c1,#0d9488),transparent 70%);
+  border-radius:50%;
+  opacity:.08;
+  transition:transform .4s ease;
+  pointer-events:none;
+}
+.upub-cinema-stat:hover::before{
+  transform:scale(1.5);
+  opacity:.15;
+}
+.upub-cinema-stat-icon{
+  width:38px;
+  height:38px;
+  border-radius:11px;
+  background:linear-gradient(135deg,var(--c1),var(--c2));
+  color:#fff;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  margin:0 auto 8px;
+  box-shadow:0 6px 14px var(--c1,rgba(13,148,136,.3));
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+}
+.upub-cinema-stat:hover .upub-cinema-stat-icon{
+  transform:scale(1.1) rotate(-5deg);
+}
+.upub-cinema-stat-num{
+  font-size:24px;
+  font-weight:900;
+  color:var(--text-primary);
+  line-height:1;
+  margin-bottom:4px;
+  letter-spacing:-.5px;
+  background:linear-gradient(135deg,var(--text-primary),var(--c1));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+html.dark .upub-cinema-stat-num{
+  background:linear-gradient(135deg,#f0fdfa,var(--c1));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.upub-cinema-stat-lbl{
+  font-size:11px;
+  font-weight:800;
+  color:var(--text-muted);
+  letter-spacing:.3px;
+  text-transform:uppercase;
+}
+
+/* Body */
+.upub-cinema-body{
+  padding:22px 24px;
+}
+
+/* Section Title */
+.upub-cinema-section-title{
+  font-size:14px;
+  font-weight:900;
+  color:var(--text-primary);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+  letter-spacing:0;
+}
+html.dark .upub-cinema-section-title{color:var(--text-primary)}
+.upub-cinema-section-icon{
+  width:32px;
+  height:32px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#0d9488,#0f766e);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:15px;
+  flex-shrink:0;
+  box-shadow:0 4px 12px rgba(13,148,136,.3);
+}
+
+/* Shields List */
+.upub-cinema-shields{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.upub-cinema-shield{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px 16px;
+  background:rgba(255,255,255,.65);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(148,163,184,.2);
+  border-radius:14px;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+}
+html.dark .upub-cinema-shield{
+  background:rgba(15,31,31,.5);
+  border-color:rgba(148,163,184,.15);
+}
+.upub-cinema-shield.active{
+  background:linear-gradient(135deg,rgba(94,234,212,.12),rgba(13,148,136,.04))!important;
+  border-color:rgba(94,234,212,.35)!important;
+}
+html.dark .upub-cinema-shield.active{
+  background:linear-gradient(135deg,rgba(94,234,212,.12),rgba(13,148,136,.04))!important;
+  border-color:rgba(94,234,212,.25)!important;
+}
+.upub-cinema-shield:hover{
+  transform:translateX(-2px);
+  box-shadow:0 8px 20px rgba(13,148,136,.1);
+  border-color:rgba(94,234,212,.5)!important;
+}
+.upub-cinema-shield-icon{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  background:linear-gradient(135deg,rgba(148,163,184,.15),rgba(148,163,184,.05));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  flex-shrink:0;
+  border:1px solid rgba(148,163,184,.2);
+}
+.upub-cinema-shield.active .upub-cinema-shield-icon{
+  background:linear-gradient(135deg,#0d9488,#0f766e)!important;
+  color:#fff;
+  border-color:#0d9488;
+  box-shadow:0 6px 14px rgba(13,148,136,.3);
+}
+.upub-cinema-shield-content{flex:1;min-width:0}
+.upub-cinema-shield-title{
+  font-size:13.5px;
+  font-weight:800;
+  color:var(--text-primary);
+  margin-bottom:2px;
+}
+html.dark .upub-cinema-shield-title{color:var(--text-primary)}
+.upub-cinema-shield-desc{
+  font-size:11.5px;
+  color:var(--text-muted);
+  line-height:1.4;
+  font-weight:500;
+}
+html.dark .upub-cinema-shield-desc{color:var(--text-muted)}
+.upub-cinema-shield-status{
+  font-size:18px;
+  font-weight:900;
+  color:var(--text-muted);
+  flex-shrink:0;
+}
+.upub-cinema-shield.active .upub-cinema-shield-status{
+  color:#22c55e;
+  font-size:22px;
+}
+
+/* Reviews */
+.upub-cinema-reviews{
+  display:flex;
+  flex-direction:column;
+  gap:11px;
+}
+.upub-cinema-review{
+  background:rgba(255,255,255,.65);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(94,234,212,.18);
+  border-radius:14px;
+  padding:14px;
+  transition:all .3s;
+}
+html.dark .upub-cinema-review{
+  background:rgba(15,31,31,.5);
+  border-color:rgba(94,234,212,.12);
+}
+.upub-cinema-review:hover{
+  transform:translateY(-2px);
+  border-color:rgba(94,234,212,.4);
+  box-shadow:0 8px 20px rgba(13,148,136,.1);
+}
+.upub-cinema-review-hdr{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:8px;
+}
+.upub-cinema-review-avatar{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  font-weight:900;
+  color:#fff;
+  flex-shrink:0;
+  box-shadow:0 4px 10px rgba(0,0,0,.15);
+}
+.upub-cinema-review-info{flex:1;min-width:0}
+.upub-cinema-review-name{
+  font-size:12.5px;
+  font-weight:800;
+  color:var(--text-primary);
+  margin-bottom:2px;
+}
+html.dark .upub-cinema-review-name{color:var(--text-primary)}
+.upub-cinema-review-stars{display:flex;gap:1px}
+.upub-cinema-review-date{
+  font-size:10.5px;
+  color:var(--text-muted);
+  font-weight:600;
+  flex-shrink:0;
+}
+.upub-cinema-review-text{
+  font-size:12.5px;
+  color:var(--text-secondary);
+  line-height:1.6;
+  font-style:italic;
+  font-weight:500;
+}
+html.dark .upub-cinema-review-text{color:var(--text-secondary)}
+
+/* Privacy Note */
+.upub-cinema-note{
+  margin-top:20px;
+  padding:14px 16px;
+  background:linear-gradient(135deg,rgba(94,234,212,.08),rgba(13,148,136,.03));
+  border:1px solid rgba(94,234,212,.2);
+  border-radius:14px;
+  display:flex;
+  gap:11px;
+  align-items:flex-start;
+}
+html.dark .upub-cinema-note{
+  background:linear-gradient(135deg,rgba(94,234,212,.06),rgba(13,148,136,.02));
+  border-color:rgba(94,234,212,.15);
+}
+.upub-cinema-note-icon{
+  font-size:20px;
+  flex-shrink:0;
+  filter:drop-shadow(0 2px 4px rgba(94,234,212,.3));
+}
+.upub-cinema-note-text{
+  flex:1;
+  font-size:11.5px;
+  color:var(--text-secondary);
+  line-height:1.6;
+  font-weight:500;
+}
+html.dark .upub-cinema-note-text{color:var(--text-secondary)}
+
+/* Mobile */
+@media(max-width:480px){
+  .upub-cinema{padding:10px}
+  .upub-cinema-card{margin-top:24px;border-radius:22px}
+  .upub-cinema-hero{padding:30px 18px 26px}
+  .upub-cinema-avatar{width:84px;height:84px;font-size:32px}
+  .upub-cinema-crown{width:32px;height:32px;font-size:16px}
+  .upub-cinema-name{font-size:21px}
+  .upub-cinema-rating-num{font-size:26px}
+  .upub-cinema-stat{padding:14px 10px}
+  .upub-cinema-stat-num{font-size:20px}
+  .upub-cinema-stat-icon{width:34px;height:34px;font-size:16px}
+  .upub-cinema-body{padding:18px 18px}
+  .upub-back-btn{width:36px;height:36px}
 }
 
 /* AUDIT LOG */
@@ -5730,7 +6633,11 @@ function buildShell(){
     <div class="main" role="main">
       <div class="topbar">
         <div class="flex aic gap8">
-          <button class="back-btn" id="back-btn" onclick="goBack()" aria-label="رجوع">${isAr()?'→':'←'}</button>
+          <button class="back-btn" id="back-btn" onclick="goBack()" aria-label="${isAr()?'رجوع':'Back'}">
+            <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+              <path d="${isAr()?'M9 18l6-6-6-6':'M15 18l-6-6 6-6'}" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
           ${LOGO_S(26)}
           <span style="font-size:14.5px;font-weight:700;color:var(--g900)" id="ptbar">الرئيسية</span>
         </div>
@@ -7059,74 +7966,145 @@ async function rUpub(){
   const logoWatermark=`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><g transform="translate(60,60)">${Array.from({length:12},(_,i)=>`<rect x="-6" y="-46" width="12" height="12" rx="3" fill="#fff" transform="rotate(${i*30})"/>`).join('')}</g></svg>`
 
   c.innerHTML=`
-    <div class="upub-page">
-      <div class="upub-wrap">
-        <div class="upub-card">
-          <div class="upub-cover">
-            <div class="upub-watermark">${logoWatermark}</div>
-            <div class="upub-cover-content">
-              <div class="upub-cover-label">${isAr()?'مستخدم في قسطني':'QASTNI USER'}</div>
-              <div class="upub-avatar-wrap">
-                <div class="upub-avatar has-color" style="--av-color:${color}">${initials}</div>
-                ${floatBadge}
+    <div class="upub-cinema">
+      <!-- 🌌 خلفيات سينمائية -->
+      <div class="upub-bg-orbs">
+        <div class="upub-orb"></div>
+        <div class="upub-orb"></div>
+        <div class="upub-orb"></div>
+      </div>
+
+      <!-- 🔙 زر الرجوع -->
+      <button class="upub-back-btn" onclick="goBack()" aria-label="${isAr()?'رجوع':'Back'}">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+          <path d="${isAr()?'M9 18l6-6-6-6':'M15 18l-6-6 6-6'}" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="upub-cinema-card">
+        <!-- 🎬 الـ Hero الفخم -->
+        <div class="upub-cinema-hero">
+          <div class="upub-cinema-hero-bg"></div>
+          <div class="upub-cinema-hero-content">
+            <div class="upub-cinema-eyebrow">
+              <span class="live-pulse-dot"></span>
+              ${isAr()?'مستخدم في قسطني':'QASTNI MEMBER'}
+            </div>
+
+            <!-- Avatar الأسطوري -->
+            <div class="upub-cinema-avatar-wrap">
+              <div class="upub-cinema-avatar" style="--av-color:${color};--av-color2:${color}cc">
+                ${initials}
               </div>
-              <div class="upub-name">${san(displayName)} ${verifBadge}</div>
-              <div class="upub-email">${san(email)}</div>
-              ${avgRating?`
-                <div class="upub-rating">
-                  <span style="color:#fbbf24;font-size:14px">★</span>
-                  <span style="color:#fff;font-weight:800;font-size:13px">${avgRating}</span>
-                  <span style="color:rgba(255,255,255,.7);font-size:11px" dir="ltr">(${ratings.length})</span>
+              ${isPrem?'<div class="upub-cinema-crown">⭐</div>':''}
+            </div>
+
+            <!-- الاسم -->
+            <h1 class="upub-cinema-name">${san(displayName)}</h1>
+            ${isPrem?'<div class="upub-cinema-vbadge">⭐ <span class="ar-t">حساب موثَّق</span><span class="en-t hidden">Verified Account</span></div>':''}
+            <div class="upub-cinema-email">${san(email)}</div>
+
+            <!-- النجوم الكبيرة -->
+            ${avgRating?`
+              <div class="upub-cinema-rating">
+                <div class="upub-cinema-rating-num">${avgRating}</div>
+                <div class="upub-cinema-rating-stars">${stars(avgRating,0,18)}</div>
+                <div class="upub-cinema-rating-count" dir="ltr">${ratings.length} ${isAr()?'تقييم':'review'+(ratings.length!==1?'s':'')}</div>
+              </div>
+            `:`
+              <div class="upub-cinema-rating empty">
+                <div style="font-size:32px;margin-bottom:4px">⭐</div>
+                <div style="font-size:12px;color:rgba(255,255,255,.7);font-weight:600">${isAr()?'لا يوجد تقييمات بعد':'No ratings yet'}</div>
+              </div>
+            `}
+          </div>
+        </div>
+
+        <!-- 📊 Stats Grid -->
+        <div class="upub-cinema-stats">
+          <div class="upub-cinema-stat" style="--c1:#0d9488;--c2:#0f766e">
+            <div class="upub-cinema-stat-icon">📋</div>
+            <div class="upub-cinema-stat-num">${totalDeals}</div>
+            <div class="upub-cinema-stat-lbl">${isAr()?'صفقات':'Deals'}</div>
+          </div>
+          <div class="upub-cinema-stat" style="--c1:#22c55e;--c2:#16a34a">
+            <div class="upub-cinema-stat-icon">✅</div>
+            <div class="upub-cinema-stat-num">${completedCount}</div>
+            <div class="upub-cinema-stat-lbl">${isAr()?'مكتملة':'Done'}</div>
+          </div>
+          <div class="upub-cinema-stat" style="--c1:#fbbf24;--c2:#f59e0b">
+            <div class="upub-cinema-stat-icon">⭐</div>
+            <div class="upub-cinema-stat-num">${ratings.length}</div>
+            <div class="upub-cinema-stat-lbl">${isAr()?'تقييم':'Rated'}</div>
+          </div>
+        </div>
+
+        <!-- 🛡️ Trust Cards -->
+        <div class="upub-cinema-body">
+          <div class="upub-cinema-section-title">
+            <div class="upub-cinema-section-icon">🛡️</div>
+            <span class="ar-t">حالة الحساب</span><span class="en-t hidden">Account Status</span>
+          </div>
+
+          <div class="upub-cinema-shields">
+            <div class="upub-cinema-shield ${isPrem?'active':''}">
+              <div class="upub-cinema-shield-icon">${isPrem?'⭐':'🔒'}</div>
+              <div class="upub-cinema-shield-content">
+                <div class="upub-cinema-shield-title">${isAr()?'باقة موثَّق':'Verified Plan'}</div>
+                <div class="upub-cinema-shield-desc">${isPrem?(isAr()?'مشترك ويحظى بحماية إضافية':'Subscribed with extra protection'):(isAr()?'غير مشترك في الباقة':'Not subscribed')}</div>
+              </div>
+              <div class="upub-cinema-shield-status">${isPrem?'✓':'—'}</div>
+            </div>
+
+            <div class="upub-cinema-shield ${isNafath?'active':''}">
+              <div class="upub-cinema-shield-icon">${isNafath?'🔐':'🔓'}</div>
+              <div class="upub-cinema-shield-content">
+                <div class="upub-cinema-shield-title">${isAr()?'تحقق نافذ':'Nafath Verification'}</div>
+                <div class="upub-cinema-shield-desc">${isNafath?(isAr()?'هويته متحققة رسمياً':'Identity officially verified'):(isAr()?'لم يتحقق من هويته بعد':'Identity not verified yet')}</div>
+              </div>
+              <div class="upub-cinema-shield-status">${isNafath?'✓':'—'}</div>
+            </div>
+
+            <div class="upub-cinema-shield active">
+              <div class="upub-cinema-shield-icon">📅</div>
+              <div class="upub-cinema-shield-content">
+                <div class="upub-cinema-shield-title">${isAr()?'تاريخ الانضمام':'Member Since'}</div>
+                <div class="upub-cinema-shield-desc">${memberSince}</div>
+              </div>
+              <div class="upub-cinema-shield-status">📆</div>
+            </div>
+          </div>
+
+          <!-- ⭐ Rating Section -->
+          ${avgRating?`
+            <div class="upub-cinema-section-title" style="margin-top:24px">
+              <div class="upub-cinema-section-icon">⭐</div>
+              <span class="ar-t">التقييمات (${ratings.length})</span><span class="en-t hidden">Reviews (${ratings.length})</span>
+            </div>
+            <div class="upub-cinema-reviews">
+              ${ratings.slice(0,5).map(r=>`
+                <div class="upub-cinema-review">
+                  <div class="upub-cinema-review-hdr">
+                    <div class="upub-cinema-review-avatar" style="background:${avc(r.from_email||r.from_name||'a')}">${ini(r.from_name||'?')}</div>
+                    <div class="upub-cinema-review-info">
+                      <div class="upub-cinema-review-name">${san(r.from_name||'مستخدم')}</div>
+                      <div class="upub-cinema-review-stars">${stars(r.stars,0,12)}</div>
+                    </div>
+                    <div class="upub-cinema-review-date">${fmtD(r.created_at)}</div>
+                  </div>
+                  ${r.comment?`<div class="upub-cinema-review-text">"${san(r.comment)}"</div>`:''}
                 </div>
-              `:''}
+              `).join('')}
             </div>
-          </div>
+          `:''}
 
-          <div class="upub-stats">
-            <div class="upub-stats-grid">
-              <div class="upub-stat">
-                <div class="upub-stat-num">${totalDeals}</div>
-                <div class="upub-stat-lbl">${isAr()?'صفقات':'DEALS'}</div>
-              </div>
-              <div class="upub-stat">
-                <div class="upub-stat-num">${completedCount}</div>
-                <div class="upub-stat-lbl">${isAr()?'مكتملة':'COMPLETED'}</div>
-              </div>
-              <div class="upub-stat">
-                <div class="upub-stat-num">${ratings.length}</div>
-                <div class="upub-stat-lbl">${isAr()?'تقييم':'RATINGS'}</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="upub-body">
-            ${trustStatus}
-
-            <div class="upub-section">
-              <div class="upub-section-title"><span class="icon">📊</span>${isAr()?'التقييم العام':'Overall Rating'}</div>
-              ${ratingCard}
-            </div>
-
-            <div class="upub-section">
-              <div class="upub-section-title"><span class="icon">🔍</span>${isAr()?'حالة التحقق':'Verification Status'}</div>
-              <div class="upub-info-row">
-                <span class="upub-info-lbl">${isAr()?'التحقق من الهوية (نافذ)':'Identity (Nafath)'}</span>
-                <span class="upub-info-val ${isNafath?'':'unverif'}">${isNafath?(isAr()?'✓ مفعّل':'✓ Verified'):(isAr()?'غير مفعّل':'Not yet')}</span>
-              </div>
-              <div class="upub-info-row">
-                <span class="upub-info-lbl">${isAr()?'باقة موثَّق':'Verified Plan'}</span>
-                <span class="upub-info-val ${isPrem?'':'unverif'}">${isPrem?(isAr()?'⭐ مشترك':'⭐ Subscribed'):(isAr()?'غير مشترك':'Not subscribed')}</span>
-              </div>
-              <div class="upub-info-row">
-                <span class="upub-info-lbl">${isAr()?'تاريخ الانضمام':'Member since'}</span>
-                <span class="upub-info-val">${memberSince}</span>
-              </div>
-            </div>
-
-            <div class="upub-foot-note">
+          <!-- ℹ️ Privacy Note -->
+          <div class="upub-cinema-note">
+            <div class="upub-cinema-note-icon">🛡️</div>
+            <div class="upub-cinema-note-text">
               ${isAr()
-                ?'🛡️ المعلومات أعلاه مأخوذة من سجل المستخدم في قسطني. لحماية الخصوصية، التفاصيل الشخصية مثل رقم الجوال والهوية لا تظهر للأطراف الأخرى.'
-                :"🛡️ Information above is from this user's Qastni record. For privacy, personal details like phone and ID are not shown to other parties."}
+                ?'لحماية الخصوصية، البيانات الحساسة (رقم الجوال، رقم الهوية) لا تظهر للأطراف الأخرى. كل ما تشاهده هنا مأخوذ من سجل المستخدم العام في قسطني.'
+                :"For privacy, sensitive data (phone, ID) is not shown to other parties. Everything you see here is from the user's public Qastni record."}
             </div>
           </div>
         </div>
@@ -8174,7 +9152,11 @@ window.openSugg=()=>{
   $('sugg-overlay').innerHTML=`
     <div class="menu-modal" onclick="event.stopPropagation()" style="max-width:420px">
       <div class="menu-hdr" style="padding:20px">
-        <button class="menu-close" onclick="backToMenu('sugg-overlay')" aria-label="رجوع">${isAr()?'→':'←'}</button>
+        <button class="menu-back" onclick="backToMenu('sugg-overlay')" aria-label="${isAr()?'رجوع':'Back'}">
+          <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+            <path d="${isAr()?'M9 18l6-6-6-6':'M15 18l-6-6 6-6'}" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
         <h2 style="font-size:17px;font-weight:800;color:#fff;margin-bottom:3px">${isAr()?'💡 شاركنا رأيك':'💡 Share Your Feedback'}</h2>
         <div style="font-size:11.5px;color:rgba(255,255,255,.7)">${isAr()?'كل اقتراح يصل مباشرة لمؤسس المنصة':'Goes directly to the platform founder'}</div>
       </div>
@@ -8462,7 +9444,11 @@ function renderFAQ(){
 
   ov.innerHTML=`<div class="faq-modal" onclick="event.stopPropagation()">
     <div class="faq-hero">
-      <button class="faq-close" onclick="backToMenu('faq-overlay')" aria-label="رجوع">${isAr()?'→':'←'}</button>
+      <button class="menu-back faq-close" onclick="backToMenu('faq-overlay')" aria-label="${isAr()?'رجوع':'Back'}">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+          <path d="${isAr()?'M9 18l6-6-6-6':'M15 18l-6-6 6-6'}" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
       <div class="faq-hero-ico">${LOGO_S(34)}</div>
       <h2>${isAr()?'كيف نقدر نساعدك؟':'How can we help?'}</h2>
       <p>${isAr()?'إجابات على أكثر الأسئلة الشائعة في قسطني':'Common questions answered'}</p>
@@ -8514,7 +9500,11 @@ window.openAbout=()=>{
   $('about-overlay').innerHTML=`
     <div class="menu-modal" onclick="event.stopPropagation()" style="max-width:430px">
       <div class="menu-hdr" style="padding:0;border-radius:var(--r20) var(--r20) 0 0;overflow:hidden;position:relative">
-        <button class="menu-close" onclick="backToMenu('about-overlay')" aria-label="رجوع" style="z-index:5">${isAr()?'→':'←'}</button>
+        <button class="menu-back" onclick="backToMenu('about-overlay')" aria-label="${isAr()?'رجوع':'Back'}" style="z-index:5">
+          <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+            <path d="${isAr()?'M9 18l6-6-6-6':'M15 18l-6-6 6-6'}" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
         <div class="about-hero">
           <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;background:#fff;border-radius:50%;margin-bottom:11px;box-shadow:0 4px 14px rgba(13,148,136,.25)">${LOGO_S(46)}</div>
           <h2 style="font-size:20px;font-weight:900;color:var(--teal2);margin-bottom:5px">قسطني</h2>
@@ -9140,19 +10130,22 @@ window.dismissInstallBanner=()=>{
 // ═══════════════════════════════════════════════
 
 // ✨ توليد الجزيئات الذهبية المتساقطة
-function spawnParticles(count=15){
+function spawnParticles(count=8){
   const bg=$('particles-bg')
   if(!bg)return
   bg.innerHTML=''
-  for(let i=0;i<count;i++){
+  // ⚡ تخفيض عدد الجزيئات على الجوال
+  const isMobile=window.innerWidth<769
+  const finalCount=isMobile?6:count
+  for(let i=0;i<finalCount;i++){
     const p=document.createElement('div')
     p.className='particle'
     const left=Math.random()*100
-    const dur=15+Math.random()*15
-    const delay=Math.random()*15
-    const size=2+Math.random()*4
-    const drift=(Math.random()-.5)*200
-    const opacity=.3+Math.random()*.5
+    const dur=20+Math.random()*15
+    const delay=Math.random()*20
+    const size=2+Math.random()*3
+    const drift=(Math.random()-.5)*150
+    const opacity=.25+Math.random()*.35
     p.style.cssText=`
       left:${left}%;
       bottom:0;
@@ -9161,6 +10154,7 @@ function spawnParticles(count=15){
       opacity:${opacity};
       --drift:${drift}px;
       animation:floatParticle ${dur}s linear ${delay}s infinite;
+      will-change:transform;
     `
     bg.appendChild(p)
   }
@@ -9175,7 +10169,6 @@ function animateCounter(el,target,duration=1500,prefix='',suffix=''){
   function update(now){
     const elapsed=now-startTime
     const progress=Math.min(elapsed/duration,1)
-    // ease out cubic
     const eased=1-Math.pow(1-progress,3)
     const current=start+range*eased
     el.textContent=prefix+(target>=1000?Math.round(current).toLocaleString('en-US'):Math.round(current).toString())+suffix
@@ -9190,40 +10183,75 @@ function animateCounter(el,target,duration=1500,prefix='',suffix=''){
   requestAnimationFrame(update)
 }
 
-// 🎨 3D Tilt Effect (للديسكتوب فقط)
+// 🎨 3D Tilt Effect (للديسكتوب فقط) — مع throttle لمنع التعليق
+let _tiltRAF=null
 function attachTiltEffects(){
-  if(window.innerWidth<769)return
-  document.querySelectorAll('.cinema-stat,.cinema-deal').forEach(card=>{
+  if(window.innerWidth<1024)return  // ✅ بس على الشاشات الكبيرة (مو tablet)
+  document.querySelectorAll('.cinema-stat').forEach(card=>{
     if(card.dataset.tiltAttached)return
     card.dataset.tiltAttached='1'
+    let rect=null
+    card.addEventListener('mouseenter',()=>{rect=card.getBoundingClientRect()})
     card.addEventListener('mousemove',(e)=>{
-      const r=card.getBoundingClientRect()
-      const x=e.clientX-r.left
-      const y=e.clientY-r.top
-      const cx=r.width/2
-      const cy=r.height/2
-      const rx=((y-cy)/cy)*-3
-      const ry=((x-cx)/cx)*3
-      card.style.transform=`perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-3px)`
+      if(_tiltRAF||!rect)return
+      _tiltRAF=requestAnimationFrame(()=>{
+        const x=e.clientX-rect.left
+        const y=e.clientY-rect.top
+        const cx=rect.width/2
+        const cy=rect.height/2
+        const rx=((y-cy)/cy)*-2
+        const ry=((x-cx)/cx)*2
+        card.style.transform=`perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-3px)`
+        _tiltRAF=null
+      })
     })
     card.addEventListener('mouseleave',()=>{
       card.style.transform=''
+      rect=null
     })
   })
 }
 
 // 📊 Initialize cinematic effects
 function initCinematicEffects(){
-  spawnParticles(15)
-  // إعادة توليد الجزيئات كل 30 ثانية لتنويع الحركة
-  setInterval(()=>{spawnParticles(15)},30000)
+  spawnParticles(8)
+  // ✅ إعادة توليد كل دقيقتين بدل 30 ثانية (تخفيف الضغط)
+  // ✅ نوقفها لما الصفحة مش ظاهرة
+  let particlesInterval=null
+  function startParticles(){
+    if(particlesInterval)return
+    particlesInterval=setInterval(()=>{
+      if(!document.hidden)spawnParticles(8)
+    },120000)  // كل دقيقتين
+  }
+  function stopParticles(){
+    if(particlesInterval){clearInterval(particlesInterval);particlesInterval=null}
+  }
+  startParticles()
+
+  // ✅ إيقاف الانيميشن لما المستخدم يخفي الصفحة
+  document.addEventListener('visibilitychange',()=>{
+    const bg=$('particles-bg')
+    const mesh=document.querySelector('.mesh-bg')
+    if(document.hidden){
+      if(bg)bg.style.animationPlayState='paused'
+      if(mesh)mesh.style.animationPlayState='paused'
+      stopParticles()
+    }else{
+      if(bg)bg.style.animationPlayState=''
+      if(mesh)mesh.style.animationPlayState=''
+      startParticles()
+    }
+  })
 }
 
-// تشغيل الجزيئات لما الموقع يحمّل
+// ✅ تشغيل بعد ما الموقع يحمل (ندي الـ DOM فرصة)
 if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded',initCinematicEffects)
+  document.addEventListener('DOMContentLoaded',()=>{
+    setTimeout(initCinematicEffects,500)
+  })
 }else{
-  initCinematicEffects()
+  setTimeout(initCinematicEffects,500)
 }
 
 // ═══════════════════════════════════════════════
