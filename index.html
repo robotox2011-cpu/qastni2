@@ -251,6 +251,256 @@ html.dark .ptbl input[type="checkbox"].mp-check:checked::after{
   border-color:#0a1414
 }
 
+/* ═══════════════════════════════════════════════════════════
+   🎬 ONBOARDING TUTORIAL — السينمائي الفخم بطابع قسطني
+   ═══════════════════════════════════════════════════════════ */
+.onb-overlay{position:fixed;inset:0;z-index:99999;background:#0a1414;display:flex;align-items:center;justify-content:center;overflow:hidden;animation:onbFadeIn .6s ease}
+@keyframes onbFadeIn{from{opacity:0}to{opacity:1}}
+
+/* الخلفية المتحركة الفخمة */
+.onb-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 20% 30%,rgba(13,148,136,.4) 0%,transparent 50%),radial-gradient(ellipse at 80% 70%,rgba(94,234,212,.25) 0%,transparent 50%),linear-gradient(135deg,#051818 0%,#0a1414 50%,#0d2828 100%);animation:onbBgShift 20s ease-in-out infinite}
+@keyframes onbBgShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+/* Particles ذهبية متحركة */
+.onb-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.onb-particle{position:absolute;width:6px;height:6px;background:radial-gradient(circle,rgba(251,191,36,.95) 0%,rgba(251,191,36,.3) 50%,transparent 100%);border-radius:50%;filter:blur(.5px);box-shadow:0 0 10px rgba(251,191,36,.6)}
+@keyframes particleFloat{
+  0%{transform:translate(0,0) scale(0);opacity:0}
+  10%{opacity:1;transform:translate(0,-20px) scale(1)}
+  90%{opacity:.8}
+  100%{transform:translate(var(--px),-100vh) scale(.5);opacity:0}
+}
+
+/* شريط التقدم السينمائي */
+.onb-progress{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,.08);z-index:5}
+.onb-progress-fill{height:100%;background:linear-gradient(90deg,#5eead4,#fbbf24,#5eead4);background-size:200% 100%;transition:width .6s cubic-bezier(.34,1.56,.64,1);animation:onbProgressShine 2s linear infinite;box-shadow:0 0 12px rgba(94,234,212,.6)}
+@keyframes onbProgressShine{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+
+/* زر التخطي */
+.onb-skip{position:absolute;top:18px;inset-inline-end:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);padding:7px 16px;border-radius:99px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;backdrop-filter:blur(8px);z-index:10;transition:all .2s}
+.onb-skip:hover{background:rgba(255,255,255,.15);color:#fff}
+
+/* المحتوى الرئيسي */
+.onb-content{position:relative;width:100%;max-width:520px;padding:28px;text-align:center;z-index:3;animation:onbContentFloat 4s ease-in-out infinite}
+@keyframes onbContentFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* الرسوم التوضيحية */
+.onb-hero{display:flex;align-items:center;justify-content:center;margin-bottom:32px;position:relative;height:200px}
+
+/* الشعار السينمائي */
+.onb-logo{position:relative;width:160px;height:160px;animation:onbLogoEntry 1.5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes onbLogoEntry{
+  0%{transform:scale(0) rotate(-180deg);opacity:0}
+  60%{transform:scale(1.15) rotate(20deg);opacity:1}
+  100%{transform:scale(1) rotate(0);opacity:1}
+}
+.onb-logo svg{width:100%;height:100%;filter:drop-shadow(0 0 24px rgba(94,234,212,.5))}
+.onb-logo-glow{position:absolute;inset:-20px;background:radial-gradient(circle,rgba(94,234,212,.4) 0%,transparent 70%);filter:blur(20px);animation:onbGlowPulse 3s ease-in-out infinite;z-index:-1}
+@keyframes onbGlowPulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.2);opacity:1}}
+
+/* النصوص */
+.onb-title{font-family:'Tajawal',sans-serif;font-size:36px;font-weight:900;color:#fff;margin-bottom:16px;letter-spacing:0;line-height:1.2;background:linear-gradient(135deg,#fff 0%,#a7f3d0 50%,#5eead4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:onbTextReveal 1s ease-out .3s both;text-shadow:0 0 40px rgba(94,234,212,.3)}
+@keyframes onbTextReveal{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+.onb-subtitle{font-size:16px;color:rgba(255,255,255,.85);line-height:1.7;margin-bottom:36px;animation:onbTextReveal 1s ease-out .5s both;font-weight:500}
+
+/* بطاقة الميزات */
+.onb-cards{display:flex;flex-direction:column;gap:14px;margin-bottom:32px;animation:onbTextReveal 1s ease-out .7s both}
+.onb-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px 18px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(10px);transition:all .3s;text-align:start}
+.onb-card:hover{background:rgba(255,255,255,.1);transform:translateY(-2px);border-color:rgba(94,234,212,.4)}
+.onb-card-ico{width:46px;height:46px;background:linear-gradient(135deg,rgba(94,234,212,.2),rgba(13,148,136,.4));border:1px solid rgba(94,234,212,.3);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 12px rgba(13,148,136,.3)}
+.onb-card-text{flex:1;min-width:0}
+.onb-card-title{font-size:14px;font-weight:800;color:#fff;margin-bottom:3px}
+.onb-card-desc{font-size:12px;color:rgba(255,255,255,.65);line-height:1.5}
+
+/* الدروع والشعارات الحكومية */
+.onb-shields{display:flex;justify-content:center;gap:18px;margin-bottom:28px;flex-wrap:wrap;animation:onbTextReveal 1s ease-out .6s both}
+.onb-shield{padding:8px 16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:99px;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.85);display:inline-flex;align-items:center;gap:6px;backdrop-filter:blur(10px)}
+.onb-shield-icon{font-size:14px}
+
+/* الأزرار */
+.onb-actions{display:flex;align-items:center;justify-content:center;gap:12px;animation:onbTextReveal 1s ease-out .9s both}
+.onb-btn{padding:14px 30px;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:800;border-radius:99px;border:none;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:10px;letter-spacing:0}
+.onb-btn-primary{background:linear-gradient(135deg,#0d9488 0%,#0f766e 100%);color:#fff;box-shadow:0 8px 24px rgba(13,148,136,.5),inset 0 1px 0 rgba(255,255,255,.2);position:relative;overflow:hidden}
+.onb-btn-primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:onbBtnShine 3s ease-in-out infinite}
+@keyframes onbBtnShine{0%{left:-100%}50%,100%{left:200%}}
+.onb-btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(13,148,136,.7)}
+.onb-btn-primary:active{transform:translateY(0)}
+
+.onb-btn-final{background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 50%,#d97706 100%);color:#1a0e00;box-shadow:0 8px 24px rgba(251,191,36,.5),inset 0 1px 0 rgba(255,255,255,.4),0 0 0 0 rgba(251,191,36,.4);font-size:16px;padding:16px 36px;animation:onbBtnGlow 2s ease-in-out infinite}
+@keyframes onbBtnGlow{0%,100%{box-shadow:0 8px 24px rgba(251,191,36,.5),inset 0 1px 0 rgba(255,255,255,.4),0 0 0 0 rgba(251,191,36,.6)}50%{box-shadow:0 12px 32px rgba(251,191,36,.7),inset 0 1px 0 rgba(255,255,255,.4),0 0 0 14px rgba(251,191,36,0)}}
+
+.onb-btn-back{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.15);padding:14px 22px}
+.onb-btn-back:hover{background:rgba(255,255,255,.12);color:#fff}
+
+/* النقاط المؤشرة */
+.onb-dots{display:flex;justify-content:center;gap:8px;margin-top:24px;animation:onbTextReveal 1s ease-out 1.1s both}
+.onb-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);transition:all .4s cubic-bezier(.34,1.56,.64,1);cursor:pointer}
+.onb-dot.active{background:#5eead4;width:32px;border-radius:99px;box-shadow:0 0 14px rgba(94,234,212,.6)}
+
+/* رسوم توضيحية متحركة */
+.onb-illust{width:140px;height:140px;margin:0 auto;position:relative}
+.onb-illust svg{width:100%;height:100%;filter:drop-shadow(0 8px 20px rgba(94,234,212,.3))}
+
+/* الموبايل */
+@media(max-width:480px){
+  .onb-content{padding:20px}
+  .onb-title{font-size:28px}
+  .onb-subtitle{font-size:14px}
+  .onb-logo{width:130px;height:130px}
+  .onb-hero{height:160px;margin-bottom:24px}
+  .onb-card{padding:12px 14px;gap:12px}
+  .onb-card-ico{width:40px;height:40px;font-size:19px;border-radius:12px}
+  .onb-card-title{font-size:13px}
+  .onb-card-desc{font-size:11px}
+  .onb-btn{padding:12px 24px;font-size:14px}
+  .onb-btn-final{font-size:15px;padding:14px 30px}
+  .onb-shields{gap:8px}
+  .onb-shield{padding:6px 12px;font-size:10.5px}
+}
+
+/* ═══════════════════════════════════════════════════════════
+   📲 APP INSTALL BANNER
+   ═══════════════════════════════════════════════════════════ */
+.install-banner{position:fixed;bottom:80px;inset-inline-start:14px;inset-inline-end:14px;background:linear-gradient(135deg,#0f2a2a 0%,#0f766e 50%,#0d9488 100%);color:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 14px 40px rgba(13,148,136,.4),0 0 0 1px rgba(94,234,212,.3);z-index:80;display:flex;align-items:center;gap:12px;animation:installSlide .5s cubic-bezier(.34,1.56,.64,1);max-width:480px;margin:0 auto;backdrop-filter:blur(10px)}
+.install-banner::before{content:'';position:absolute;top:-30px;inset-inline-end:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(94,234,212,.3),transparent 70%);border-radius:50%;pointer-events:none}
+@keyframes installSlide{from{opacity:0;transform:translateY(120%)}to{opacity:1;transform:none}}
+
+@media(min-width:768px){.install-banner{inset-inline-end:20px;inset-inline-start:auto;width:380px;bottom:20px}}
+
+.install-banner-icon{flex-shrink:0;width:48px;height:48px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);border-radius:14px;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.install-banner-content{flex:1;min-width:0;position:relative;z-index:1}
+.install-banner-title{font-size:14px;font-weight:800;margin-bottom:3px;line-height:1.2}
+.install-banner-desc{font-size:11.5px;color:rgba(255,255,255,.85);line-height:1.4}
+.install-banner-actions{display:flex;flex-direction:column;gap:5px;flex-shrink:0;position:relative;z-index:1}
+.install-banner-btn{background:#fff;color:#0f766e;border:none;padding:7px 14px;border-radius:99px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap}
+.install-banner-btn:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(0,0,0,.15)}
+.install-banner-close{background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);border:none;padding:5px 10px;border-radius:99px;font-size:10px;cursor:pointer;font-family:inherit;white-space:nowrap}
+.install-banner-close:hover{background:rgba(255,255,255,.2);color:#fff}
+
+/* ═══════════════════════════════════════════════════════════
+   🔔 NOTIFICATIONS BELL & DROPDOWN
+   ═══════════════════════════════════════════════════════════ */
+.notif-btn{position:relative;background:none;border:none;cursor:pointer;width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;transition:all .15s;font-size:18px}
+.notif-btn:hover{background:var(--g100)}
+html.dark .notif-btn:hover{background:var(--bg-elevated)}
+.notif-dot{position:absolute;top:6px;inset-inline-end:6px;width:9px;height:9px;background:#dc2626;border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 0 rgba(220,38,38,.6);animation:notifPulse 2s ease-in-out infinite}
+html.dark .notif-dot{border-color:var(--bg-card)}
+@keyframes notifPulse{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.6)}50%{box-shadow:0 0 0 6px rgba(220,38,38,0)}}
+
+.notif-dropdown{position:absolute;top:48px;inset-inline-end:8px;background:#fff;border:1px solid var(--g200);border-radius:16px;box-shadow:0 14px 40px rgba(15,42,42,.18);width:340px;max-width:calc(100vw - 28px);max-height:480px;overflow-y:auto;z-index:200;animation:notifDropIn .25s cubic-bezier(.34,1.56,.64,1)}
+html.dark .notif-dropdown{background:var(--bg-card);border-color:var(--border)}
+@keyframes notifDropIn{from{opacity:0;transform:translateY(-10px) scale(.95)}to{opacity:1;transform:none}}
+
+.notif-header{padding:14px 18px 12px;border-bottom:1px solid var(--g100);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;border-radius:16px 16px 0 0;z-index:2}
+html.dark .notif-header{background:var(--bg-card);border-color:var(--border-soft)}
+.notif-header-title{font-size:14px;font-weight:800;color:var(--g900)}
+html.dark .notif-header-title{color:var(--text-primary)}
+.notif-mark-read{font-size:11px;color:var(--teal2);font-weight:700;background:none;border:none;cursor:pointer;font-family:inherit;padding:4px 8px;border-radius:6px;transition:background .15s}
+.notif-mark-read:hover{background:var(--teal3)}
+html.dark .notif-mark-read{color:#5eead4}
+
+.notif-list{display:flex;flex-direction:column}
+.notif-item{padding:12px 18px;display:flex;align-items:flex-start;gap:11px;border-bottom:1px solid var(--g100);transition:background .15s;cursor:pointer;position:relative}
+html.dark .notif-item{border-color:var(--border-soft)}
+.notif-item:last-child{border-bottom:none}
+.notif-item:hover{background:var(--g50)}
+html.dark .notif-item:hover{background:var(--bg-hover)}
+.notif-item.unread{background:linear-gradient(90deg,rgba(13,148,136,.08) 0%,transparent 100%)}
+html.dark .notif-item.unread{background:linear-gradient(90deg,rgba(94,234,212,.08) 0%,transparent 100%)}
+.notif-item.unread::before{content:'';position:absolute;top:50%;inset-inline-start:6px;transform:translateY(-50%);width:6px;height:6px;background:#0d9488;border-radius:50%}
+html.dark .notif-item.unread::before{background:#5eead4}
+
+.notif-ico{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;background:var(--teal3);color:var(--teal2)}
+html.dark .notif-ico{background:rgba(94,234,212,.15);color:#5eead4}
+.notif-ico.success{background:#dcfce7;color:#16a34a}
+html.dark .notif-ico.success{background:rgba(34,197,94,.15);color:#86efac}
+.notif-ico.warning{background:#fef3c7;color:#d97706}
+html.dark .notif-ico.warning{background:rgba(245,158,11,.15);color:#fbbf24}
+.notif-ico.danger{background:#fee2e2;color:#dc2626}
+html.dark .notif-ico.danger{background:rgba(239,68,68,.15);color:#fca5a5}
+
+.notif-body{flex:1;min-width:0}
+.notif-text{font-size:12.5px;font-weight:600;color:var(--g800);line-height:1.5;margin-bottom:2px}
+html.dark .notif-text{color:var(--text-primary)}
+.notif-time{font-size:10.5px;color:var(--g400)}
+html.dark .notif-time{color:var(--text-muted)}
+
+.notif-empty{padding:36px 20px;text-align:center;color:var(--g400);font-size:12.5px}
+.notif-empty-ico{font-size:36px;margin-bottom:8px;opacity:.5}
+
+/* ═══════════════════════════════════════════════════════════
+   📰 ACTIVITY FEED
+   ═══════════════════════════════════════════════════════════ */
+.feed-card{background:#fff;border:1px solid var(--g200);border-radius:var(--r16);overflow:hidden;margin-bottom:18px;box-shadow:var(--sh)}
+html.dark .feed-card{background:var(--bg-card);border-color:var(--border)}
+.feed-header{padding:14px 18px 12px;border-bottom:1px solid var(--g100);display:flex;align-items:center;gap:10px}
+html.dark .feed-header{border-color:var(--border-soft)}
+.feed-header-icon{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#0d9488,#0f766e);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;box-shadow:0 4px 10px rgba(13,148,136,.25)}
+.feed-header-title{font-size:14px;font-weight:800;color:var(--g900);flex:1}
+html.dark .feed-header-title{color:var(--text-primary)}
+
+.feed-list{padding:8px 0}
+.feed-item{padding:10px 18px;display:flex;align-items:flex-start;gap:11px;transition:background .15s;position:relative}
+.feed-item:hover{background:var(--g50)}
+html.dark .feed-item:hover{background:var(--bg-hover)}
+.feed-item::after{content:'';position:absolute;inset-inline-start:36px;top:48px;bottom:0;width:1.5px;background:var(--g200);opacity:.5}
+html.dark .feed-item::after{background:var(--border-soft)}
+.feed-item:last-child::after{display:none}
+.feed-ico{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;position:relative;z-index:1;border:2px solid #fff}
+html.dark .feed-ico{border-color:var(--bg-card)}
+.feed-ico.success{background:#dcfce7;color:#16a34a}
+.feed-ico.info{background:#dbeafe;color:#2563eb}
+.feed-ico.payment{background:var(--teal3);color:var(--teal2)}
+.feed-ico.deal{background:#ede9fe;color:#7c3aed}
+.feed-ico.warning{background:#fef3c7;color:#d97706}
+html.dark .feed-ico.success{background:rgba(34,197,94,.15);color:#86efac}
+html.dark .feed-ico.info{background:rgba(59,130,246,.15);color:#93c5fd}
+html.dark .feed-ico.payment{background:rgba(94,234,212,.15);color:#5eead4}
+html.dark .feed-ico.deal{background:rgba(124,58,237,.15);color:#c4b5fd}
+html.dark .feed-ico.warning{background:rgba(245,158,11,.15);color:#fbbf24}
+.feed-body{flex:1;min-width:0;padding-top:2px}
+.feed-text{font-size:12.5px;font-weight:600;color:var(--g800);line-height:1.55}
+html.dark .feed-text{color:var(--text-primary)}
+.feed-text strong{color:var(--g900);font-weight:800}
+html.dark .feed-text strong{color:var(--text-primary)}
+.feed-time{font-size:10.5px;color:var(--g400);margin-top:2px}
+html.dark .feed-time{color:var(--text-muted)}
+
+.feed-empty{padding:32px 20px;text-align:center;color:var(--g400)}
+.feed-empty-ico{font-size:34px;margin-bottom:8px;opacity:.4}
+.feed-empty-text{font-size:12.5px}
+
+/* ═══════════════════════════════════════════════════════════
+   🚀 NEW SELLER ONBOARDING (Dashboard widget)
+   ═══════════════════════════════════════════════════════════ */
+.seller-onb{background:linear-gradient(135deg,#0f2a2a 0%,#0d9488 100%);color:#fff;border-radius:20px;padding:24px;margin-bottom:20px;position:relative;overflow:hidden;box-shadow:0 14px 36px rgba(13,148,136,.3)}
+.seller-onb::before{content:'';position:absolute;top:-60px;inset-inline-end:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(94,234,212,.25),transparent 70%);border-radius:50%}
+.seller-onb::after{content:'';position:absolute;bottom:-40px;inset-inline-start:-40px;width:150px;height:150px;background:radial-gradient(circle,rgba(255,255,255,.1),transparent 70%);border-radius:50%}
+.seller-onb-content{position:relative;z-index:1}
+.seller-onb-header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.seller-onb-emoji{font-size:36px;animation:wave 2s ease-in-out infinite;transform-origin:70% 70%}
+@keyframes wave{0%,100%{transform:rotate(0)}10%,30%{transform:rotate(14deg)}20%,40%{transform:rotate(-8deg)}50%{transform:rotate(0)}}
+.seller-onb-title{font-size:18px;font-weight:900;margin-bottom:4px;line-height:1.2}
+.seller-onb-subtitle{font-size:12.5px;color:rgba(255,255,255,.85);line-height:1.5}
+.seller-onb-progress{height:6px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;margin-bottom:16px}
+.seller-onb-progress-fill{height:100%;background:linear-gradient(90deg,#fbbf24,#5eead4);border-radius:99px;transition:width .8s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 12px rgba(94,234,212,.5)}
+.seller-onb-steps{display:flex;flex-direction:column;gap:10px}
+.seller-onb-step{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:14px;cursor:pointer;transition:all .2s;backdrop-filter:blur(10px);text-align:start;font-family:inherit;color:#fff}
+.seller-onb-step:hover{background:rgba(255,255,255,.15);transform:translateY(-1px);border-color:rgba(94,234,212,.4)}
+.seller-onb-step.done{opacity:.6;background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.3)}
+.seller-onb-step-num{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;border:1.5px solid rgba(255,255,255,.3);transition:all .3s}
+.seller-onb-step.done .seller-onb-step-num{background:#22c55e;border-color:#22c55e}
+.seller-onb-step-text{flex:1;min-width:0}
+.seller-onb-step-title{font-size:13px;font-weight:800;margin-bottom:1px}
+.seller-onb-step-desc{font-size:11px;color:rgba(255,255,255,.75);line-height:1.4}
+.seller-onb-step-arrow{font-size:18px;opacity:.6;flex-shrink:0}
+.seller-onb-step.done .seller-onb-step-arrow{display:none}
+
+/* ═══════════════════════════════════════════════════════════
+   🧮 PUBLIC CALCULATOR (محذوفة)
+   ═══════════════════════════════════════════════════════════ */
+
 /* ═══════ FAQ PAGE STYLES ═══════ */
 .faq-modal{background:#fff;border-radius:var(--r20);box-shadow:var(--shl);width:100%;max-width:480px;max-height:92vh;overflow-y:auto;animation:slideUp .3s ease;position:relative}
 html.dark .faq-modal{background:var(--bg-card);border:1px solid var(--border)}
@@ -1283,6 +1533,12 @@ html.dark .bn-badge{background:#dc2626!important;border-color:var(--bg-card)!imp
 
 <div id="app"></div>
 
+<!-- ═══ ONBOARDING TUTORIAL — السينمائي الفخم ═══ -->
+<div id="onb-overlay" class="onb-overlay hidden"></div>
+
+<!-- ═══ APP INSTALL BANNER ═══ -->
+<div id="install-banner" class="install-banner hidden"></div>
+
 <div class="moverlay hidden" id="rmodal">
   <div class="modal">
     <div class="mhdr"><h3>⭐ تقييم الطرف الآخر</h3><button class="mclose" onclick="closeRM()">✕</button></div>
@@ -1812,6 +2068,10 @@ function buildShell(){
           <span style="font-size:14.5px;font-weight:700;color:var(--g900)" id="ptbar">الرئيسية</span>
         </div>
         <div class="flex aic gap8">
+          <button class="notif-btn" onclick="toggleNotifs()" aria-label="الإشعارات">
+            <span style="font-size:19px">🔔</span>
+            <span class="notif-dot hidden" id="notif-dot"></span>
+          </button>
           <button class="hamb-btn" onclick="openMenu()" aria-label="القائمة">
             <span></span><span></span><span></span>
           </button>
@@ -1821,6 +2081,7 @@ function buildShell(){
       <div class="page hidden" id="pg-dash"><div class="pi">
         <div class="disc">⚠️ <span class="ar-t">قسطني — قيد الترخيص من البنك المركزي السعودي. الرسوم سعي وتيسير وليست فوائد ربوية. النظام التجريبي حالياً</span><span class="en-t hidden">Qastni — Pending SAMA license. Service fees, not interest. Currently in test mode</span></div>
         <div id="dash-prem-reminder"></div>
+        <div id="dash-seller-onb"></div>
         <h1 class="ptit" id="dwelcome">مرحباً 👋</h1>
         <p class="psub ar-t">إليك ملخص نشاطك في منصة قسطني</p><p class="psub en-t hidden">Your Qastni activity summary</p>
         <div class="sgrid">
@@ -1831,6 +2092,7 @@ function buildShell(){
         </div>
         <div class="shdr"><h2 class="stit ar-t">صفقاتك النشطة</h2><h2 class="stit en-t hidden">Active Deals</h2><button class="btn bsec bsm" onclick="nav('deals')"><span class="ar-t">عرض الكل</span><span class="en-t hidden">View All</span></button></div>
         <div id="dl"></div>
+        <div id="dash-activity-feed" style="margin-top:18px"></div>
         <div class="mt20"><button class="btn bp blg" onclick="nav('create')">➕ <span class="ar-t">بيع بالتقسيط</span><span class="en-t hidden">Sell on Installment</span></button></div>
       </div></div>
 
@@ -2413,6 +2675,18 @@ function rDash(){
   const remSlot=$('dash-prem-reminder')
   if(remSlot){
     remSlot.innerHTML=buildPremReminder()
+  }
+
+  // ═══ 🚀 Seller Onboarding (يختفي تلقائياً لما تكتمل كل الخطوات) ═══
+  const onbSlot=$('dash-seller-onb')
+  if(onbSlot){
+    onbSlot.innerHTML=renderSellerOnboarding()
+  }
+
+  // ═══ 📰 Activity Feed (نشاطك الأخير) ═══
+  const feedSlot=$('dash-activity-feed')
+  if(feedSlot){
+    feedSlot.innerHTML=renderActivityFeed()
   }
 }
 
@@ -4519,7 +4793,558 @@ document.addEventListener('keydown',e=>{
 })
 
 // ═══════════════════════════════════════════════
+// 🎬 ONBOARDING TUTORIAL — السينمائي الفخم
+// ═══════════════════════════════════════════════
+const ONB_KEY='qastni_onb_seen_v1'
+let _onbStep=0
 
+const ONB_SCREENS=[
+  // الشاشة 1: ترحيب
+  {
+    type:'welcome',
+    title:isAr=>isAr?'أهلاً بك في قسطني':'Welcome to Qastni',
+    subtitle:isAr=>isAr?'منصة سعودية ثورية للتقسيط الآمن بين الأفراد. حقوقك محمية، صفقاتك موثَّقة، تجربتك استثنائية.':'A revolutionary Saudi platform for secure peer-to-peer installments. Your rights protected, deals verified, experience exceptional.',
+    showLogo:true,
+    shields:true
+  },
+  // الشاشة 2: كيف يشتغل
+  {
+    type:'features',
+    title:isAr=>isAr?'كيف يشتغل قسطني؟':'How does Qastni work?',
+    subtitle:isAr=>isAr?'بسيط، آمن، وسريع — في 3 خطوات فقط':'Simple, safe, and fast — in just 3 steps',
+    cards:[
+      {ic:'📤',titleAr:'البائع يرسل العرض',titleEn:'Seller sends offer',descAr:'يحدد السعر والمدة ويرسل عرض التقسيط لإيميل المشتري',descEn:'Sets price, term, and sends the offer to buyer\'s email'},
+      {ic:'✓',titleAr:'المشتري يقبل ويدفع',titleEn:'Buyer accepts & pays',descAr:'يراجع التفاصيل، يقبل الشروط، ويبدأ السداد بأمان',descEn:'Reviews details, accepts terms, and starts secure payment'},
+      {ic:'🛡️',titleAr:'قسطني يحمي الطرفين',titleEn:'Qastni protects both',descAr:'عقد رقمي موثَّق + سند لأمر + متابعة قانونية تلقائية',descEn:'Verified digital contract + promissory note + legal follow-up'}
+    ]
+  },
+  // الشاشة 3: حقوقك محمية
+  {
+    type:'protection',
+    title:isAr=>isAr?'حقوقك محمية':'Your rights are protected',
+    subtitle:isAr=>isAr?'قسطني تعمل تحت إشراف الجهات الرسمية السعودية لضمان أعلى مستويات الأمان والشفافية':'Qastni operates under Saudi official supervision to ensure the highest levels of security and transparency',
+    cards:[
+      {ic:'🏛️',titleAr:'البنك المركزي السعودي',titleEn:'Saudi Central Bank',descAr:'قيد الترخيص من ساما — ضمن البيئة التجريبية التنظيمية',descEn:'Pending SAMA license — Regulatory Sandbox'},
+      {ic:'🔐',titleAr:'تحقق نافذ',titleEn:'Nafath Verification',descAr:'كل مستخدم متحقق رسمياً عبر النظام الوطني للهوية',descEn:'Every user verified via national identity system'},
+      {ic:'⚖️',titleAr:'سند لأمر معتمد',titleEn:'Approved Promissory Note',descAr:'قابل للتنفيذ مباشرة عبر منصة ناجز عند التأخر',descEn:'Directly enforceable via Najiz on default'}
+    ]
+  },
+  // الشاشة 4: ابدأ رحلتك
+  {
+    type:'final',
+    title:isAr=>isAr?'ابدأ رحلتك معنا':'Start your journey',
+    subtitle:isAr=>isAr?'جاهز لتجربة الجيل القادم من التقسيط الآمن؟':'Ready for the next generation of safe installments?',
+    showLogo:true,
+    finalBtn:true
+  }
+]
+
+window.openOnboarding=()=>{
+  const ov=$('onb-overlay');if(!ov)return
+  _onbStep=0
+  ov.classList.remove('hidden')
+  document.body.style.overflow='hidden'
+  // particles
+  const particles=Array.from({length:20},(_,i)=>{
+    const left=Math.random()*100
+    const dur=8+Math.random()*7
+    const delay=Math.random()*8
+    const px=(Math.random()-.5)*200
+    return `<div class="onb-particle" style="left:${left}%;bottom:0;animation:particleFloat ${dur}s linear ${delay}s infinite;--px:${px}px"></div>`
+  }).join('')
+  ov.innerHTML=`<div class="onb-bg"></div><div class="onb-particles">${particles}</div><div class="onb-progress"><div class="onb-progress-fill" id="onb-progress-fill" style="width:25%"></div></div><button class="onb-skip" onclick="closeOnboarding()">${isAr()?'تخطي':'Skip'}</button><div id="onb-content-wrap"></div>`
+  renderOnbScreen()
+}
+
+function renderOnbScreen(){
+  const wrap=$('onb-content-wrap');if(!wrap)return
+  const screen=ONB_SCREENS[_onbStep]
+  const total=ONB_SCREENS.length
+  const isFinal=_onbStep===total-1
+  const isFirst=_onbStep===0
+
+  // تحديث شريط التقدم
+  const fill=$('onb-progress-fill')
+  if(fill)fill.style.width=`${((_onbStep+1)/total)*100}%`
+
+  let logoHTML=''
+  if(screen.showLogo){
+    logoHTML=`<div class="onb-hero"><div class="onb-logo"><div class="onb-logo-glow"></div>${LOGO_W(160).replace('width="160" height="160"','width="160" height="160" style="filter:drop-shadow(0 0 30px rgba(94,234,212,.7))"')}</div></div>`
+  }
+
+  let shieldsHTML=''
+  if(screen.shields){
+    shieldsHTML=`<div class="onb-shields">
+      <div class="onb-shield"><span class="onb-shield-icon">🏛️</span>${isAr()?'قيد الترخيص من ساما':'SAMA Pending'}</div>
+      <div class="onb-shield"><span class="onb-shield-icon">🔐</span>${isAr()?'تحقق نافذ':'Nafath Verified'}</div>
+      <div class="onb-shield"><span class="onb-shield-icon">🛡️</span>${isAr()?'متوافق شرعاً':'Sharia Compliant'}</div>
+    </div>`
+  }
+
+  let cardsHTML=''
+  if(screen.cards){
+    cardsHTML=`<div class="onb-cards">${screen.cards.map((card,i)=>`
+      <div class="onb-card" style="animation:onbTextReveal .8s ease-out ${.7+i*.15}s both">
+        <div class="onb-card-ico">${card.ic}</div>
+        <div class="onb-card-text">
+          <div class="onb-card-title">${isAr()?card.titleAr:card.titleEn}</div>
+          <div class="onb-card-desc">${isAr()?card.descAr:card.descEn}</div>
+        </div>
+      </div>
+    `).join('')}</div>`
+  }
+
+  // الأزرار
+  let actionsHTML=''
+  if(isFinal){
+    actionsHTML=`<div class="onb-actions">
+      <button class="onb-btn onb-btn-final" onclick="closeOnboarding()">
+        <span>${isAr()?'يلا نبدأ':"Let's start"}</span>
+        <span style="font-size:18px">✨</span>
+      </button>
+    </div>`
+  }else{
+    actionsHTML=`<div class="onb-actions">
+      ${!isFirst?`<button class="onb-btn onb-btn-back" onclick="prevOnbStep()">${isAr()?'← رجوع':'← Back'}</button>`:''}
+      <button class="onb-btn onb-btn-primary" onclick="nextOnbStep()">
+        <span>${isAr()?'التالي':'Next'}</span>
+        <span style="font-size:14px">${isAr()?'←':'→'}</span>
+      </button>
+    </div>`
+  }
+
+  // النقاط المؤشرة
+  const dotsHTML=`<div class="onb-dots">${ONB_SCREENS.map((_,i)=>`<div class="onb-dot ${i===_onbStep?'active':''}" onclick="jumpOnbStep(${i})"></div>`).join('')}</div>`
+
+  wrap.innerHTML=`<div class="onb-content" key="${_onbStep}">
+    ${logoHTML}
+    <div class="onb-title">${screen.title(isAr())}</div>
+    <div class="onb-subtitle">${screen.subtitle(isAr())}</div>
+    ${shieldsHTML}
+    ${cardsHTML}
+    ${actionsHTML}
+    ${dotsHTML}
+  </div>`
+}
+
+window.nextOnbStep=()=>{
+  if(_onbStep<ONB_SCREENS.length-1){
+    _onbStep++
+    renderOnbScreen()
+  }else{
+    closeOnboarding()
+  }
+}
+window.prevOnbStep=()=>{
+  if(_onbStep>0){
+    _onbStep--
+    renderOnbScreen()
+  }
+}
+window.jumpOnbStep=(i)=>{
+  _onbStep=i
+  renderOnbScreen()
+}
+window.closeOnboarding=()=>{
+  const ov=$('onb-overlay');if(!ov)return
+  ov.style.opacity='0'
+  ov.style.transition='opacity .5s ease'
+  setTimeout(()=>{
+    ov.classList.add('hidden')
+    ov.style.opacity=''
+    document.body.style.overflow=''
+    try{localStorage.setItem(ONB_KEY,'1')}catch(e){}
+  },500)
+}
+
+// تظهر الـ onboarding للمستخدمين الجدد فقط
+function maybeShowOnboarding(){
+  try{
+    if(localStorage.getItem(ONB_KEY)==='1')return
+    setTimeout(()=>openOnboarding(),800)
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════════════
+// 🔔 NOTIFICATIONS SYSTEM
+// ═══════════════════════════════════════════════
+const NOTIFS_KEY='qastni_notifs_v1'
+const NOTIF_READ_KEY='qastni_notif_read_v1'
+let _notifs=[]
+
+function loadNotifs(){
+  try{
+    _notifs=JSON.parse(localStorage.getItem(NOTIFS_KEY)||'[]')
+  }catch(e){_notifs=[]}
+}
+function saveNotifs(){
+  try{
+    // نحتفظ بـ آخر 30 إشعار
+    if(_notifs.length>30)_notifs=_notifs.slice(0,30)
+    localStorage.setItem(NOTIFS_KEY,JSON.stringify(_notifs))
+  }catch(e){}
+}
+function addNotif(text,type='info',ico='🔔'){
+  _notifs.unshift({
+    id:Date.now()+Math.random(),
+    text,type,ico,
+    time:Date.now(),
+    read:false
+  })
+  saveNotifs()
+  updNotifBadge()
+}
+function getUnreadCount(){
+  return _notifs.filter(n=>!n.read).length
+}
+function updNotifBadge(){
+  const dot=$('notif-dot')
+  if(dot){
+    const cnt=getUnreadCount()
+    dot.classList.toggle('hidden',cnt===0)
+  }
+}
+function markAllNotifsRead(){
+  _notifs.forEach(n=>n.read=true)
+  saveNotifs()
+  updNotifBadge()
+  renderNotifDropdown()
+}
+function fmtTimeAgo(ts){
+  const now=Date.now()
+  const diff=Math.floor((now-ts)/1000)
+  if(diff<60)return isAr()?'الآن':'now'
+  if(diff<3600){const m=Math.floor(diff/60);return isAr()?`قبل ${m} ${m===1?'دقيقة':'دقائق'}`:`${m}m ago`}
+  if(diff<86400){const h=Math.floor(diff/3600);return isAr()?`قبل ${h} ${h===1?'ساعة':'ساعات'}`:`${h}h ago`}
+  const d=Math.floor(diff/86400)
+  return isAr()?`قبل ${d} ${d===1?'يوم':'أيام'}`:`${d}d ago`
+}
+
+window.toggleNotifs=()=>{
+  let dd=$('notif-dropdown')
+  if(dd){dd.remove();return}
+  dd=document.createElement('div')
+  dd.id='notif-dropdown'
+  dd.className='notif-dropdown'
+  document.body.appendChild(dd)
+  renderNotifDropdown()
+  // إغلاق عند النقر خارج
+  setTimeout(()=>{
+    document.addEventListener('click',function closeNotif(e){
+      if(!dd.contains(e.target)&&!e.target.closest('.notif-btn')){
+        dd.remove()
+        document.removeEventListener('click',closeNotif)
+      }
+    })
+  },10)
+}
+
+function renderNotifDropdown(){
+  const dd=$('notif-dropdown');if(!dd)return
+  const unread=getUnreadCount()
+  let listHTML
+  if(_notifs.length===0){
+    listHTML=`<div class="notif-empty">
+      <div class="notif-empty-ico">🔔</div>
+      <div>${isAr()?'لا توجد إشعارات بعد':'No notifications yet'}</div>
+    </div>`
+  }else{
+    listHTML=`<div class="notif-list">${_notifs.map(n=>`
+      <div class="notif-item ${n.read?'':'unread'}">
+        <div class="notif-ico ${n.type||''}">${n.ico||'🔔'}</div>
+        <div class="notif-body">
+          <div class="notif-text">${n.text}</div>
+          <div class="notif-time">${fmtTimeAgo(n.time)}</div>
+        </div>
+      </div>
+    `).join('')}</div>`
+  }
+  dd.innerHTML=`<div class="notif-header">
+    <div class="notif-header-title">${isAr()?'الإشعارات':'Notifications'}${unread>0?` <span style="background:#dc2626;color:#fff;font-size:10px;padding:2px 7px;border-radius:99px;margin-inline-start:6px">${unread}</span>`:''}</div>
+    ${unread>0?`<button class="notif-mark-read" onclick="markAllNotifsRead()">${isAr()?'تعليم كمقروء':'Mark read'}</button>`:''}
+  </div>${listHTML}`
+}
+
+// إنشاء إشعارات تلقائية بناءً على الأحداث
+function generateAutoNotifs(){
+  if(!CU||!DEALS)return
+  const now=Date.now()
+  const lastCheck=parseInt(localStorage.getItem('qastni_last_notif_check')||'0')
+
+  // إشعارات للصفقات الواردة الجديدة (Pending)
+  DEALS.filter(d=>d.buyer_email===CU.email&&d.status==='pending'&&new Date(d.created_at).getTime()>lastCheck).forEach(d=>{
+    addNotif(
+      isAr()?`📥 وصلك عرض تقسيط جديد من <strong>${san(d.seller_name||d.seller_email)}</strong>`:`New offer from ${san(d.seller_name)}`,
+      'info','📥'
+    )
+  })
+
+  // إشعار للأقساط القادمة خلال 3 أيام
+  const threeDays=3*24*60*60*1000
+  DEALS.filter(d=>d.status==='active'&&(d.buyer_email===CU.email||d.buyer_id===CU.id)).forEach(d=>{
+    const upcomingPays=(d.payments||[]).filter(p=>!p.is_paid)
+    upcomingPays.forEach(p=>{
+      const dueTime=new Date(p.due_date).getTime()
+      const diff=dueTime-now
+      if(diff>0&&diff<=threeDays){
+        const exists=_notifs.some(n=>n.id&&n.id.toString().includes(p.id))
+        if(!exists){
+          const days=Math.ceil(diff/(24*60*60*1000))
+          addNotif(
+            isAr()?`⏰ موعد قسط <strong>${fmtSAR(p.amount+(p.platform_fee||0))}</strong> خلال ${days} ${days===1?'يوم':'أيام'}`:`Payment ${fmtSAR(p.amount)} due in ${days}d`,
+            'warning','⏰'
+          )
+        }
+      }
+    })
+  })
+
+  localStorage.setItem('qastni_last_notif_check',now.toString())
+}
+
+// ═══════════════════════════════════════════════
+// 📰 ACTIVITY FEED
+// ═══════════════════════════════════════════════
+function getActivityFeed(){
+  if(!DEALS||!CU)return []
+  const items=[]
+  const now=Date.now()
+
+  DEALS.forEach(d=>{
+    const isBuyer=d.buyer_id===CU.id||d.buyer_email===CU.email
+    const isSeller=d.seller_id===CU.id||d.seller_email===CU.email
+    const otherName=isBuyer?(d.seller_name||d.seller_email):(d.buyer_name||d.buyer_email)
+
+    // إنشاء الصفقة
+    items.push({
+      time:new Date(d.created_at).getTime(),
+      type:'deal',
+      ico:'📋',
+      text:isAr()
+        ?(isSeller?`أنشأت عرض تقسيط لـ <strong>${san(otherName)}</strong>`:`وصلك عرض تقسيط من <strong>${san(otherName)}</strong>`)
+        :(isSeller?`Created offer for ${san(otherName)}`:`Received offer from ${san(otherName)}`)
+    })
+
+    // قبول الصفقة
+    if(d.accepted_at){
+      items.push({
+        time:new Date(d.accepted_at).getTime(),
+        type:'success',
+        ico:'✓',
+        text:isAr()?`تم قبول الصفقة مع <strong>${san(otherName)}</strong>`:`Deal accepted with ${san(otherName)}`
+      })
+    }
+
+    // اكتمال الصفقة
+    if(d.completed_at){
+      items.push({
+        time:new Date(d.completed_at).getTime(),
+        type:'success',
+        ico:'🎉',
+        text:isAr()?`اكتملت الصفقة مع <strong>${san(otherName)}</strong>`:`Deal completed with ${san(otherName)}`
+      })
+    }
+
+    // المدفوعات
+    ;(d.payments||[]).filter(p=>p.is_paid&&p.paid_at).forEach(p=>{
+      items.push({
+        time:new Date(p.paid_at).getTime(),
+        type:'payment',
+        ico:'💳',
+        text:isAr()
+          ?(isBuyer?`دفعت قسط <strong>${fmtSAR(p.amount+(p.platform_fee||0))}</strong>`:`استلمت قسط من <strong>${san(otherName)}</strong>`)
+          :(isBuyer?`Paid ${fmtSAR(p.amount)}`:`Received payment from ${san(otherName)}`)
+      })
+    })
+  })
+
+  // ترتيب من الأحدث للأقدم
+  items.sort((a,b)=>b.time-a.time)
+  return items.slice(0,7)
+}
+
+function renderActivityFeed(){
+  const items=getActivityFeed()
+  if(items.length===0){
+    return `<div class="feed-card">
+      <div class="feed-header">
+        <div class="feed-header-icon">📰</div>
+        <div class="feed-header-title">${isAr()?'نشاطك الأخير':'Recent Activity'}</div>
+      </div>
+      <div class="feed-empty">
+        <div class="feed-empty-ico">✨</div>
+        <div class="feed-empty-text">${isAr()?'لا يوجد نشاط بعد. ابدأ بإنشاء أول صفقة!':'No activity yet. Create your first deal!'}</div>
+      </div>
+    </div>`
+  }
+  return `<div class="feed-card">
+    <div class="feed-header">
+      <div class="feed-header-icon">📰</div>
+      <div class="feed-header-title">${isAr()?'نشاطك الأخير':'Recent Activity'}</div>
+    </div>
+    <div class="feed-list">${items.map(it=>`
+      <div class="feed-item">
+        <div class="feed-ico ${it.type}">${it.ico}</div>
+        <div class="feed-body">
+          <div class="feed-text">${it.text}</div>
+          <div class="feed-time">${fmtTimeAgo(it.time)}</div>
+        </div>
+      </div>
+    `).join('')}</div>
+  </div>`
+}
+
+// ═══════════════════════════════════════════════
+// 🚀 SELLER ONBOARDING (Dashboard widget)
+// ═══════════════════════════════════════════════
+function renderSellerOnboarding(){
+  if(!PRF||!CU)return ''
+
+  const steps=[
+    {
+      id:'profile',
+      done:!!(PRF.full_name&&PRF.phone&&PRF.national_id),
+      titleAr:'أكمل ملفك الشخصي',
+      titleEn:'Complete your profile',
+      descAr:'أضف اسمك ورقم جوالك وهويتك',
+      descEn:'Add name, phone, and ID',
+      action:()=>nav('profile')
+    },
+    {
+      id:'nafath',
+      done:!!PRF.nafath_verified,
+      titleAr:'تحقق من هويتك (نافذ)',
+      titleEn:'Verify identity (Nafath)',
+      descAr:'مجاني — يبني الثقة مع المستخدمين',
+      descEn:'Free — builds trust',
+      action:()=>openNafath({},()=>{toast(isAr()?'✓ تم التحقق':'✓ Verified','s');rDash()})
+    },
+    {
+      id:'firstDeal',
+      done:DEALS.length>0,
+      titleAr:'أنشئ أول صفقة',
+      titleEn:'Create first deal',
+      descAr:'ابدأ بصفقة تقسيط آمنة',
+      descEn:'Start a secure deal',
+      action:()=>nav('create')
+    }
+  ]
+
+  const doneCount=steps.filter(s=>s.done).length
+  const total=steps.length
+  const progress=Math.round((doneCount/total)*100)
+
+  // إذا كل الخطوات مكتملة، لا نعرض الـ onboarding
+  if(doneCount===total)return ''
+
+  return `<div class="seller-onb">
+    <div class="seller-onb-content">
+      <div class="seller-onb-header">
+        <div class="seller-onb-emoji">👋</div>
+        <div>
+          <div class="seller-onb-title">${isAr()?`أهلاً ${san(PRF.full_name||CU.email.split('@')[0])}!`:`Welcome ${san(CU.email.split('@')[0])}!`}</div>
+          <div class="seller-onb-subtitle">${isAr()?`أكمل ${total-doneCount} ${total-doneCount===1?'خطوة':'خطوات'} لتجربة قسطني الكاملة`:`Complete ${total-doneCount} step${total-doneCount===1?'':'s'} to unlock full experience`}</div>
+        </div>
+      </div>
+      <div class="seller-onb-progress">
+        <div class="seller-onb-progress-fill" style="width:${progress}%"></div>
+      </div>
+      <div class="seller-onb-steps">${steps.map((s,i)=>`
+        <button class="seller-onb-step ${s.done?'done':''}" onclick="(${s.action.toString()})()">
+          <div class="seller-onb-step-num">${s.done?'✓':i+1}</div>
+          <div class="seller-onb-step-text">
+            <div class="seller-onb-step-title">${isAr()?s.titleAr:s.titleEn}</div>
+            <div class="seller-onb-step-desc">${isAr()?s.descAr:s.descEn}</div>
+          </div>
+          <div class="seller-onb-step-arrow">›</div>
+        </button>
+      `).join('')}</div>
+    </div>
+  </div>`
+}
+
+// ═══════════════════════════════════════════════
+// 📲 APP INSTALL BANNER
+// ═══════════════════════════════════════════════
+const INSTALL_KEY='qastni_install_dismissed'
+const VISIT_KEY='qastni_visit_count'
+let _deferredInstallPrompt=null
+
+window.addEventListener('beforeinstallprompt',(e)=>{
+  e.preventDefault()
+  _deferredInstallPrompt=e
+  Q.log('Install prompt available')
+})
+
+function maybeShowInstallBanner(){
+  try{
+    // تجاهل لو رفض المستخدم
+    if(localStorage.getItem(INSTALL_KEY))return
+    // تجاهل لو مفعّل أصلاً (PWA installed)
+    if(window.matchMedia('(display-mode: standalone)').matches)return
+    if(window.navigator.standalone)return
+
+    // عداد الزيارات
+    const visits=parseInt(localStorage.getItem(VISIT_KEY)||'0')+1
+    localStorage.setItem(VISIT_KEY,visits.toString())
+
+    // تظهر بعد الزيارة الثالثة
+    if(visits<3)return
+
+    setTimeout(()=>showInstallBanner(),3000)
+  }catch(e){}
+}
+
+function showInstallBanner(){
+  const b=$('install-banner')
+  if(!b)return
+  const isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent)
+  b.innerHTML=`
+    <div class="install-banner-icon">${LOGO_W(28)}</div>
+    <div class="install-banner-content">
+      <div class="install-banner-title">${isAr()?'ثبّت قسطني كتطبيق':'Install Qastni as app'}</div>
+      <div class="install-banner-desc">${isAr()?'وصول أسرع وتجربة أفخم 🚀':'Faster access & better experience 🚀'}</div>
+    </div>
+    <div class="install-banner-actions">
+      <button class="install-banner-btn" onclick="installApp()">${isAr()?'تثبيت':'Install'}</button>
+      <button class="install-banner-close" onclick="dismissInstallBanner()">${isAr()?'لاحقاً':'Later'}</button>
+    </div>
+  `
+  b.classList.remove('hidden')
+}
+window.installApp=async()=>{
+  if(_deferredInstallPrompt){
+    _deferredInstallPrompt.prompt()
+    const{outcome}=await _deferredInstallPrompt.userChoice
+    if(outcome==='accepted'){
+      toast(isAr()?'🎉 تم تثبيت قسطني بنجاح!':'🎉 Qastni installed!','s')
+      try{localStorage.setItem(INSTALL_KEY,'1')}catch(e){}
+    }
+    _deferredInstallPrompt=null
+    dismissInstallBanner()
+  }else{
+    // iOS — تعليمات يدوية
+    const isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent)
+    if(isIOS){
+      toast(isAr()?'📱 اضغط زر المشاركة في Safari ثم "أضف إلى الشاشة الرئيسية"':'📱 Tap Share in Safari, then "Add to Home Screen"','i')
+    }else{
+      toast(isAr()?'📱 افتح القائمة في المتصفح وابحث عن "تثبيت التطبيق"':'📱 Open browser menu and find "Install app"','i')
+    }
+  }
+}
+window.dismissInstallBanner=()=>{
+  const b=$('install-banner')
+  if(b){
+    b.style.transform='translateY(120%)'
+    b.style.transition='transform .4s ease'
+    setTimeout(()=>{b.classList.add('hidden');b.style.transform=''},400)
+  }
+  try{localStorage.setItem(INSTALL_KEY,'1')}catch(e){}
+}
+
+// ═══════════════════════════════════════════════
+// 🚀 SESSION INITIALIZATION
+// ═══════════════════════════════════════════════
 async function initSession(session){
   try{
     CU=session.user
@@ -4527,6 +5352,11 @@ async function initSession(session){
     if(pe)Q.warn('Profile fetch warning:',pe)
     PRF=p||{full_name:CU.user_metadata?.full_name||'',phone:CU.user_metadata?.phone||'',national_id:CU.user_metadata?.national_id||''}
     await loadDeals()
+
+    // ═══ تحميل الإشعارات وإنشاء الإشعارات التلقائية ═══
+    loadNotifs()
+    generateAutoNotifs()
+
     buildShell()
     let savedPage='dash',savedPP={}
     try{
@@ -4536,23 +5366,30 @@ async function initSession(session){
       if(spp)savedPP=JSON.parse(spp)||{}
     }catch(e){}
     await nav(savedPage,savedPP)
+    updNotifBadge()
+
     try{
       // Debounced realtime listener - فقط نحدّث البيانات بدون إعادة رسم
       let _rtDebounce=null
       _rtChannel=sb.channel('qrt_'+CU.id).on('postgres_changes',{event:'*',schema:'public',table:'deals'},()=>{
         clearTimeout(_rtDebounce)
         _rtDebounce=setTimeout(async()=>{
-          // فقط نحدّث البيانات. لا نعيد رسم أي صفحة (يفسد السكرول والأحداث).
-          // المستخدم يشوف التحديثات لما ينقّل بين الصفحات
           try{
             await loadDeals()
             updBadge()
+            generateAutoNotifs()  // ✨ إشعارات تلقائية على التحديثات
           }catch(e){Q.warn('rt refresh:',e)}
         },1500)
       }).subscribe()
     }catch(e){Q.warn('Realtime setup failed (non-critical):',e)}
+
+    // ═══ بعد التحميل: عرض الـ Onboarding للمستخدمين الجدد + Install Banner ═══
+    setTimeout(()=>{
+      maybeShowOnboarding()
+      maybeShowInstallBanner()
+    },1200)
   }catch(e){
-    console.error('Session init failed:',e)
+    Q.error('Session init failed:',e)
     _started=false
     CU=null;PRF=null;DEALS=[]
     $('app').innerHTML=getAuthHTML()
