@@ -2621,6 +2621,440 @@ html.dark .fbar{
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════════
+   🎬 CINEMA TABS — تابات سينمائية
+   ═══════════════════════════════════════════════════════════════════════ */
+.tabbar{
+  display:flex;
+  background:rgba(255,255,255,.6)!important;
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(94,234,212,.2)!important;
+  border-radius:14px!important;
+  padding:5px!important;
+  gap:4px;
+  margin-bottom:18px!important;
+  overflow:hidden;
+  position:relative;
+}
+html.dark .tabbar{
+  background:rgba(15,31,31,.5)!important;
+  border-color:rgba(94,234,212,.15)!important;
+}
+.tbn{
+  flex:1;
+  padding:10px 14px!important;
+  background:none!important;
+  border:none!important;
+  border-radius:10px!important;
+  font-size:13px!important;
+  font-weight:800!important;
+  color:rgba(15,42,42,.55)!important;
+  cursor:pointer;
+  font-family:inherit!important;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1)!important;
+  letter-spacing:0!important;
+  position:relative;
+  z-index:1;
+}
+html.dark .tbn{color:rgba(240,253,250,.55)!important}
+.tbn:hover:not(.active){
+  color:var(--text-primary)!important;
+  background:rgba(94,234,212,.08)!important;
+}
+.tbn.active{
+  background:linear-gradient(135deg,#0d9488 0%,#0f766e 100%)!important;
+  color:#fff!important;
+  box-shadow:
+    0 4px 14px rgba(13,148,136,.4),
+    inset 0 1px 0 rgba(255,255,255,.25)!important;
+  transform:translateY(-1px);
+}
+
+/* ═══ FAB Button — تحسين زر العائم ═══ */
+.fab-create{
+  background:linear-gradient(135deg,#0d9488,#0f766e)!important;
+  box-shadow:
+    0 12px 32px rgba(13,148,136,.45),
+    inset 0 1px 0 rgba(255,255,255,.3)!important;
+  transition:all .35s cubic-bezier(.34,1.56,.64,1)!important;
+}
+
+/* ═══ DETAIL PAGE تحسين ═══ */
+#pg-detail .pi{padding-top:0}
+.dt-hero-content{padding:22px 24px!important;position:relative;z-index:1}
+.dt-hero-eyebrow{
+  font-size:11px!important;
+  color:rgba(94,234,212,.95)!important;
+  font-weight:800!important;
+  letter-spacing:0!important;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:rgba(255,255,255,.1);
+  padding:5px 11px;
+  border-radius:99px;
+  border:1px solid rgba(94,234,212,.3);
+  margin-bottom:12px;
+  backdrop-filter:blur(10px);
+}
+.dt-hero-title{
+  color:#fff!important;
+  font-size:24px!important;
+  font-weight:900!important;
+  letter-spacing:0!important;
+  line-height:1.2!important;
+  margin-bottom:8px!important;
+}
+.dt-hero-meta{
+  color:rgba(255,255,255,.85)!important;
+  font-size:13px!important;
+  font-weight:600!important;
+}
+.dt-hero-stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:18px;
+  padding-top:18px;
+  border-top:1px solid rgba(255,255,255,.15);
+}
+.dt-hero-stat{text-align:start}
+.dt-hero-stat-lbl{
+  font-size:10.5px;
+  color:rgba(255,255,255,.7);
+  font-weight:700;
+  margin-bottom:3px;
+  letter-spacing:0;
+}
+.dt-hero-stat-val{
+  font-size:18px;
+  color:#fff;
+  font-weight:900;
+  letter-spacing:0;
+}
+
+/* ═══ PROFILE PAGE تحسين ═══ */
+.prf-hero{
+  background:linear-gradient(135deg,#0f2a2a 0%,#0f766e 50%,#0d9488 100%)!important;
+  padding:32px 24px 70px!important;
+  border-radius:0 0 32px 32px!important;
+  margin:-12px -8px 24px!important;
+  position:relative;
+  overflow:hidden;
+  text-align:center;
+  box-shadow:0 14px 40px rgba(13,148,136,.3)!important;
+}
+.prf-hero::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  inset-inline-end:-30%;
+  width:300px;
+  height:300px;
+  background:radial-gradient(circle,rgba(94,234,212,.3),transparent 70%);
+  border-radius:50%;
+  animation:prfOrb 8s ease-in-out infinite;
+  pointer-events:none;
+}
+.prf-hero::after{
+  content:'';
+  position:absolute;
+  bottom:-30%;
+  inset-inline-start:-20%;
+  width:200px;
+  height:200px;
+  background:radial-gradient(circle,rgba(251,191,36,.15),transparent 70%);
+  border-radius:50%;
+  pointer-events:none;
+}
+@keyframes prfOrb{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(-30px,20px) scale(1.1)}
+}
+.prf-hero-content{position:relative;z-index:1}
+.prf-avatar{
+  width:90px!important;
+  height:90px!important;
+  border-radius:50%!important;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:36px;
+  font-weight:900;
+  color:#fff;
+  margin-bottom:12px;
+  box-shadow:
+    0 14px 36px rgba(0,0,0,.3),
+    0 0 0 4px rgba(255,255,255,.2),
+    0 0 0 6px rgba(94,234,212,.3),
+    inset 0 -8px 20px rgba(0,0,0,.15),
+    inset 0 8px 20px rgba(255,255,255,.2);
+  background:linear-gradient(135deg,var(--av-color,var(--teal)),color-mix(in srgb,var(--av-color,var(--teal)) 70%,#000))!important;
+}
+.prf-name{
+  color:#fff;
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:0;
+  margin-bottom:4px;
+}
+.prf-email{
+  color:rgba(255,255,255,.7);
+  font-size:13px;
+  direction:ltr;
+  display:inline-block;
+  margin-bottom:14px;
+}
+.prf-shields{
+  display:inline-flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.prf-shield{
+  padding:5px 11px;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(94,234,212,.3);
+  border-radius:99px;
+  font-size:10.5px;
+  font-weight:700;
+  color:#fff;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  backdrop-filter:blur(10px);
+}
+
+/* ═══ PREMIUM PAGE — أسطورية ═══ */
+.prem-hero{
+  background:linear-gradient(135deg,#0f2a2a 0%,#0f766e 35%,#0d9488 70%,#fbbf24 130%)!important;
+  padding:36px 24px 36px!important;
+  border-radius:0 0 32px 32px!important;
+  margin:-12px -8px 24px!important;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 14px 40px rgba(13,148,136,.3)!important;
+}
+.prem-hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(at 30% 20%,rgba(251,191,36,.3),transparent 50%),
+    radial-gradient(at 70% 80%,rgba(94,234,212,.3),transparent 50%);
+  animation:premHeroPulse 6s ease-in-out infinite;
+}
+@keyframes premHeroPulse{
+  0%,100%{opacity:.7}
+  50%{opacity:1}
+}
+.prem-hero-content{position:relative;z-index:2}
+.prem-crown{
+  font-size:52px;
+  margin-bottom:12px;
+  display:inline-block;
+  filter:drop-shadow(0 8px 20px rgba(251,191,36,.6));
+  animation:crownFloat 4s ease-in-out infinite;
+}
+@keyframes crownFloat{
+  0%,100%{transform:translateY(0) rotate(-3deg)}
+  50%{transform:translateY(-8px) rotate(3deg)}
+}
+.prem-hero-title{
+  color:#fff!important;
+  font-size:32px!important;
+  font-weight:900!important;
+  margin-bottom:8px!important;
+  letter-spacing:0!important;
+  text-shadow:0 4px 20px rgba(251,191,36,.4);
+}
+.prem-hero-subtitle{
+  color:rgba(255,255,255,.9)!important;
+  font-size:14px!important;
+  font-weight:600!important;
+  line-height:1.6!important;
+}
+.prem-features-list{
+  display:flex;
+  flex-direction:column;
+  gap:11px;
+  margin-bottom:20px;
+}
+.prem-feature{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:13px 15px;
+  background:rgba(255,255,255,.85)!important;
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(94,234,212,.2)!important;
+  border-radius:14px!important;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+}
+html.dark .prem-feature{
+  background:rgba(15,31,31,.6)!important;
+  border-color:rgba(94,234,212,.15)!important;
+}
+.prem-feature:hover{
+  transform:translateX(-3px);
+  border-color:rgba(94,234,212,.5)!important;
+  box-shadow:0 8px 20px rgba(13,148,136,.15)!important;
+}
+.prem-feature-ico{
+  width:38px;
+  height:38px;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  flex-shrink:0;
+  background:linear-gradient(135deg,#0d9488,#0f766e);
+  color:#fff;
+  box-shadow:0 6px 14px rgba(13,148,136,.3);
+}
+.prem-feature.gold .prem-feature-ico{
+  background:linear-gradient(135deg,#fbbf24,#f59e0b);
+  box-shadow:0 6px 14px rgba(245,158,11,.4);
+}
+.prem-feature-text{flex:1;min-width:0}
+.prem-feature-title{
+  font-size:13.5px;
+  font-weight:800;
+  color:var(--text-primary);
+  margin-bottom:2px;
+  letter-spacing:0;
+}
+.prem-feature-desc{
+  font-size:11.5px;
+  color:var(--text-muted);
+  line-height:1.5;
+  font-weight:500;
+}
+
+/* ═══ UPUB PAGE تحسين ═══ */
+.upub-cover{
+  background:linear-gradient(135deg,#0f2a2a 0%,#0f766e 50%,#0d9488 100%)!important;
+  position:relative;
+  overflow:hidden;
+}
+.upub-cover::before{
+  content:'';
+  position:absolute;
+  top:-30%;
+  inset-inline-end:-20%;
+  width:280px;
+  height:280px;
+  background:radial-gradient(circle,rgba(94,234,212,.3),transparent 70%);
+  border-radius:50%;
+  animation:upubOrb 8s ease-in-out infinite;
+}
+@keyframes upubOrb{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(-30px,20px) scale(1.1)}
+}
+
+/* ═══ INVOICE/PAY ROWS تحسين ═══ */
+.pay-list{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+
+/* ═══ HEROES on subpages ═══ */
+.cinema-hero.compact{
+  padding:24px 22px 20px;
+  margin:-12px -8px 20px;
+}
+.cinema-hero.compact .cinema-hero-title{font-size:24px!important}
+.cinema-hero.compact .cinema-hero-subtitle{font-size:13px!important}
+
+/* ═══ INC card special — حمراء/برتقالية للطوارئ ═══ */
+.icard-pending{
+  background:linear-gradient(135deg,rgba(255,251,235,.85),rgba(254,243,199,.7))!important;
+  border-color:rgba(245,158,11,.35)!important;
+  box-shadow:0 6px 18px rgba(245,158,11,.12)!important;
+}
+html.dark .icard-pending{
+  background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(245,158,11,.08))!important;
+  border-color:rgba(251,191,36,.25)!important;
+}
+
+/* ═══ INFO BOX ═══ */
+.info-box,.feebox{
+  background:linear-gradient(135deg,rgba(94,234,212,.08),rgba(13,148,136,.04))!important;
+  border:1px solid rgba(94,234,212,.2)!important;
+  border-radius:13px!important;
+  padding:11px 14px!important;
+}
+html.dark .info-box,html.dark .feebox{
+  background:linear-gradient(135deg,rgba(94,234,212,.08),rgba(13,148,136,.04))!important;
+  border-color:rgba(94,234,212,.15)!important;
+}
+
+/* ═══ CALC BOX سينمائي ═══ */
+.calcbox{
+  background:linear-gradient(135deg,#0f2a2a 0%,#0d9488 100%)!important;
+  border-radius:18px!important;
+  padding:18px 20px!important;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 10px 28px rgba(13,148,136,.3),inset 0 1px 0 rgba(255,255,255,.15)!important;
+  margin:14px 0!important;
+}
+.calcbox::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  inset-inline-end:-30%;
+  width:200px;
+  height:200px;
+  background:radial-gradient(circle,rgba(94,234,212,.3),transparent 70%);
+  border-radius:50%;
+  pointer-events:none;
+}
+.calclbl{
+  color:rgba(255,255,255,.85)!important;
+  font-size:13px!important;
+  font-weight:700!important;
+  position:relative;
+  z-index:1;
+}
+.calcval{
+  color:#fff!important;
+  font-size:24px!important;
+  font-weight:900!important;
+  letter-spacing:0!important;
+  text-shadow:0 2px 8px rgba(0,0,0,.2);
+  position:relative;
+  z-index:1;
+  white-space:nowrap;
+}
+
+/* ═══ NUMBER STEPPERS سينمائية ═══ */
+.num-step{
+  background:rgba(13,148,136,.08)!important;
+  border:1px solid rgba(13,148,136,.2)!important;
+  color:var(--teal2)!important;
+  transition:all .2s!important;
+}
+.num-step:hover{
+  background:var(--teal2)!important;
+  color:#fff!important;
+  transform:scale(1.1);
+}
+html.dark .num-step{
+  background:rgba(94,234,212,.1)!important;
+  color:#5eead4!important;
+  border-color:rgba(94,234,212,.2)!important;
+}
+html.dark .num-step:hover{
+  background:#5eead4!important;
+  color:#0a1414!important;
+}
+
 /* ═══════ FAQ PAGE STYLES ═══════ */
 .faq-modal{background:#fff;border-radius:var(--r20);box-shadow:var(--shl);width:100%;max-width:480px;max-height:92vh;overflow-y:auto;animation:slideUp .3s ease;position:relative}
 html.dark .faq-modal{background:var(--bg-card);border:1px solid var(--border)}
@@ -4413,19 +4847,30 @@ function buildShell(){
       </div></div>
 
       <div class="page hidden" id="pg-create"><div class="pi" style="max-width:680px">
-        <h1 class="ptit ar-t">بيع بالتقسيط</h1><h1 class="ptit en-t hidden">Sell on Installment</h1>
-        <p class="psub ar-t">أرسل عرض تقسيط للمشتري — يدفع عند الموافقة</p><p class="psub en-t hidden">Send an installment offer to the buyer — they pay upon approval</p>
-        <div id="cr-promo-slot"></div>
-        <div class="card">
-          <div class="chdr"><h3 class="ar-t">تفاصيل الاتفاقية</h3><h3 class="en-t hidden">Agreement Details</h3></div>
+        <!-- 🎬 Hero Section السينمائي -->
+        <div class="cinema-hero reveal-1">
+          <div class="cinema-hero-badge">
+            <span style="font-size:14px">📤</span>
+            <span class="ar-t">عرض جديد</span><span class="en-t hidden">New Offer</span>
+          </div>
+          <h1 class="cinema-hero-title ar-t">بيع بالتقسيط</h1>
+          <h1 class="cinema-hero-title en-t hidden">Sell on Installment</h1>
+          <p class="cinema-hero-subtitle ar-t">أرسل عرض تقسيط احترافي للمشتري — يدفع عند الموافقة بأمان كامل</p>
+          <p class="cinema-hero-subtitle en-t hidden">Send a professional installment offer — buyer pays safely upon approval</p>
+        </div>
+
+        <div id="cr-promo-slot" class="reveal-2"></div>
+
+        <div class="card reveal-3">
+          <div class="chdr"><h3 class="ar-t">📋 تفاصيل الاتفاقية</h3><h3 class="en-t hidden">📋 Agreement Details</h3></div>
           <div class="cbody">
-            <div class="fg"><label class="fl"><span class="ar-t">البريد الإلكتروني للمشتري</span><span class="en-t hidden">Buyer Email</span> <span class="req">*</span></label><input class="fc" type="email" id="c-sel" placeholder="buyer@example.com"/><p class="fhint ar-t">يجب أن يكون المشتري مسجلاً في المنصة</p><p class="fhint en-t hidden">Buyer must be registered on the platform</p></div>
+            <div class="fg"><label class="fl"><span style="font-size:13px">📧</span> <span class="ar-t">البريد الإلكتروني للمشتري</span><span class="en-t hidden">Buyer Email</span> <span class="req">*</span></label><input class="fc" type="email" id="c-sel" placeholder="buyer@example.com"/><p class="fhint ar-t">يجب أن يكون المشتري مسجلاً في المنصة</p><p class="fhint en-t hidden">Buyer must be registered on the platform</p></div>
             <div class="frow">
-              <div class="fg"><label class="fl"><span class="ar-t">نوع السلعة</span><span class="en-t hidden">Item Type</span> <span class="req">*</span></label><select class="fc" id="c-item"><option value="">${isAr()?'-- اختر --':'-- Select --'}</option>${IOPTS}</select></div>
-              <div class="fg"><label class="fl"><span class="ar-t">وصف السلعة</span><span class="en-t hidden">Description</span></label><input class="fc" type="text" id="c-desc" placeholder="Toyota Camry 2021" maxlength="200"/></div>
+              <div class="fg"><label class="fl"><span style="font-size:13px">📦</span> <span class="ar-t">نوع السلعة</span><span class="en-t hidden">Item Type</span> <span class="req">*</span></label><select class="fc" id="c-item"><option value="">${isAr()?'-- اختر --':'-- Select --'}</option>${IOPTS}</select></div>
+              <div class="fg"><label class="fl"><span style="font-size:13px">📝</span> <span class="ar-t">وصف السلعة</span><span class="en-t hidden">Description</span></label><input class="fc" type="text" id="c-desc" placeholder="Toyota Camry 2021" maxlength="200"/></div>
             </div>
             <div class="frow">
-              <div class="fg"><label class="fl"><span class="ar-t">السعر الإجمالي (ر.س)</span><span class="en-t hidden">Total Price (SAR)</span> <span class="req">*</span></label>
+              <div class="fg"><label class="fl"><span style="font-size:13px">💰</span> <span class="ar-t">السعر الإجمالي (ر.س)</span><span class="en-t hidden">Total Price (SAR)</span> <span class="req">*</span></label>
                 <div class="num-wrap">
                   <input class="fc" type="number" id="c-price" placeholder="50000" min="1" max="100000" oninput="calcI()"/>
                   <div class="num-steppers">
@@ -4435,7 +4880,7 @@ function buildShell(){
                 </div>
                 <p class="fhint ar-t">الحد الأقصى: 100,000 ر.س</p><p class="fhint en-t hidden">Max: 100,000 SAR</p>
               </div>
-              <div class="fg"><label class="fl"><span class="ar-t">الدفعة الأولى (ر.س)</span><span class="en-t hidden">Down Payment</span></label>
+              <div class="fg"><label class="fl"><span style="font-size:13px">💵</span> <span class="ar-t">الدفعة الأولى (ر.س)</span><span class="en-t hidden">Down Payment</span></label>
                 <div class="num-wrap">
                   <input class="fc" type="number" id="c-down" placeholder="0" min="0" value="0" oninput="calcI()"/>
                   <div class="num-steppers">
@@ -4446,7 +4891,7 @@ function buildShell(){
               </div>
             </div>
             <div class="frow">
-              <div class="fg"><label class="fl"><span class="ar-t">عدد الأشهر</span><span class="en-t hidden">Months</span> <span class="req">*</span></label>
+              <div class="fg"><label class="fl"><span style="font-size:13px">📅</span> <span class="ar-t">عدد الأشهر</span><span class="en-t hidden">Months</span> <span class="req">*</span></label>
                 <div class="num-wrap">
                   <input class="fc" type="number" id="c-mo" placeholder="12" min="1" max="24" oninput="calcI()"/>
                   <div class="num-steppers">
@@ -4456,38 +4901,56 @@ function buildShell(){
                 </div>
                 <p class="fhint">1 – 24</p>
               </div>
-              <div class="fg"><label class="fl"><span class="ar-t">تاريخ البداية</span><span class="en-t hidden">Start Date</span></label><input class="fc" type="date" id="c-date" value="${today()}"/><p class="fhint ar-t">📅 تواريخ السداد ستكون يوم 27 من كل شهر (موعد الرواتب)</p><p class="fhint en-t hidden">📅 Payment dates align with salary day (27th of each month)</p></div>
+              <div class="fg"><label class="fl"><span style="font-size:13px">🗓️</span> <span class="ar-t">تاريخ البداية</span><span class="en-t hidden">Start Date</span></label><input class="fc" type="date" id="c-date" value="${today()}"/><p class="fhint ar-t">📅 تواريخ السداد ستكون يوم 27 من كل شهر (موعد الرواتب)</p><p class="fhint en-t hidden">📅 Payment dates align with salary day (27th of each month)</p></div>
             </div>
             <div class="calcbox"><div><div class="calclbl ar-t">القسط الشهري الإجمالي</div><div class="calclbl en-t hidden">Total Monthly Installment</div><div style="font-size:11px;color:var(--teal);margin-top:2px" id="cbrk"></div></div><div class="calcval" id="cval">—</div></div>
             <div class="feebox">
               <div class="ico">💼</div>
               <div class="txt"><span class="ar-t">رسوم سعي وتيسير 7% (3.5% من البائع + 3.5% من المشتري). تواريخ السداد على رواتب السعودية (يوم 27 من كل شهر).</span><span class="en-t hidden">7% service fee (3.5% seller + 3.5% buyer). Payments aligned with Saudi salary day (27th).</span></div>
             </div>
-            <div class="fg mt16"><label class="fl"><span class="ar-t">ملاحظات إضافية</span><span class="en-t hidden">Notes</span></label><textarea class="fc" id="c-notes" rows="2" maxlength="500"></textarea></div>
+            <div class="fg mt16"><label class="fl"><span style="font-size:13px">📋</span> <span class="ar-t">ملاحظات إضافية</span><span class="en-t hidden">Notes</span></label><textarea class="fc" id="c-notes" rows="2" maxlength="500"></textarea></div>
           </div>
           <div class="cfoot flex jce gap10">
             <button class="btn bg bsm" onclick="nav('dash')"><span class="ar-t">إلغاء</span><span class="en-t hidden">Cancel</span></button>
-            <button class="btn bp blg" id="sbtn" onclick="submitDeal()">📤 <span class="ar-t">إرسال العرض للمشتري</span><span class="en-t hidden">Send Offer to Buyer</span></button>
+            <button class="btn bp blg glow-on-hover" id="sbtn" onclick="submitDeal()">📤 <span class="ar-t">إرسال العرض للمشتري</span><span class="en-t hidden">Send Offer to Buyer</span></button>
           </div>
         </div>
       </div></div>
 
       <div class="page hidden" id="pg-inc"><div class="pi">
-        <h1 class="ptit ar-t">الطلبات الواردة</h1><h1 class="ptit en-t hidden">Incoming Requests</h1>
-        <p class="psub ar-t">طلبات التقسيط المُرسلة إليك من المشترين</p><p class="psub en-t hidden">Installment requests sent to you</p>
-        <div id="incl"></div>
+        <!-- 🎬 Hero السينمائي -->
+        <div class="cinema-hero reveal-1">
+          <div class="cinema-hero-badge">
+            <span style="font-size:14px">📥</span>
+            <span class="ar-t">طلبات تنتظر ردك</span><span class="en-t hidden">Awaiting your response</span>
+          </div>
+          <h1 class="cinema-hero-title ar-t">الطلبات الواردة</h1>
+          <h1 class="cinema-hero-title en-t hidden">Incoming Requests</h1>
+          <p class="cinema-hero-subtitle ar-t">طلبات التقسيط المُرسلة إليك من المشترين</p>
+          <p class="cinema-hero-subtitle en-t hidden">Installment requests sent to you</p>
+        </div>
+        <div id="incl" class="reveal-2"></div>
       </div></div>
 
       <div class="page hidden" id="pg-deals"><div class="pi">
-        <h1 class="ptit ar-t">صفقاتي</h1><h1 class="ptit en-t hidden">My Deals</h1>
-        <p class="psub ar-t">جميع اتفاقيات التقسيط الخاصة بك</p><p class="psub en-t hidden">All your installment agreements</p>
-        <div class="tabbar" role="tablist">
+        <!-- 🎬 Hero السينمائي -->
+        <div class="cinema-hero reveal-1">
+          <div class="cinema-hero-badge">
+            <span style="font-size:14px">📋</span>
+            <span class="ar-t">جميع صفقاتك</span><span class="en-t hidden">All your deals</span>
+          </div>
+          <h1 class="cinema-hero-title ar-t">صفقاتي</h1>
+          <h1 class="cinema-hero-title en-t hidden">My Deals</h1>
+          <p class="cinema-hero-subtitle ar-t">جميع اتفاقيات التقسيط الخاصة بك في مكان واحد</p>
+          <p class="cinema-hero-subtitle en-t hidden">All your installment agreements in one place</p>
+        </div>
+        <div class="tabbar reveal-2" role="tablist">
           <button class="tbn active" onclick="filtD('all')" id="ta" role="tab"><span class="ar-t">الكل</span><span class="en-t hidden">All</span></button>
           <button class="tbn" onclick="filtD('active')" id="tac" role="tab"><span class="ar-t">نشطة</span><span class="en-t hidden">Active</span></button>
           <button class="tbn" onclick="filtD('pending')" id="tpe" role="tab"><span class="ar-t">معلقة</span><span class="en-t hidden">Pending</span></button>
           <button class="tbn" onclick="filtD('completed')" id="tco" role="tab"><span class="ar-t">مكتملة</span><span class="en-t hidden">Done</span></button>
         </div>
-        <div id="dealsl"></div>
+        <div id="dealsl" class="reveal-3"></div>
       </div></div>
 
       <div class="page hidden" id="pg-detail"><div class="pi" id="detc"></div></div>
@@ -5136,9 +5599,32 @@ async function rDetail(id){
     const canDel=(d.seller_id===CU.id||d.seller_email===CU.email)&&d.status==='pending'
     el.innerHTML=`
       <button class="btn bg bsm mb16" onclick="goBack()">← ${isAr()?'رجوع':'Back'}</button>
-      <div class="flex aic jsb mb20" style="flex-wrap:wrap;gap:12px">
-        <div><h1 style="font-size:18px;font-weight:800">${ico(d.item)} ${san(d.item)}${d.description?' — '+san(d.description):''}</h1><div class="text-sm text-m mt8">${isAr()?'رقم العقد':'Contract #'}: <strong>${d.contract_num}</strong></div></div>
-        <div class="flex aic gap10" style="flex-wrap:wrap">${sbdg(d.status)}${canR?`<button class="btn bsec bsm" onclick="openRM('${d.id}','${rte}')">⭐ ${isAr()?'تقييم':'Rate'}</button>`:''}${canDel?`<button class="btn bd bsm" onclick="deleteDeal('${d.id}')">🗑️ ${isAr()?'إلغاء العرض':'Cancel Offer'}</button>`:''}</div>
+
+      <!-- 🎬 Hero Section السينمائي -->
+      <div class="dt-hero" style="margin-bottom:18px">
+        <div class="dt-hero-content">
+          <div class="dt-hero-eyebrow">
+            <span style="font-size:13px">${ico(d.item)}</span>
+            ${isAr()?'صفقة تقسيط':'Installment Deal'} · #${d.contract_num}
+          </div>
+          <h1 class="dt-hero-title">${san(d.item)}${d.description?' — '+san(d.description):''}</h1>
+          <div class="dt-hero-meta">${sbdg(d.status)}</div>
+          <div class="dt-hero-stats">
+            <div class="dt-hero-stat">
+              <div class="dt-hero-stat-lbl">${isAr()?'السعر الإجمالي':'Total Price'}</div>
+              <div class="dt-hero-stat-val">${fmtSAR(d.price)}</div>
+            </div>
+            <div class="dt-hero-stat">
+              <div class="dt-hero-stat-lbl">${isAr()?'القسط الشهري':'Monthly'}</div>
+              <div class="dt-hero-stat-val">${fmtSAR(d.installment)}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex aic jsb mb16" style="flex-wrap:wrap;gap:10px">
+        <div></div>
+        <div class="flex aic gap10" style="flex-wrap:wrap">${canR?`<button class="btn bsec bsm" onclick="openRM('${d.id}','${rte}')">⭐ ${isAr()?'تقييم':'Rate'}</button>`:''}${canDel?`<button class="btn bd bsm" onclick="deleteDeal('${d.id}')">🗑️ ${isAr()?'إلغاء العرض':'Cancel Offer'}</button>`:''}</div>
       </div>
       <div class="card mb16">
         <div class="chdr"><h2>${isAr()?'طرفا الصفقة والتفاصيل المالية':'Parties & Financial Details'}</h2></div>
@@ -5302,21 +5788,30 @@ async function rProfile(){
   }
 
   el.innerHTML=`
+    <!-- 🎬 Hero الفخم للملف الشخصي -->
+    <div class="prf-hero">
+      <div class="prf-hero-content">
+        <div class="prf-avatar" style="--av-color:${color}">${ini(nm)}</div>
+        <h2 class="prf-name">${san(nm)}${profileBadge}</h2>
+        <div class="prf-email">${san(CU.email)}</div>
+        ${avg?`<div style="margin-bottom:14px">${stars(avg,totalRats,16)}</div>`:''}
+        <div class="prf-shields">
+          <div class="prf-shield">🛡️ <span class="ar-t">حساب آمن</span><span class="en-t hidden">Protected</span></div>
+          ${PRF?.nafath_verified?'<div class="prf-shield">🔐 <span class="ar-t">تحقق نافذ</span><span class="en-t hidden">Nafath</span></div>':''}
+          ${isPremActive?'<div class="prf-shield" style="background:linear-gradient(135deg,rgba(251,191,36,.2),rgba(251,191,36,.1));border-color:rgba(251,191,36,.4)">⭐ <span class="ar-t">موثَّق</span><span class="en-t hidden">Verified</span></div>':''}
+        </div>
+      </div>
+    </div>
+
     ${subscriptionCard}
     <div class="card mb20">
-      <div style="background:linear-gradient(135deg,var(--teal2),#065f46);padding:28px 24px;text-align:center;border-radius:var(--r16) var(--r16) 0 0;position:relative">
-        <div style="position:absolute;top:14px;${isAr()?'left':'right'}:14px"><span class="samabadge">${isAr()?'محمي':'Protected'}</span></div>
-        <div style="width:68px;height:68px;border-radius:50%;background:${color};border:3px solid rgba(255,255,255,.3);display:inline-flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;margin-bottom:10px">${ini(nm)}</div>
-        <h2 style="color:#fff;font-size:18px;font-weight:800;display:inline-flex;align-items:center;flex-wrap:wrap;justify-content:center">${san(nm)}${profileBadge}</h2>
-        <div style="color:rgba(255,255,255,.65);font-size:12px;margin-top:3px">${san(CU.email)}</div>
-        <div style="margin-top:9px">${avg?stars(avg,totalRats,14):`<span style="color:rgba(255,255,255,.5);font-size:11px">${isAr()?'لا تقييمات بعد':'No ratings yet'}</span>`}</div>
-      </div>
+      <div class="chdr"><h2>👤 ${isAr()?'معلومات الحساب':'Account Info'}</h2></div>
       <div class="cbody">
         <div class="igrid">
-          ${PRF?.phone?`<div class="iitem"><div class="ilbl">${isAr()?'رقم الجوال':'Phone'}</div><div class="ival">${san(PRF.phone)}</div></div>`:''}
-          ${PRF?.national_id?`<div class="iitem"><div class="ilbl">${isAr()?'رقم الهوية':'National ID'}</div><div class="ival">${san(PRF.national_id)}</div></div>`:''}
-          <div class="iitem"><div class="ilbl">${isAr()?'تاريخ الانضمام':'Member Since'}</div><div class="ival">${fmtD(CU.created_at)}</div></div>
-          <div class="iitem"><div class="ilbl">${isAr()?'البريد الإلكتروني':'Email'}</div><div class="ival" style="font-size:12px;word-break:break-all">${san(CU.email)}</div></div>
+          ${PRF?.phone?`<div class="iitem"><div class="ilbl">📱 ${isAr()?'رقم الجوال':'Phone'}</div><div class="ival">${san(PRF.phone)}</div></div>`:''}
+          ${PRF?.national_id?`<div class="iitem"><div class="ilbl">🆔 ${isAr()?'رقم الهوية':'National ID'}</div><div class="ival">${san(PRF.national_id)}</div></div>`:''}
+          <div class="iitem"><div class="ilbl">📅 ${isAr()?'تاريخ الانضمام':'Member Since'}</div><div class="ival">${fmtD(CU.created_at)}</div></div>
+          <div class="iitem"><div class="ilbl">📧 ${isAr()?'البريد الإلكتروني':'Email'}</div><div class="ival" style="font-size:12px;word-break:break-all">${san(CU.email)}</div></div>
         </div>
       </div>
     </div>
