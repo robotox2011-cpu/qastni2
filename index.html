@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,viewport-fit=cover"/>
-<title>قسطني  Qastni</title>
+<title>قسطني v47 | Qastni</title>
 
 <!-- PWA Setup -->
 <link rel="manifest" href="manifest.json"/>
@@ -693,12 +693,12 @@ html.dark .glass-strong{
 /* ═══ Hero Section — الجزء العلوي الفخم ═══ */
 .cinema-hero{
   position:relative;
-  padding:32px 24px 28px;
-  margin:-24px -16px 24px;
+  padding:28px 24px 26px;
+  margin:0 -16px 22px;
   background:
     radial-gradient(circle at 30% 0%,rgba(94,234,212,.15) 0%,transparent 50%),
     linear-gradient(180deg,rgba(204,251,241,.4) 0%,transparent 100%);
-  border-radius:0 0 32px 32px;
+  border-radius:24px 24px 24px 24px;
   overflow:hidden;
 }
 html.dark .cinema-hero{
@@ -2672,34 +2672,82 @@ html.dark .fbar{
 @media(max-width:768px){
   /* ⚡ تخفيف الـ blur على الموبايل لمنع التعليق */
   .topbar,.bottom-nav{
-    backdrop-filter:blur(14px) saturate(1.4)!important;
-    -webkit-backdrop-filter:blur(14px) saturate(1.4)!important;
+    backdrop-filter:blur(10px) saturate(1.2)!important;
+    -webkit-backdrop-filter:blur(10px) saturate(1.2)!important;
   }
-  .card,.scard,.dcard,.icard{
-    backdrop-filter:blur(8px)!important;
-    -webkit-backdrop-filter:blur(8px)!important;
-  }
-  .menu-modal,.faq-modal,.modal,.pmodal,.nafath-card{
-    backdrop-filter:blur(20px) saturate(1.4)!important;
-    -webkit-backdrop-filter:blur(20px) saturate(1.4)!important;
-  }
-  .pm-row,.pcard-input,.pbreakdown,.pm-card-fields{
+  /* ⚡ إلغاء كامل للـ blur على البطاقات والحقول */
+  .card,.scard,.dcard,.icard,.cinema-deal,.cinema-stat,
+  .pm-row,.pcard-input,.pbreakdown,.pm-card-fields,
+  .iitem,.pay-row,.feed-card,.faq-it,.fc,.fbar{
     backdrop-filter:none!important;
     -webkit-backdrop-filter:none!important;
   }
-  /* إيقاف الـ shine animation على الموبايل */
-  .btn.bp::after,.cinema-btn-main::before,.pmod-foot .btn.bp::after{
+  /* ⚡ Modals: blur خفيف فقط */
+  .menu-modal,.faq-modal,.modal,.pmodal,.nafath-card{
+    backdrop-filter:blur(14px) saturate(1.2)!important;
+    -webkit-backdrop-filter:blur(14px) saturate(1.2)!important;
+  }
+  /* ⚡ إيقاف كل الـ shine animations */
+  .btn.bp::after,.cinema-btn-main::before,.pmod-foot .btn.bp::after,
+  .cinema-hero-badge::before,.menu-promo-fullwidth::before{
     animation:none!important;
     display:none!important;
   }
-  /* إيقاف orbs المتحركة */
-  .menu-hdr::before,.pmod-hdr::before,.menu-promo-fullwidth::before,
-  .prf-hero::before,.prem-hero::before,.dt-hero::before,
-  .scard::after,.cinema-hero::before,.calcbox::before,.pamt-box::before{
+  /* ⚡ إيقاف ALL orbs animations */
+  .menu-hdr::before,.menu-hdr::after,
+  .pmod-hdr::before,.pmod-hdr::after,
+  .menu-promo-fullwidth::before,
+  .prf-hero::before,.prf-hero::after,
+  .prem-hero::before,
+  .dt-hero::before,
+  .scard::after,
+  .cinema-hero::before,
+  .calcbox::before,
+  .pamt-box::before,
+  .upub-cinema-hero-bg::before,
+  .upub-cinema-hero-bg::after,
+  .upub-orb,
+  .cinema-fab::before,
+  .menu-av::before,
+  .upub-cinema-avatar::before{
     animation:none!important;
   }
-  /* إيقاف progress bar shine */
-  .pfill{animation:none!important}
+  /* ⚡ إيقاف progress bar shine */
+  .pfill{animation:none!important;background:linear-gradient(90deg,#0d9488,#0f766e)!important}
+  /* ⚡ إيقاف particles على الموبايل */
+  .particles-bg{display:none!important}
+  /* ⚡ إيقاف الـ mesh-bg animation تماماً */
+  .mesh-bg::before{animation:none!important;opacity:.08!important}
+  /* ⚡ إيقاف التاج والأفاتار glow */
+  .upub-cinema-crown,.crown,.prem-crown{animation:none!important}
+  /* ⚡ إيقاف livePulse */
+  .live-pulse-dot,.notif-dot{animation:none!important}
+  /* ⚡ إيقاف الانيميشن المستمرة في الـ Hero */
+  @keyframes heroFloat{0%,100%{transform:none}}
+  @keyframes meshShift{0%,100%{transform:none}}
+  @keyframes upubOrb1,upubOrb2,upubOrb3,upubHeroOrb,prfOrb,premOrb,dtOrb,
+  pmodOrb,menuOrb,pamtOrb,heroPulse,menuPromoOrb,
+  premHeroPulse,crownFloat,crownFloat2,upubAvatarGlow,avPulse{0%,100%{transform:none}}
+  /* ⚡ تقليل heavy gradients */
+  .menu-hdr,.pmod-hdr,.upub-cinema-hero{
+    background:linear-gradient(135deg,#0f2a2a,#0d9488)!important;
+  }
+  .prf-hero,.prem-hero,.dt-hero{
+    background:linear-gradient(135deg,#0f2a2a,#0d9488)!important;
+  }
+}
+
+/* ⚡ تحسينات إضافية على الجوالات الضعيفة */
+@media(max-width:480px){
+  /* تقليل shadows */
+  .card,.scard,.dcard,.cinema-stat,.cinema-deal,.menu-modal,.pmodal{
+    box-shadow:0 2px 8px rgba(0,0,0,.08)!important;
+  }
+  html.dark .card,html.dark .scard,html.dark .dcard,
+  html.dark .cinema-stat,html.dark .cinema-deal,
+  html.dark .menu-modal,html.dark .pmodal{
+    box-shadow:0 2px 8px rgba(0,0,0,.3)!important;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -2818,9 +2866,9 @@ html.dark .tbn{color:rgba(240,253,250,.55)!important}
 /* ═══ PROFILE PAGE تحسين ═══ */
 .prf-hero{
   background:linear-gradient(135deg,#0f2a2a 0%,#0f766e 50%,#0d9488 100%)!important;
-  padding:32px 24px 70px!important;
-  border-radius:0 0 32px 32px!important;
-  margin:-12px -8px 24px!important;
+  padding:30px 24px 60px!important;
+  border-radius:24px!important;
+  margin:0 -8px 22px!important;
   position:relative;
   overflow:hidden;
   text-align:center;
@@ -2910,9 +2958,9 @@ html.dark .tbn{color:rgba(240,253,250,.55)!important}
 /* ═══ PREMIUM PAGE — أسطورية ═══ */
 .prem-hero{
   background:linear-gradient(135deg,#0f2a2a 0%,#0f766e 35%,#0d9488 70%,#fbbf24 130%)!important;
-  padding:36px 24px 36px!important;
-  border-radius:0 0 32px 32px!important;
-  margin:-12px -8px 24px!important;
+  padding:32px 24px 32px!important;
+  border-radius:24px!important;
+  margin:0 -8px 22px!important;
   text-align:center;
   position:relative;
   overflow:hidden;
@@ -3042,8 +3090,8 @@ html.dark .prem-feature{
 
 /* ═══ HEROES on subpages ═══ */
 .cinema-hero.compact{
-  padding:24px 22px 20px;
-  margin:-12px -8px 20px;
+  padding:22px 20px 18px;
+  margin:0 -8px 18px;
 }
 .cinema-hero.compact .cinema-hero-title{font-size:24px!important}
 .cinema-hero.compact .cinema-hero-subtitle{font-size:13px!important}
@@ -4552,7 +4600,7 @@ button:hover .promo-arrow,
 
 /* زر الرجوع */
 .upub-back-btn{
-  position:fixed;
+  position:absolute;
   top:14px;
   inset-inline-start:14px;
   z-index:50;
@@ -10161,9 +10209,21 @@ function spawnParticles(count=8){
 }
 
 // 🔢 Counter Animation — أرقام تعد من الصفر
-function animateCounter(el,target,duration=1500,prefix='',suffix=''){
+// 🔢 Counter Animation — مع cleanup عشان منع memory leak
+const _activeCounters=new WeakMap()
+function animateCounter(el,target,duration=1200,prefix='',suffix=''){
   if(!el)return
+  // إلغاء أي counter سابق على نفس العنصر
+  if(_activeCounters.has(el)){
+    cancelAnimationFrame(_activeCounters.get(el))
+  }
   const start=parseFloat(el.dataset.current||0)
+  // لو ما تغيّر الرقم، ما نسوي animation
+  if(start===target){
+    el.textContent=prefix+(target>=1000?Math.round(target).toLocaleString('en-US'):Math.round(target).toString())+suffix
+    el.dataset.current=target
+    return
+  }
   const startTime=performance.now()
   const range=target-start
   function update(now){
@@ -10173,42 +10233,40 @@ function animateCounter(el,target,duration=1500,prefix='',suffix=''){
     const current=start+range*eased
     el.textContent=prefix+(target>=1000?Math.round(current).toLocaleString('en-US'):Math.round(current).toString())+suffix
     if(progress<1){
-      requestAnimationFrame(update)
+      _activeCounters.set(el,requestAnimationFrame(update))
     }else{
+      _activeCounters.delete(el)
       el.dataset.current=target
-      el.classList.add('counter-update')
-      setTimeout(()=>el.classList.remove('counter-update'),400)
     }
   }
-  requestAnimationFrame(update)
+  _activeCounters.set(el,requestAnimationFrame(update))
 }
 
-// 🎨 3D Tilt Effect (للديسكتوب فقط) — مع throttle لمنع التعليق
+// 🎨 3D Tilt Effect — مع cleanup شامل
 let _tiltRAF=null
+const _tiltAttached=new WeakSet()
 function attachTiltEffects(){
-  if(window.innerWidth<1024)return  // ✅ بس على الشاشات الكبيرة (مو tablet)
+  if(window.innerWidth<1280)return  // ⚡ فقط على شاشات كبيرة جداً
   document.querySelectorAll('.cinema-stat').forEach(card=>{
-    if(card.dataset.tiltAttached)return
-    card.dataset.tiltAttached='1'
+    if(_tiltAttached.has(card))return
+    _tiltAttached.add(card)
     let rect=null
-    card.addEventListener('mouseenter',()=>{rect=card.getBoundingClientRect()})
-    card.addEventListener('mousemove',(e)=>{
+    const onEnter=()=>{rect=card.getBoundingClientRect()}
+    const onMove=(e)=>{
       if(_tiltRAF||!rect)return
       _tiltRAF=requestAnimationFrame(()=>{
         const x=e.clientX-rect.left
         const y=e.clientY-rect.top
-        const cx=rect.width/2
-        const cy=rect.height/2
-        const rx=((y-cy)/cy)*-2
-        const ry=((x-cx)/cx)*2
+        const rx=((y-rect.height/2)/(rect.height/2))*-2
+        const ry=((x-rect.width/2)/(rect.width/2))*2
         card.style.transform=`perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-3px)`
         _tiltRAF=null
       })
-    })
-    card.addEventListener('mouseleave',()=>{
-      card.style.transform=''
-      rect=null
-    })
+    }
+    const onLeave=()=>{card.style.transform='';rect=null}
+    card.addEventListener('mouseenter',onEnter,{passive:true})
+    card.addEventListener('mousemove',onMove,{passive:true})
+    card.addEventListener('mouseleave',onLeave,{passive:true})
   })
 }
 
