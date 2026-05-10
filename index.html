@@ -2705,20 +2705,41 @@ html.dark .pay-row.paid{
   border-color:rgba(34,197,94,.3)!important;
 }
 
-/* ═══ Welcome Splash تحسين ═══ */
+/* ═══ Welcome Splash — يحترم وضع المستخدم ═══ */
 #splash{
+  background:linear-gradient(135deg,#f0fafa 0%,#ccfbf1 50%,#a7f3d0 100%)!important;
+}
+html.dark #splash{
   background:linear-gradient(135deg,#0a1414 0%,#0f2a2a 50%,#0d2828 100%)!important;
+}
+/* لو المستخدم ما اختار وضع، نتبع نظام الجوال */
+@media (prefers-color-scheme: dark){
+  html:not(.light) #splash{
+    background:linear-gradient(135deg,#0a1414 0%,#0f2a2a 50%,#0d2828 100%)!important;
+  }
 }
 #splash::before{
   content:'';
   position:absolute;
   inset:0;
   background:
-    radial-gradient(at 30% 30%,rgba(94,234,212,.2) 0,transparent 50%),
-    radial-gradient(at 70% 70%,rgba(251,191,36,.1) 0,transparent 50%);
+    radial-gradient(at 30% 30%,rgba(13,148,136,.15) 0%,transparent 50%),
+    radial-gradient(at 70% 70%,rgba(94,234,212,.18) 0%,transparent 50%);
   filter:blur(60px);
   pointer-events:none;
 }
+html.dark #splash::before{
+  background:
+    radial-gradient(at 30% 30%,rgba(94,234,212,.2) 0%,transparent 50%),
+    radial-gradient(at 70% 70%,rgba(251,191,36,.1) 0%,transparent 50%);
+}
+/* تكبير قطع الشعار في Splash */
+#splash .qlogo-wrap svg rect{
+  /* القطع الأصلية 12×12 → نخليها 14×14 */
+}
+#splash-name{color:var(--teal2)}
+html.dark #splash-name{color:#5eead4!important}
+html.dark #splash-sub{color:rgba(255,255,255,.6)!important}
 
 /* ═══ FILTER BAR تحسين ═══ */
 .fbar{
@@ -5312,6 +5333,421 @@ html.dark .upub-cinema-note-text{color:var(--text-secondary)}
   .upub-back-btn{width:36px;height:36px}
 }
 
+/* ═══════════════════════════════════════════════════════════════════════
+   📜 LEGAL DOCUMENTS — Terms & Privacy SCREEN (تصميم خورافي)
+   ═══════════════════════════════════════════════════════════════════════ */
+.legal-modal{
+  background:rgba(255,255,255,.97)!important;
+  backdrop-filter:blur(40px) saturate(1.8);
+  -webkit-backdrop-filter:blur(40px) saturate(1.8);
+  border-radius:28px!important;
+  border:1px solid rgba(94,234,212,.2)!important;
+  box-shadow:
+    0 32px 80px -10px rgba(0,0,0,.35),
+    0 0 0 1px rgba(94,234,212,.1),
+    inset 0 1px 0 rgba(255,255,255,.6)!important;
+  width:100%;
+  max-width:640px;
+  max-height:92vh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  animation:menuEntry .6s cubic-bezier(.34,1.56,.64,1);
+  position:relative;
+}
+html.dark .legal-modal{
+  background:rgba(15,31,31,.96)!important;
+  border-color:rgba(94,234,212,.18)!important;
+  box-shadow:
+    0 32px 80px -10px rgba(0,0,0,.6),
+    0 0 0 1px rgba(94,234,212,.12)!important;
+}
+
+/* ═══ Hero Header ═══ */
+.legal-hero{
+  position:relative;
+  background:linear-gradient(135deg,#051818 0%,#0f2a2a 35%,#0f766e 75%,#0d9488 110%)!important;
+  padding:30px 28px 26px;
+  color:#fff;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.legal-hero::before{
+  content:'';
+  position:absolute;
+  top:-60%;
+  inset-inline-end:-30%;
+  width:340px;
+  height:340px;
+  background:radial-gradient(circle,rgba(94,234,212,.4),transparent 65%);
+  border-radius:50%;
+  animation:legalOrb 8s ease-in-out infinite;
+  pointer-events:none;
+}
+.legal-hero::after{
+  content:'';
+  position:absolute;
+  bottom:-50%;
+  inset-inline-start:-25%;
+  width:240px;
+  height:240px;
+  background:radial-gradient(circle,rgba(251,191,36,.18),transparent 70%);
+  border-radius:50%;
+  pointer-events:none;
+}
+@keyframes legalOrb{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(-30px,20px) scale(1.15)}
+}
+@media(max-width:768px){
+  .legal-hero::before,.legal-hero::after{animation:none}
+}
+
+/* زر الرجوع في Hero */
+.legal-back-btn{
+  position:absolute;
+  top:16px;
+  inset-inline-start:16px;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:rgba(255,255,255,.12)!important;
+  border:1px solid rgba(94,234,212,.3)!important;
+  color:#fff;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all .35s cubic-bezier(.34,1.56,.64,1);
+  backdrop-filter:blur(10px);
+  z-index:10;
+  padding:0;
+  font-family:inherit;
+}
+.legal-back-btn svg{transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.legal-back-btn:hover{
+  background:rgba(94,234,212,.25)!important;
+  border-color:rgba(94,234,212,.6)!important;
+  transform:scale(1.1);
+}
+.legal-back-btn:hover svg{transform:translateX(-3px)}
+
+.legal-hero-content{
+  position:relative;
+  z-index:2;
+  text-align:center;
+}
+
+/* أيقونة كبيرة */
+.legal-hero-icon{
+  width:74px;
+  height:74px;
+  border-radius:22px;
+  background:linear-gradient(135deg,rgba(94,234,212,.25),rgba(94,234,212,.08));
+  border:1px solid rgba(94,234,212,.4);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:38px;
+  margin-bottom:14px;
+  box-shadow:
+    0 12px 28px rgba(0,0,0,.25),
+    inset 0 1px 0 rgba(255,255,255,.15);
+  animation:legalIconFloat 4s ease-in-out infinite;
+}
+@keyframes legalIconFloat{
+  0%,100%{transform:translateY(0) rotate(-2deg)}
+  50%{transform:translateY(-5px) rotate(3deg)}
+}
+@media(max-width:768px){
+  .legal-hero-icon{animation:none}
+}
+
+.legal-hero-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:5px 13px;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(94,234,212,.3);
+  border-radius:99px;
+  font-size:10.5px;
+  font-weight:800;
+  color:rgba(94,234,212,.95);
+  margin-bottom:10px;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  backdrop-filter:blur(10px);
+}
+
+.legal-hero-title{
+  font-size:26px!important;
+  font-weight:900!important;
+  color:#fff!important;
+  letter-spacing:0!important;
+  margin-bottom:8px!important;
+  background:linear-gradient(135deg,#fff 0%,#a7f3d0 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.legal-hero-subtitle{
+  font-size:13px;
+  color:rgba(255,255,255,.78);
+  font-weight:600;
+  line-height:1.6;
+  max-width:500px;
+  margin:0 auto;
+}
+
+/* تاريخ آخر تحديث */
+.legal-update-date{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  margin-top:12px;
+  padding:5px 11px;
+  background:rgba(0,0,0,.2);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:99px;
+  font-size:10.5px;
+  font-weight:700;
+  color:rgba(255,255,255,.7);
+}
+
+/* ═══ Body ═══ */
+.legal-body{
+  padding:24px 28px 22px;
+  overflow-y:auto;
+  flex:1 1 auto;
+  min-height:0;
+  -webkit-overflow-scrolling:touch;
+  background:transparent;
+}
+
+/* المقدمة */
+.legal-intro{
+  background:linear-gradient(135deg,rgba(94,234,212,.08),rgba(13,148,136,.03));
+  border:1px solid rgba(94,234,212,.2);
+  border-radius:14px;
+  padding:14px 16px;
+  margin-bottom:22px;
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+html.dark .legal-intro{
+  background:linear-gradient(135deg,rgba(94,234,212,.06),rgba(13,148,136,.02));
+  border-color:rgba(94,234,212,.15);
+}
+.legal-intro-icon{
+  font-size:22px;
+  flex-shrink:0;
+  margin-top:1px;
+}
+.legal-intro-text{
+  flex:1;
+  font-size:12.5px;
+  color:var(--text-secondary);
+  line-height:1.7;
+  font-weight:500;
+}
+html.dark .legal-intro-text{color:var(--text-secondary)}
+
+/* قسم */
+.legal-section{
+  margin-bottom:22px;
+  animation:legalFadeIn .5s ease both;
+}
+.legal-section:nth-child(2){animation-delay:.05s}
+.legal-section:nth-child(3){animation-delay:.1s}
+.legal-section:nth-child(4){animation-delay:.15s}
+.legal-section:nth-child(5){animation-delay:.2s}
+.legal-section:nth-child(6){animation-delay:.25s}
+.legal-section:nth-child(7){animation-delay:.3s}
+@keyframes legalFadeIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:none}
+}
+
+.legal-section-header{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  margin-bottom:11px;
+  padding-bottom:8px;
+  border-bottom:1.5px solid rgba(94,234,212,.15);
+}
+html.dark .legal-section-header{
+  border-bottom-color:rgba(94,234,212,.12);
+}
+
+.legal-section-num{
+  width:30px;
+  height:30px;
+  border-radius:9px;
+  background:linear-gradient(135deg,#0d9488,#0f766e);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  font-weight:900;
+  flex-shrink:0;
+  box-shadow:0 4px 10px rgba(13,148,136,.3);
+  font-feature-settings:'tnum';
+}
+
+.legal-section-title{
+  flex:1;
+  font-size:15px!important;
+  font-weight:900!important;
+  color:var(--text-primary)!important;
+  letter-spacing:0!important;
+  margin:0!important;
+}
+html.dark .legal-section-title{color:var(--text-primary)!important}
+
+.legal-section-content{
+  font-size:13px;
+  color:var(--text-secondary);
+  line-height:1.85;
+  font-weight:500;
+  padding-inline-start:42px;
+}
+html.dark .legal-section-content{color:var(--text-secondary)}
+
+.legal-section-content p{
+  margin-bottom:9px;
+}
+.legal-section-content p:last-child{margin-bottom:0}
+
+.legal-section-content strong{
+  color:var(--text-primary);
+  font-weight:800;
+}
+html.dark .legal-section-content strong{color:var(--text-primary)}
+
+/* قائمة نقاط */
+.legal-list{
+  list-style:none;
+  padding:0;
+  margin:8px 0;
+}
+.legal-list li{
+  position:relative;
+  padding-inline-start:22px;
+  margin-bottom:7px;
+  font-size:13px;
+  color:var(--text-secondary);
+  line-height:1.75;
+  font-weight:500;
+}
+.legal-list li::before{
+  content:'';
+  position:absolute;
+  inset-inline-start:0;
+  top:8px;
+  width:8px;
+  height:8px;
+  border-radius:2px;
+  background:linear-gradient(135deg,#5eead4,#0d9488);
+  transform:rotate(45deg);
+}
+
+/* Highlight Box */
+.legal-highlight{
+  background:linear-gradient(135deg,rgba(251,191,36,.1),rgba(245,158,11,.04));
+  border:1.5px solid rgba(251,191,36,.3);
+  border-radius:13px;
+  padding:13px 16px;
+  margin:12px 0;
+  display:flex;
+  gap:11px;
+  align-items:flex-start;
+}
+html.dark .legal-highlight{
+  background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(245,158,11,.03));
+  border-color:rgba(251,191,36,.25);
+}
+.legal-highlight-icon{
+  font-size:18px;
+  flex-shrink:0;
+  margin-top:1px;
+}
+.legal-highlight-text{
+  flex:1;
+  font-size:12.5px;
+  color:#92400e;
+  line-height:1.7;
+  font-weight:600;
+}
+html.dark .legal-highlight-text{color:#fcd34d}
+
+/* Critical Box */
+.legal-critical{
+  background:linear-gradient(135deg,rgba(220,38,38,.08),rgba(220,38,38,.03));
+  border:1.5px solid rgba(220,38,38,.25);
+  border-radius:13px;
+  padding:13px 16px;
+  margin:12px 0;
+  display:flex;
+  gap:11px;
+  align-items:flex-start;
+}
+html.dark .legal-critical{
+  background:linear-gradient(135deg,rgba(220,38,38,.1),rgba(220,38,38,.04));
+  border-color:rgba(220,38,38,.3);
+}
+.legal-critical-icon{
+  font-size:18px;
+  flex-shrink:0;
+  margin-top:1px;
+}
+.legal-critical-text{
+  flex:1;
+  font-size:12.5px;
+  color:#991b1b;
+  line-height:1.7;
+  font-weight:600;
+}
+html.dark .legal-critical-text{color:#fca5a5}
+
+/* الـ Footer */
+.legal-foot{
+  background:linear-gradient(180deg,rgba(94,234,212,.04),rgba(13,148,136,.02));
+  border-top:1px solid rgba(94,234,212,.15);
+  padding:18px 24px;
+  font-size:11.5px;
+  color:var(--text-muted);
+  text-align:center;
+  line-height:1.7;
+  flex-shrink:0;
+}
+html.dark .legal-foot{
+  background:linear-gradient(180deg,rgba(94,234,212,.04),rgba(13,148,136,.02));
+  border-top-color:rgba(94,234,212,.1);
+}
+.legal-foot strong{
+  color:var(--teal2);
+  font-weight:800;
+}
+html.dark .legal-foot strong{color:#5eead4}
+
+/* Mobile */
+@media(max-width:480px){
+  .legal-hero{padding:26px 22px 22px}
+  .legal-hero-icon{width:62px;height:62px;font-size:32px;border-radius:18px}
+  .legal-hero-title{font-size:22px!important}
+  .legal-hero-subtitle{font-size:12px}
+  .legal-body{padding:20px 22px 20px}
+  .legal-section-num{width:26px;height:26px;font-size:12px;border-radius:8px}
+  .legal-section-title{font-size:14px!important}
+  .legal-section-content{font-size:12.5px;padding-inline-start:36px}
+  .legal-list li{font-size:12.5px}
+}
+
 /* AUDIT LOG */
 .audit-list{max-height:240px;overflow-y:auto}
 .audit-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--g100);align-items:flex-start}
@@ -6124,18 +6560,18 @@ html.dark .bn-badge{background:#dc2626!important;border-color:var(--bg-card)!imp
   <div class="qlogo-wrap" style="width:120px;height:120px">
     <svg viewBox="0 0 120 120">
       <g transform="translate(60,60)">
-        <g class="qp" style="--a:0deg"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g>
-        <g class="qp" style="--a:30deg"><g transform="rotate(30)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g>
-        <g class="qp" style="--a:60deg"><g transform="rotate(60)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g>
-        <g class="qp" style="--a:90deg"><g transform="rotate(90)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g>
-        <g class="qp" style="--a:120deg"><g transform="rotate(120)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g>
-        <g class="qp" style="--a:150deg"><g transform="rotate(150)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g>
-        <g class="qp" style="--a:180deg"><g transform="rotate(180)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g>
-        <g class="qp" style="--a:210deg"><g transform="rotate(210)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g>
-        <g class="qp" style="--a:240deg"><g transform="rotate(240)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g>
-        <g class="qp" style="--a:270deg"><g transform="rotate(270)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g>
-        <g class="qp" style="--a:300deg"><g transform="rotate(300)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g>
-        <g class="qp" style="--a:330deg"><g transform="rotate(330)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="#0d9488"/></g></g>
+        <g class="qp" style="--a:0deg"><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="#0d9488"/></g>
+        <g class="qp" style="--a:30deg"><g transform="rotate(30)"><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="#0d9488"/></g></g>
+        <g class="qp" style="--a:60deg"><g transform="rotate(60)"><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="#0d9488"/></g></g>
+        <g class="qp" style="--a:90deg"><g transform="rotate(90)"><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="#0d9488"/></g></g>
+        <g class="qp" style="--a:120deg"><g transform="rotate(120)"><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="#0d9488"/></g></g>
+        <g class="qp" style="--a:150deg"><g transform="rotate(150)"><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="#0d9488"/></g></g>
+        <g class="qp" style="--a:180deg"><g transform="rotate(180)"><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="#0d9488"/></g></g>
+        <g class="qp" style="--a:210deg"><g transform="rotate(210)"><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="#0d9488"/></g></g>
+        <g class="qp" style="--a:240deg"><g transform="rotate(240)"><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="#0d9488"/></g></g>
+        <g class="qp" style="--a:270deg"><g transform="rotate(270)"><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="#0d9488"/></g></g>
+        <g class="qp" style="--a:300deg"><g transform="rotate(300)"><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="#0d9488"/></g></g>
+        <g class="qp" style="--a:330deg"><g transform="rotate(330)"><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="#0d9488"/></g></g>
       </g>
     </svg>
     <div class="qshine"></div>
@@ -6179,6 +6615,8 @@ html.dark .bn-badge{background:#dc2626!important;border-color:var(--bg-card)!imp
 <div class="menu-overlay hidden" id="sugg-overlay" onclick="if(event.target===this)backToMenu('sugg-overlay')"></div>
 <div class="menu-overlay hidden" id="about-overlay" onclick="if(event.target===this)backToMenu('about-overlay')"></div>
 <div class="menu-overlay hidden" id="faq-overlay" onclick="if(event.target===this)backToMenu('faq-overlay')"></div>
+<div class="menu-overlay hidden" id="terms-overlay" onclick="if(event.target===this)backToMenu('terms-overlay')"></div>
+<div class="menu-overlay hidden" id="privacy-overlay" onclick="if(event.target===this)backToMenu('privacy-overlay')"></div>
 <div class="menu-overlay hidden" id="thanks-overlay" onclick="if(event.target===this)closeThanks()"></div>
 
 <script>
@@ -6277,7 +6715,7 @@ const qLoader=(size='md',color='t')=>{
   const sz=size==='sm'?22:size==='lg'?70:size==='xl'?120:40
   const fill=color==='w'?'rgba(255,255,255,.95)':'#0d9488'
   const cls=sz<=24?'xs':sz<=44?'sm':''
-  const pieces=Array.from({length:12},(_,i)=>`<g class="qp" style="--a:${i*30}deg"><g transform="rotate(${i*30})"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="${fill}"/></g></g>`).join('')
+  const pieces=Array.from({length:12},(_,i)=>`<g class="qp" style="--a:${i*30}deg"><g transform="rotate(${i*30})"><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="${fill}"/></g></g>`).join('')
   return `<span class="qlogo-wrap ${cls}" style="width:${sz}px;height:${sz}px;vertical-align:middle"><svg viewBox="0 0 120 120" style="display:block"><g transform="translate(60,60)">${pieces}</g></svg><span class="qshine"></span></span>`
 }
 
@@ -6349,10 +6787,10 @@ function stars(avg,cnt,sz=13){
 }
 
 // Static logo - uses currentColor so it adapts to context
-const LOGO_S=(sz,cls='')=>`<svg ${cls?`class="${cls}"`:''} viewBox="0 0 120 120" width="${sz}" height="${sz}" style="flex-shrink:0;color:#0d9488"><g transform="translate(60,60)" fill="currentColor"><rect x="-6" y="-46" width="12" height="12" rx="3"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(30)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(60)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(90)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(120)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(150)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(180)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(210)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(240)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(270)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(300)"/><rect x="-6" y="-46" width="12" height="12" rx="3" transform="rotate(330)"/></g></svg>`
+const LOGO_S=(sz,cls='')=>`<svg ${cls?`class="${cls}"`:''} viewBox="0 0 120 120" width="${sz}" height="${sz}" style="flex-shrink:0;color:#0d9488"><g transform="translate(60,60)" fill="currentColor"><rect x="-7" y="-47" width="14" height="14" rx="3.5"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" transform="rotate(30)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" transform="rotate(60)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" transform="rotate(90)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" transform="rotate(120)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" transform="rotate(150)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" transform="rotate(180)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" transform="rotate(210)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" transform="rotate(240)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" transform="rotate(270)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" transform="rotate(300)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" transform="rotate(330)"/></g></svg>`
 
-const LOGO_ANIM=(sz=70)=>`<div class="qlogo-wrap" style="width:${sz}px;height:${sz}px;color:#0d9488"><svg viewBox="0 0 120 120"><g transform="translate(60,60)" fill="currentColor"><g class="qp" style="--a:0deg"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g><g class="qp" style="--a:30deg"><g transform="rotate(30)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:60deg"><g transform="rotate(60)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:90deg"><g transform="rotate(90)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:120deg"><g transform="rotate(120)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:150deg"><g transform="rotate(150)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:180deg"><g transform="rotate(180)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:210deg"><g transform="rotate(210)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:240deg"><g transform="rotate(240)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:270deg"><g transform="rotate(270)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:300deg"><g transform="rotate(300)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g><g class="qp" style="--a:330deg"><g transform="rotate(330)"><rect x="-6" y="-46" width="12" height="12" rx="3"/></g></g></g></svg><div class="qshine"></div></div>`
-const LOGO_W=(sz)=>`<svg viewBox="0 0 120 120" width="${sz}" height="${sz}" style="flex-shrink:0"><g transform="translate(60,60)"><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(30)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(60)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(90)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(120)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(150)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(180)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(210)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(240)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(270)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(300)"/><rect x="-6" y="-46" width="12" height="12" rx="3" fill="rgba(255,255,255,.85)" transform="rotate(330)"/></g></svg>`
+const LOGO_ANIM=(sz=70)=>`<div class="qlogo-wrap" style="width:${sz}px;height:${sz}px;color:#0d9488"><svg viewBox="0 0 120 120"><g transform="translate(60,60)" fill="currentColor"><g class="qp" style="--a:0deg"><rect x="-7" y="-47" width="14" height="14" rx="3.5"/></g><g class="qp" style="--a:30deg"><g transform="rotate(30)"><rect x="-7" y="-47" width="14" height="14" rx="3.5"/></g></g><g class="qp" style="--a:60deg"><g transform="rotate(60)"><rect x="-7" y="-47" width="14" height="14" rx="3.5"/></g></g><g class="qp" style="--a:90deg"><g transform="rotate(90)"><rect x="-7" y="-47" width="14" height="14" rx="3.5"/></g></g><g class="qp" style="--a:120deg"><g transform="rotate(120)"><rect x="-7" y="-47" width="14" height="14" rx="3.5"/></g></g><g class="qp" style="--a:150deg"><g transform="rotate(150)"><rect x="-7" y="-47" width="14" height="14" rx="3.5"/></g></g><g class="qp" style="--a:180deg"><g transform="rotate(180)"><rect x="-7" y="-47" width="14" height="14" rx="3.5"/></g></g><g class="qp" style="--a:210deg"><g transform="rotate(210)"><rect x="-7" y="-47" width="14" height="14" rx="3.5"/></g></g><g class="qp" style="--a:240deg"><g transform="rotate(240)"><rect x="-7" y="-47" width="14" height="14" rx="3.5"/></g></g><g class="qp" style="--a:270deg"><g transform="rotate(270)"><rect x="-7" y="-47" width="14" height="14" rx="3.5"/></g></g><g class="qp" style="--a:300deg"><g transform="rotate(300)"><rect x="-7" y="-47" width="14" height="14" rx="3.5"/></g></g><g class="qp" style="--a:330deg"><g transform="rotate(330)"><rect x="-7" y="-47" width="14" height="14" rx="3.5"/></g></g></g></svg><div class="qshine"></div></div>`
+const LOGO_W=(sz)=>`<svg viewBox="0 0 120 120" width="${sz}" height="${sz}" style="flex-shrink:0"><g transform="translate(60,60)"><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="rgba(255,255,255,.85)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="rgba(255,255,255,.85)" transform="rotate(30)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="rgba(255,255,255,.85)" transform="rotate(60)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="rgba(255,255,255,.85)" transform="rotate(90)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="rgba(255,255,255,.85)" transform="rotate(120)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="rgba(255,255,255,.85)" transform="rotate(150)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="rgba(255,255,255,.85)" transform="rotate(180)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="rgba(255,255,255,.85)" transform="rotate(210)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="rgba(255,255,255,.85)" transform="rotate(240)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="rgba(255,255,255,.85)" transform="rotate(270)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="rgba(255,255,255,.85)" transform="rotate(300)"/><rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="rgba(255,255,255,.85)" transform="rotate(330)"/></g></svg>`
 
 function applyLang(){
   document.documentElement.dir=isAr()?'rtl':'ltr'
@@ -8141,7 +8579,7 @@ async function rUpub(){
     </div>`
 
   // SVG شعار قسطني للـ watermark
-  const logoWatermark=`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><g transform="translate(60,60)">${Array.from({length:12},(_,i)=>`<rect x="-6" y="-46" width="12" height="12" rx="3" fill="#fff" transform="rotate(${i*30})"/>`).join('')}</g></svg>`
+  const logoWatermark=`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><g transform="translate(60,60)">${Array.from({length:12},(_,i)=>`<rect x="-7" y="-47" width="14" height="14" rx="3.5" fill="#fff" transform="rotate(${i*30})"/>`).join('')}</g></svg>`
 
   c.innerHTML=`
     <div class="upub-cinema">
@@ -9153,6 +9591,22 @@ window.openMenu=()=>{
             <div class="msub ar-t">إجابات على أكثر الأسئلة</div><div class="msub en-t hidden">Common questions answered</div>
           </div>
         </button>
+
+        <button class="menu-item" onclick="closeMenu();openTerms()">
+          <div class="micon">📜</div>
+          <div class="mtxt">
+            <div class="mlbl ar-t">الشروط والأحكام</div><div class="mlbl en-t hidden">Terms of Service</div>
+            <div class="msub ar-t">حقوقك وواجباتك في قسطني</div><div class="msub en-t hidden">Your rights and obligations</div>
+          </div>
+        </button>
+
+        <button class="menu-item" onclick="closeMenu();openPrivacy()">
+          <div class="micon">🔒</div>
+          <div class="mtxt">
+            <div class="mlbl ar-t">سياسة الخصوصية</div><div class="mlbl en-t hidden">Privacy Policy</div>
+            <div class="msub ar-t">كيف نحمي بياناتك</div><div class="msub en-t hidden">How we protect your data</div>
+          </div>
+        </button>
         
         <button class="menu-item" onclick="toggleLang();closeMenu()">
           <div class="micon">🌐</div>
@@ -9740,6 +10194,406 @@ window.openAbout=()=>{
       </div>
     </div>`
   $('about-overlay').classList.remove('hidden')
+  applyLang()
+}
+
+// ═══════════════════════════════════════════════════════
+// 📜 TERMS OF SERVICE — الشروط والأحكام
+// ═══════════════════════════════════════════════════════
+window.openTerms=()=>{
+  $('terms-overlay').innerHTML=`
+    <div class="legal-modal" onclick="event.stopPropagation()">
+      <div class="legal-hero">
+        <button class="legal-back-btn" onclick="backToMenu('terms-overlay')" aria-label="${isAr()?'رجوع':'Back'}">
+          <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+            <path d="${isAr()?'M9 18l6-6-6-6':'M15 18l-6-6 6-6'}" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="legal-hero-content">
+          <div class="legal-hero-icon">📜</div>
+          <div class="legal-hero-eyebrow">
+            <span class="ar-t">الإطار القانوني</span>
+            <span class="en-t hidden">Legal Framework</span>
+          </div>
+          <h1 class="legal-hero-title ar-t">الشروط والأحكام</h1>
+          <h1 class="legal-hero-title en-t hidden">Terms of Service</h1>
+          <p class="legal-hero-subtitle ar-t">حقوقك وواجباتك عند استخدام منصة قسطني</p>
+          <p class="legal-hero-subtitle en-t hidden">Your rights and obligations when using Qastni</p>
+          <div class="legal-update-date">📅 ${isAr()?'آخر تحديث: مايو 2026':'Last updated: May 2026'}</div>
+        </div>
+      </div>
+
+      <div class="legal-body">
+        <div class="legal-intro">
+          <div class="legal-intro-icon">👋</div>
+          <div class="legal-intro-text">
+            ${isAr()
+              ?'مرحباً بك في قسطني. باستخدامك لمنصتنا، فإنك توافق على الشروط التالية. يرجى قراءتها بعناية لأنها تحدد العلاقة بينك وبين المنصة.'
+              :'Welcome to Qastni. By using our platform, you agree to the following terms. Please read them carefully as they define the relationship between you and the platform.'}
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <div class="legal-section-header">
+            <div class="legal-section-num">1</div>
+            <h3 class="legal-section-title ar-t">طبيعة الخدمة</h3>
+            <h3 class="legal-section-title en-t hidden">Nature of Service</h3>
+          </div>
+          <div class="legal-section-content">
+            <p class="ar-t">قسطني <strong>منصة وساطة رقمية</strong> تُسهّل التقسيط بين الأفراد. نحن لا نقدم قروضاً، ولا نملك السلع المعروضة، ولا نضمن جودتها.</p>
+            <p class="en-t hidden">Qastni is a <strong>digital intermediary platform</strong> that facilitates installments between individuals. We do not provide loans, do not own listed goods, and do not guarantee their quality.</p>
+            <div class="legal-highlight">
+              <div class="legal-highlight-icon">💡</div>
+              <div class="legal-highlight-text">
+                <span class="ar-t">دورنا: توثيق الاتفاقية + معالجة المدفوعات + حفظ السجلات. نحن لسنا طرفاً في الصفقة نفسها.</span>
+                <span class="en-t hidden">Our role: documenting agreements + processing payments + maintaining records. We are not a party to the transaction itself.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <div class="legal-section-header">
+            <div class="legal-section-num">2</div>
+            <h3 class="legal-section-title ar-t">شروط الأهلية</h3>
+            <h3 class="legal-section-title en-t hidden">Eligibility</h3>
+          </div>
+          <div class="legal-section-content">
+            <p class="ar-t">للاستخدام، يجب أن تكون:</p>
+            <ul class="legal-list ar-t">
+              <li>مقيماً في المملكة العربية السعودية</li>
+              <li>بالغاً من العمر 18 سنة فأكثر</li>
+              <li>تملك هوية وطنية أو إقامة سارية</li>
+              <li>لديك حساب نافذ مفعّل (للحسابات الموثَّقة)</li>
+            </ul>
+            <p class="en-t hidden">To use Qastni, you must:</p>
+            <ul class="legal-list en-t hidden">
+              <li>Be a resident of Saudi Arabia</li>
+              <li>Be 18 years or older</li>
+              <li>Have a valid National ID or Iqama</li>
+              <li>Have an activated Nafath account (for verified accounts)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <div class="legal-section-header">
+            <div class="legal-section-num">3</div>
+            <h3 class="legal-section-title ar-t">رسوم المنصة</h3>
+            <h3 class="legal-section-title en-t hidden">Platform Fees</h3>
+          </div>
+          <div class="legal-section-content">
+            <p class="ar-t">قسطني تتقاضى <strong>7% رسوم سعي وتيسير</strong> على كل صفقة، موزعة بالتساوي:</p>
+            <ul class="legal-list ar-t">
+              <li>3.5% على البائع (يخصم من المبلغ المستلم)</li>
+              <li>3.5% على المشتري (يضاف على المبلغ المدفوع)</li>
+            </ul>
+            <p class="en-t hidden">Qastni charges <strong>7% facilitation fee</strong> on each transaction, split equally:</p>
+            <ul class="legal-list en-t hidden">
+              <li>3.5% on the seller (deducted from received amount)</li>
+              <li>3.5% on the buyer (added to paid amount)</li>
+            </ul>
+            <div class="legal-highlight">
+              <div class="legal-highlight-icon">✅</div>
+              <div class="legal-highlight-text">
+                <span class="ar-t">الرسوم متوافقة شرعاً ولا تحتوي على ربا أو فوائد مركبة. لا توجد رسوم خفية.</span>
+                <span class="en-t hidden">Fees are Sharia-compliant with no riba or compound interest. No hidden fees.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <div class="legal-section-header">
+            <div class="legal-section-num">4</div>
+            <h3 class="legal-section-title ar-t">التزامات المستخدمين</h3>
+            <h3 class="legal-section-title en-t hidden">User Obligations</h3>
+          </div>
+          <div class="legal-section-content">
+            <p class="ar-t"><strong>المشتري:</strong> الالتزام بسداد الأقساط في مواعيدها (يوم 27 من كل شهر).</p>
+            <p class="ar-t"><strong>البائع:</strong> تسليم السلعة المتفق عليها بحالتها الموصوفة.</p>
+            <p class="ar-t"><strong>الطرفان:</strong> تقديم بيانات صحيحة، عدم التحايل، احترام الطرف الآخر.</p>
+            <p class="en-t hidden"><strong>Buyer:</strong> Pay installments on time (27th of each month).</p>
+            <p class="en-t hidden"><strong>Seller:</strong> Deliver the agreed item in its described condition.</p>
+            <p class="en-t hidden"><strong>Both:</strong> Provide accurate information, no fraud, respect each other.</p>
+            <div class="legal-critical">
+              <div class="legal-critical-icon">⚠️</div>
+              <div class="legal-critical-text">
+                <span class="ar-t">أي محاولة للاحتيال أو إنشاء حسابات مكررة = إيقاف فوري وقد تترتب عليها عواقب قانونية.</span>
+                <span class="en-t hidden">Any fraud attempt or duplicate accounts = immediate suspension and possible legal consequences.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <div class="legal-section-header">
+            <div class="legal-section-num">5</div>
+            <h3 class="legal-section-title ar-t">التعثّر والنزاعات</h3>
+            <h3 class="legal-section-title en-t hidden">Default & Disputes</h3>
+          </div>
+          <div class="legal-section-content">
+            <p class="ar-t">عند تأخر المشتري عن السداد:</p>
+            <ul class="legal-list ar-t">
+              <li>تذكير عبر التطبيق + إشعار للبائع</li>
+              <li>للحسابات الموثَّقة: حق رفع سند لأمر عبر منصة "ناجز"</li>
+              <li>قسطني تتدخل كوسيط في النزاعات</li>
+            </ul>
+            <p class="en-t hidden">When a buyer defaults:</p>
+            <ul class="legal-list en-t hidden">
+              <li>App reminder + seller notification</li>
+              <li>Verified accounts: right to file a promissory note via "Najiz"</li>
+              <li>Qastni mediates disputes</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <div class="legal-section-header">
+            <div class="legal-section-num">6</div>
+            <h3 class="legal-section-title ar-t">حدود المسؤولية</h3>
+            <h3 class="legal-section-title en-t hidden">Liability Limits</h3>
+          </div>
+          <div class="legal-section-content">
+            <p class="ar-t">قسطني <strong>غير مسؤولة</strong> عن:</p>
+            <ul class="legal-list ar-t">
+              <li>جودة السلعة أو مطابقتها للوصف</li>
+              <li>عدم إيفاء أحد الطرفين بالتزاماته</li>
+              <li>الأضرار الناتجة عن الاستخدام الخاطئ للمنصة</li>
+            </ul>
+            <p class="en-t hidden">Qastni is <strong>not liable</strong> for:</p>
+            <ul class="legal-list en-t hidden">
+              <li>Item quality or matching its description</li>
+              <li>Failure of either party to fulfill obligations</li>
+              <li>Damages caused by misuse of the platform</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <div class="legal-section-header">
+            <div class="legal-section-num">7</div>
+            <h3 class="legal-section-title ar-t">القانون الحاكم</h3>
+            <h3 class="legal-section-title en-t hidden">Governing Law</h3>
+          </div>
+          <div class="legal-section-content">
+            <p class="ar-t">تخضع هذه الاتفاقية وأي نزاعات ناشئة عنها <strong>لأنظمة المملكة العربية السعودية</strong>، وتختص المحاكم السعودية بالفصل فيها.</p>
+            <p class="en-t hidden">This agreement and any disputes arising are governed by <strong>Saudi Arabian laws</strong>, and Saudi courts have exclusive jurisdiction.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="legal-foot">
+        <span class="ar-t">للاستفسار: تواصل معنا عبر <strong>الواتساب</strong> أو <strong>support@qastni.com</strong></span>
+        <span class="en-t hidden">For inquiries, contact us via <strong>WhatsApp</strong> or <strong>support@qastni.com</strong></span>
+      </div>
+    </div>
+  `
+  $('terms-overlay').classList.remove('hidden')
+  applyLang()
+}
+
+// ═══════════════════════════════════════════════════════
+// 🔒 PRIVACY POLICY — سياسة الخصوصية
+// ═══════════════════════════════════════════════════════
+window.openPrivacy=()=>{
+  $('privacy-overlay').innerHTML=`
+    <div class="legal-modal" onclick="event.stopPropagation()">
+      <div class="legal-hero">
+        <button class="legal-back-btn" onclick="backToMenu('privacy-overlay')" aria-label="${isAr()?'رجوع':'Back'}">
+          <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+            <path d="${isAr()?'M9 18l6-6-6-6':'M15 18l-6-6 6-6'}" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="legal-hero-content">
+          <div class="legal-hero-icon">🔒</div>
+          <div class="legal-hero-eyebrow">
+            <span class="ar-t">حماية البيانات</span>
+            <span class="en-t hidden">Data Protection</span>
+          </div>
+          <h1 class="legal-hero-title ar-t">سياسة الخصوصية</h1>
+          <h1 class="legal-hero-title en-t hidden">Privacy Policy</h1>
+          <p class="legal-hero-subtitle ar-t">كيف نجمع بياناتك ونحميها ونستخدمها</p>
+          <p class="legal-hero-subtitle en-t hidden">How we collect, protect, and use your data</p>
+          <div class="legal-update-date">📅 ${isAr()?'آخر تحديث: مايو 2026':'Last updated: May 2026'}</div>
+        </div>
+      </div>
+
+      <div class="legal-body">
+        <div class="legal-intro">
+          <div class="legal-intro-icon">🛡️</div>
+          <div class="legal-intro-text">
+            ${isAr()
+              ?'نحن في قسطني نأخذ خصوصيتك بجدية. هذه السياسة توضح بشفافية ما نجمعه من بيانات، ولماذا، وكيف نحميها.'
+              :'At Qastni, we take your privacy seriously. This policy transparently explains what data we collect, why, and how we protect it.'}
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <div class="legal-section-header">
+            <div class="legal-section-num">1</div>
+            <h3 class="legal-section-title ar-t">البيانات التي نجمعها</h3>
+            <h3 class="legal-section-title en-t hidden">Data We Collect</h3>
+          </div>
+          <div class="legal-section-content">
+            <p class="ar-t">عند التسجيل والاستخدام، نجمع:</p>
+            <ul class="legal-list ar-t">
+              <li><strong>بيانات أساسية:</strong> الاسم، البريد، رقم الجوال</li>
+              <li><strong>بيانات التحقق:</strong> رقم الهوية (للحسابات الموثَّقة)</li>
+              <li><strong>بيانات مالية:</strong> الراتب الشهري (لحساب نسبة 33%)</li>
+              <li><strong>بيانات الصفقات:</strong> تفاصيل كل اتفاقية تقسيط</li>
+              <li><strong>بيانات تقنية:</strong> نوع الجهاز، عنوان IP، وقت الاستخدام</li>
+            </ul>
+            <p class="en-t hidden">Upon registration and use, we collect:</p>
+            <ul class="legal-list en-t hidden">
+              <li><strong>Basic data:</strong> Name, email, phone number</li>
+              <li><strong>Verification data:</strong> National ID (for verified accounts)</li>
+              <li><strong>Financial data:</strong> Monthly salary (for 33% calculation)</li>
+              <li><strong>Transaction data:</strong> Details of each installment agreement</li>
+              <li><strong>Technical data:</strong> Device type, IP address, usage timestamps</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <div class="legal-section-header">
+            <div class="legal-section-num">2</div>
+            <h3 class="legal-section-title ar-t">كيف نستخدمها</h3>
+            <h3 class="legal-section-title en-t hidden">How We Use Data</h3>
+          </div>
+          <div class="legal-section-content">
+            <ul class="legal-list ar-t">
+              <li>تشغيل المنصة وإدارة الصفقات</li>
+              <li>التحقق من الهوية ومنع الاحتيال</li>
+              <li>حساب الحدود الائتمانية وفقاً للراتب</li>
+              <li>تحسين تجربة المستخدم</li>
+              <li>الاستجابة لطلباتك الرسمية</li>
+            </ul>
+            <ul class="legal-list en-t hidden">
+              <li>Operating the platform and managing deals</li>
+              <li>Identity verification and fraud prevention</li>
+              <li>Calculating credit limits based on salary</li>
+              <li>Improving user experience</li>
+              <li>Responding to your official requests</li>
+            </ul>
+            <div class="legal-highlight">
+              <div class="legal-highlight-icon">🚫</div>
+              <div class="legal-highlight-text">
+                <span class="ar-t">نحن <strong>لا نبيع بياناتك</strong> أبداً لأطراف ثالثة لأغراض تسويقية.</span>
+                <span class="en-t hidden">We <strong>never sell your data</strong> to third parties for marketing purposes.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <div class="legal-section-header">
+            <div class="legal-section-num">3</div>
+            <h3 class="legal-section-title ar-t">مع من نشاركها</h3>
+            <h3 class="legal-section-title en-t hidden">Who We Share With</h3>
+          </div>
+          <div class="legal-section-content">
+            <p class="ar-t">نشارك بياناتك فقط مع:</p>
+            <ul class="legal-list ar-t">
+              <li><strong>منصة نافذ:</strong> للتحقق من الهوية</li>
+              <li><strong>الجهات الحكومية:</strong> عند طلب رسمي مدعوم بأمر قضائي</li>
+              <li><strong>مزودي الدفع المرخصين:</strong> لمعالجة المدفوعات بشكل آمن</li>
+              <li><strong>الطرف الآخر في الصفقة:</strong> الاسم والإيميل فقط (لا تظهر بياناتك الحساسة)</li>
+            </ul>
+            <p class="en-t hidden">We share your data only with:</p>
+            <ul class="legal-list en-t hidden">
+              <li><strong>Nafath:</strong> For identity verification</li>
+              <li><strong>Government authorities:</strong> Upon official judicial order</li>
+              <li><strong>Licensed payment providers:</strong> For secure payment processing</li>
+              <li><strong>The other party in the deal:</strong> Name and email only (sensitive data is hidden)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <div class="legal-section-header">
+            <div class="legal-section-num">4</div>
+            <h3 class="legal-section-title ar-t">حماية بياناتك</h3>
+            <h3 class="legal-section-title en-t hidden">Data Protection</h3>
+          </div>
+          <div class="legal-section-content">
+            <p class="ar-t">نستخدم أحدث تقنيات الأمان:</p>
+            <ul class="legal-list ar-t">
+              <li>تشفير كامل (HTTPS/SSL) لكل البيانات المنقولة</li>
+              <li>تشفير قواعد البيانات (Encryption at Rest)</li>
+              <li>حماية على مستوى الصف (Row-Level Security)</li>
+              <li>سجل تدقيق لكل التغييرات (Audit Trail)</li>
+              <li>نسخ احتياطية يومية</li>
+            </ul>
+            <p class="en-t hidden">We use the latest security technologies:</p>
+            <ul class="legal-list en-t hidden">
+              <li>Full encryption (HTTPS/SSL) for all transmitted data</li>
+              <li>Database encryption at rest</li>
+              <li>Row-Level Security</li>
+              <li>Audit trail for all changes</li>
+              <li>Daily backups</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <div class="legal-section-header">
+            <div class="legal-section-num">5</div>
+            <h3 class="legal-section-title ar-t">حقوقك</h3>
+            <h3 class="legal-section-title en-t hidden">Your Rights</h3>
+          </div>
+          <div class="legal-section-content">
+            <p class="ar-t">لديك الحق في:</p>
+            <ul class="legal-list ar-t">
+              <li><strong>الاطلاع</strong> على بياناتك المخزنة</li>
+              <li><strong>تعديل</strong> أي بيانات غير صحيحة</li>
+              <li><strong>طلب الحذف</strong> (مع مراعاة الالتزامات القانونية)</li>
+              <li><strong>سحب الموافقة</strong> في أي وقت</li>
+              <li><strong>تقديم شكوى</strong> للجهات المختصة</li>
+            </ul>
+            <p class="en-t hidden">You have the right to:</p>
+            <ul class="legal-list en-t hidden">
+              <li><strong>Access</strong> your stored data</li>
+              <li><strong>Modify</strong> any incorrect data</li>
+              <li><strong>Request deletion</strong> (subject to legal obligations)</li>
+              <li><strong>Withdraw consent</strong> at any time</li>
+              <li><strong>File a complaint</strong> with relevant authorities</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <div class="legal-section-header">
+            <div class="legal-section-num">6</div>
+            <h3 class="legal-section-title ar-t">مدة الاحتفاظ بالبيانات</h3>
+            <h3 class="legal-section-title en-t hidden">Data Retention</h3>
+          </div>
+          <div class="legal-section-content">
+            <p class="ar-t">نحتفظ ببياناتك طوال فترة استخدامك للمنصة، وبعد إغلاق الحساب نحتفظ ببيانات الصفقات لمدة <strong>5 سنوات</strong> وفقاً للأنظمة المالية السعودية.</p>
+            <p class="en-t hidden">We retain your data for the duration of platform use, and after account closure we retain transaction data for <strong>5 years</strong> per Saudi financial regulations.</p>
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <div class="legal-section-header">
+            <div class="legal-section-num">7</div>
+            <h3 class="legal-section-title ar-t">التحديثات</h3>
+            <h3 class="legal-section-title en-t hidden">Policy Updates</h3>
+          </div>
+          <div class="legal-section-content">
+            <p class="ar-t">قد نحدّث هذه السياسة بين فترة وأخرى. التحديثات الجوهرية ستُبلَّغ بإشعار داخل التطبيق <strong>قبل 30 يوماً</strong> من سريانها.</p>
+            <p class="en-t hidden">We may update this policy from time to time. Material updates will be notified via in-app notification <strong>30 days before</strong> taking effect.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="legal-foot">
+        <span class="ar-t">لأي استفسار حول الخصوصية: <strong>privacy@qastni.com</strong></span>
+        <span class="en-t hidden">For any privacy questions: <strong>privacy@qastni.com</strong></span>
+      </div>
+    </div>
+  `
+  $('privacy-overlay').classList.remove('hidden')
   applyLang()
 }
 
